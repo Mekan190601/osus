@@ -19,6 +19,10 @@ import AICoachPage from "../pages/AICoachPage/AICoachPage";
 import NotificationsPage from "../pages/NotificationsPage/NotificationsPage";
 import { useSettingsStore } from "../store/settingsStore";
 import WeeklyReviewPage from "../pages/WeeklyReviewPage/WeeklyReviewPage";
+import LoginPage from "../pages/LoginPage/LoginPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage/ResetPasswordPage";
+import ProfilePage from "../pages/ProfilePage/ProfilePage";
+import ProtectedRoute from "../components/auth/ProtectedRoute/ProtectedRoute";
 
 import { ROUTES } from "./routePaths";
 
@@ -51,7 +55,17 @@ export default function AppRouter() {
   element={<StartPageRedirect />}
 />
 
-        <Route element={<AppLayout />}>
+        <Route
+  element={
+    <ProtectedRoute>
+      <AppLayout />
+    </ProtectedRoute>
+  }
+>
+        <Route
+  path="/profile"
+  element={<ProfilePage />}
+/>
           <Route
             path={ROUTES.dashboard}
             element={<DashboardPage />}
@@ -101,6 +115,16 @@ export default function AppRouter() {
           path={ROUTES.onboarding}
           element={<OnboardingPage />}
         />
+
+        <Route
+  path="/login"
+  element={<LoginPage />}
+/>
+
+<Route
+  path="/reset-password"
+  element={<ResetPasswordPage />}
+/>
 
         <Route
           path="*"

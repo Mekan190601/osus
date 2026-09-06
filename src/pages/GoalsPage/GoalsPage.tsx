@@ -3,7 +3,7 @@ import {
   Sparkles,
   Target,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import GoalEditor from "../../features/goals/components/GoalEditor/GoalEditor";
@@ -13,15 +13,55 @@ import GoalExecutiveProgress from "../../features/goals/components/GoalExecutive
 import { useGoalStore } from "../../store/goalStore";
 
 export default function GoalsPage() {
-    const [isEditing, setIsEditing] =
+  const [isEditing, setIsEditing] =
     useState(false);
+
   const mainGoal = useGoalStore(
     (state) => state.mainGoal,
   );
 
+  const loadGoal = useGoalStore(
+    (state) => state.loadGoal,
+  );
+
+  const isLoading = useGoalStore(
+    (state) => state.isLoading,
+  );
+
+  const isInitialized = useGoalStore(
+    (state) => state.isInitialized,
+  );
+
+  useEffect(() => {
+  void loadGoal();
+}, [loadGoal]);
+
   const hasGoal = Boolean(
     mainGoal.trim(),
   );
+
+  if (isLoading && !isInitialized) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div
+            className="
+              h-8 w-8
+              animate-spin
+              rounded-full
+              border-2
+              border-violet-400/20
+              border-t-violet-400
+            "
+          />
+
+          <p className="text-sm text-text-muted">
+            Maksadyň ýüklenýär...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 pb-10 lg:space-y-8">

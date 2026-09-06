@@ -22,6 +22,8 @@ export default function NotificationEngine() {
     (state) => state.targetMoney,
   );
 
+
+
   const currentMoney = useGoalStore(
     (state) => state.currentMoney,
   );
@@ -46,6 +48,11 @@ export default function NotificationEngine() {
     (state) => state.notifications,
   );
 
+  const notificationsInitialized =
+  useNotificationStore(
+    (state) => state.isInitialized,
+  );
+
   const addNotification = useNotificationStore(
     (state) => state.addNotification,
   );
@@ -55,11 +62,17 @@ export default function NotificationEngine() {
       (state) => state.resolveNotificationByKey,
     );
 
+
   useEffect(() => {
-    const todayKey = getPlannerDateKey(
-      new Date(),
-      "daily",
-    );
+  if (!notificationsInitialized) {
+    return;
+  }
+
+  const todayKey = getPlannerDateKey(
+    new Date(),
+    "daily",
+  );
+    
 
     const activePlannerTasks = tasks.filter(
       (task) =>
@@ -151,16 +164,17 @@ export default function NotificationEngine() {
       },
     );
   }, [
-    targetMoney,
-    currentMoney,
-    monthlyIncome,
-    monthlyExpense,
-    deadline,
-    tasks,
-    preferences,
-    addNotification,
-    resolveNotificationByKey,
-  ]);
+  notificationsInitialized,
+  targetMoney,
+  currentMoney,
+  monthlyIncome,
+  monthlyExpense,
+  deadline,
+  tasks,
+  preferences,
+  addNotification,
+  resolveNotificationByKey,
+]);
 
   return null;
 }

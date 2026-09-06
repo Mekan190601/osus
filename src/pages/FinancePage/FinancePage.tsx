@@ -91,6 +91,26 @@ export default function FinancePage() {
       (state) => state.transactions,
     );
 
+    const loadFinance =
+  useFinanceStore(
+    (state) => state.loadFinance,
+  );
+
+const isLoading =
+  useFinanceStore(
+    (state) => state.isLoading,
+  );
+
+const isInitialized =
+  useFinanceStore(
+    (state) => state.isInitialized,
+  );
+
+const financeError =
+  useFinanceStore(
+    (state) => state.error,
+  );
+
   const setBankBalance =
     useFinanceStore(
       (state) => state.setBankBalance,
@@ -115,6 +135,17 @@ export default function FinancePage() {
     useFinanceStore(
       (state) => state.deleteTransaction,
     );
+
+    useEffect(() => {
+  if (isInitialized) {
+    return;
+  }
+
+  void loadFinance();
+}, [
+  isInitialized,
+  loadFinance,
+]);
 
   const [
     transactionType,
@@ -226,6 +257,65 @@ const netIncome =
     searchParams,
     setSearchParams,
   ]);
+
+  if (!isInitialized || isLoading) {
+  return (
+    <div className="flex min-h-[55vh] items-center justify-center">
+      <div className="text-center">
+        <div
+          className="
+            mx-auto h-8 w-8
+            animate-spin rounded-full
+            border-2 border-border
+            border-t-primary
+          "
+        />
+
+        <p className="mt-4 text-sm text-text-muted">
+          Maliýe maglumatlaryň ýüklenýär...
+        </p>
+      </div>
+    </div>
+  );
+}
+
+if (financeError) {
+  return (
+    <div
+      className="
+        rounded-2xl
+        border border-danger/20
+        bg-danger/[0.04]
+        p-6
+      "
+    >
+      <p className="font-semibold text-danger">
+        Maliýe maglumatlaryny ýükläp bolmady
+      </p>
+
+      <p className="mt-2 text-sm text-text-muted">
+        {financeError}
+      </p>
+
+      <button
+        type="button"
+        onClick={() => {
+          void loadFinance();
+        }}
+        className="
+          mt-5 rounded-xl
+          bg-primary px-4 py-2
+          text-sm font-semibold
+          text-slate-950
+        "
+      >
+        Täzeden synanş
+      </button>
+    </div>
+  );
+}
+
+
 
   return (
     <div className="space-y-6 pb-10 lg:space-y-8">

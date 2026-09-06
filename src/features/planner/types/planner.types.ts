@@ -45,15 +45,18 @@ export type CreatePlannerTaskInput = {
   sourceGoalId?: string | null;
 };
 
-export type UpdatePlannerTaskInput = Partial<
-  Pick<
-    PlannerTask,
-    | "title"
-    | "description"
-    | "period"
-    | "quadrant"
-    | "completed"
-    | "parentTaskId"
-    | "sourceGoalId"
-  >
->;
+export type UpdatePlannerTaskInput = {
+  title?: string;
+  description?: string;
+
+  period?: PlannerPeriod;
+  quadrant?: EisenhowerQuadrant;
+
+  dateKey?: string;
+
+  parentTaskId?: string | null;
+  sourceGoalId?: string | null;
+
+  completed?: boolean;
+  completedAt?: string | null;
+};

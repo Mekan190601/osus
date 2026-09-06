@@ -1,4 +1,7 @@
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -91,6 +94,23 @@ export default function WeeklyReviewPage() {
       new Date(),
       "weekly",
     );
+
+    const currentWeekSavedReview =
+  savedReviews.find(
+    (item) =>
+      item.weekKey ===
+      currentWeekKey,
+  );
+
+useEffect(() => {
+  setNote(
+    currentWeekSavedReview?.note ??
+      "",
+  );
+}, [
+  currentWeekSavedReview?.id,
+  currentWeekSavedReview?.note,
+]);
 
   const currentWeekDailyTasks =
     tasks.filter((task) => {
@@ -287,19 +307,38 @@ export default function WeeklyReviewPage() {
     "Hepdäniň ahyrynda netijeleri täzeden gözden geçir.",
   ];
 
-  function handleSaveReview() {
-    saveReview({
-      weekKey: currentWeekKey,
-      totalTasks: review.totalTasks,
-      completedTasks: review.completedTasks,
-      pendingTasks: review.pendingTasks,
-      completionRate: review.completionRate,
-      monthlyNetIncome: review.monthlyNetIncome,
-      financialProgress: review.financialProgress,
-      plannerProgress: review.plannerProgress,
-      overallProgress: growth.overallProgress,
-      note: note.trim(),
-    });
+  async function handleSaveReview() {
+  await saveReview({
+    weekKey: currentWeekKey,
+
+    totalTasks:
+      review.totalTasks,
+
+    completedTasks:
+      review.completedTasks,
+
+    pendingTasks:
+      review.pendingTasks,
+
+    completionRate:
+      review.completionRate,
+
+    monthlyNetIncome:
+      review.monthlyNetIncome,
+
+    financialProgress:
+      review.financialProgress,
+
+    plannerProgress:
+      review.plannerProgress,
+
+    overallProgress:
+      growth.overallProgress,
+
+    note: note.trim(),
+  });
+
+  
 
     setSaved(true);
 

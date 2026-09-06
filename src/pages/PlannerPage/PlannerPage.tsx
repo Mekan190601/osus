@@ -26,6 +26,27 @@ export default function PlannerPage() {
   const activePeriod = usePlannerStore(
     (state) => state.activePeriod,
   );
+
+  const loadPlanner = usePlannerStore(
+  (state) => state.loadPlanner,
+);
+
+const isInitialized = usePlannerStore(
+  (state) => state.isInitialized,
+);
+
+const isLoading = usePlannerStore(
+  (state) => state.isLoading,
+);
+
+const plannerError = usePlannerStore(
+  (state) => state.error,
+);
+
+useEffect(() => {
+  void loadPlanner();
+}, [loadPlanner]);
+
  useEffect(() => {
   if (searchParams.get("action") !== "new") {
     return;
@@ -47,6 +68,51 @@ export default function PlannerPage() {
   const setActivePeriod = usePlannerStore(
     (state) => state.setActivePeriod,
   );
+
+  if (!isInitialized || isLoading) {
+  return (
+    <div className="flex min-h-[55vh] items-center justify-center">
+      <div className="text-center">
+        <div
+          className="
+            mx-auto h-8 w-8
+            animate-spin rounded-full
+            border-2 border-border
+            border-t-primary
+          "
+        />
+
+        <p className="mt-4 text-sm text-text-muted">
+          Meýilnamaň ýüklenýär...
+        </p>
+      </div>
+    </div>
+  );
+}
+
+if (plannerError) {
+  return (
+    <div className="rounded-3xl border border-danger/20 bg-surface p-6 sm:p-8">
+      <h2 className="text-lg font-bold text-text-primary">
+        Meýilnamany ýükläp bolmady
+      </h2>
+
+      <p className="mt-2 text-sm text-text-muted">
+        {plannerError}
+      </p>
+
+      <button
+        type="button"
+        onClick={() => {
+          void loadPlanner();
+        }}
+        className="mt-5 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-slate-950"
+      >
+        Täzeden synanş
+      </button>
+    </div>
+  );
+}
   
 
   return (

@@ -5,6 +5,7 @@ import {
   CircleDollarSign,
   Save,
   Target,
+  Trash2,
   WalletCards,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -32,6 +33,14 @@ export default function GoalEditor() {
     (state) => state.updateGoal,
   );
 
+  const resetGoal = useGoalStore(
+    (state) => state.resetGoal,
+  );
+
+  const isSaving = useGoalStore(
+    (state) => state.isSaving,
+  );
+
   const [goalValue, setGoalValue] =
     useState(mainGoal);
 
@@ -50,7 +59,10 @@ export default function GoalEditor() {
   const [error, setError] =
     useState("");
 
-  function handleSubmit(
+  const [isDeleting, setIsDeleting] =
+    useState(false);
+
+  async function handleSubmit(
     event: React.FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
@@ -101,23 +113,78 @@ export default function GoalEditor() {
       return;
     }
 
-    updateGoal({
-      mainGoal: cleanGoal,
-      targetMoney:
-        parsedTargetMoney,
-      currentMoney:
-        parsedCurrentMoney,
-      deadline: deadlineValue,
-    });
+    try {
+      await updateGoal({
+        mainGoal: cleanGoal,
 
-    setError("");
-    setSaved(true);
+        targetMoney:
+          parsedTargetMoney,
+
+        currentMoney:
+          parsedCurrentMoney,
+
+        deadline:
+          deadlineValue,
+      });
+
+      setError("");
+      setSaved(true);
+    } catch (submitError) {
+      console.error(
+        "Goal save failed:",
+        submitError,
+      );
+
+      setSaved(false);
+
+      setError(
+        "Maksady ýatda saklamak başartmady.",
+      );
+    }
+  }
+
+  async function handleDelete() {
+    const confirmed =
+      window.confirm(
+        "Bu maksady pozmak isleýäniňe ynamyň barmy?",
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+      setError("");
+      setSaved(false);
+
+      await resetGoal();
+
+      setGoalValue("");
+      setTargetValue("0");
+      setCurrentValue("0");
+      setDeadlineValue("");
+    } catch (deleteError) {
+      console.error(
+        "Goal delete failed:",
+        deleteError,
+      );
+
+      setError(
+        "Maksady pozmak başartmady.",
+      );
+    } finally {
+      setIsDeleting(false);
+    }
   }
 
   function handleFieldChange() {
     setSaved(false);
     setError("");
   }
+
+  const hasExistingGoal =
+    Boolean(mainGoal.trim());
 
   return (
     <motion.form
@@ -206,6 +273,7 @@ export default function GoalEditor() {
                 size={15}
                 className="text-violet-400"
               />
+
               Esasy maksat
             </label>
 
@@ -213,6 +281,10 @@ export default function GoalEditor() {
               id="goal-title"
               type="text"
               value={goalValue}
+              disabled={
+                isSaving ||
+                isDeleting
+              }
               onChange={(event) => {
                 setGoalValue(
                   event.target.value,
@@ -233,6 +305,8 @@ export default function GoalEditor() {
                 focus:border-violet-400/40
                 focus:ring-2
                 focus:ring-violet-400/10
+                disabled:cursor-not-allowed
+                disabled:opacity-50
               "
             />
           </div>
@@ -248,6 +322,7 @@ export default function GoalEditor() {
                   size={15}
                   className="text-info"
                 />
+
                 Gerek pul
               </label>
 
@@ -256,6 +331,10 @@ export default function GoalEditor() {
                 type="number"
                 min="0"
                 value={targetValue}
+                disabled={
+                  isSaving ||
+                  isDeleting
+                }
                 onChange={(event) => {
                   setTargetValue(
                     event.target.value,
@@ -274,6 +353,8 @@ export default function GoalEditor() {
                   focus:border-info/40
                   focus:ring-2
                   focus:ring-info/10
+                  disabled:cursor-not-allowed
+                  disabled:opacity-50
                 "
               />
             </div>
@@ -287,6 +368,7 @@ export default function GoalEditor() {
                   size={15}
                   className="text-success"
                 />
+
                 Häzirki ýygnalan pul
               </label>
 
@@ -295,6 +377,10 @@ export default function GoalEditor() {
                 type="number"
                 min="0"
                 value={currentValue}
+                disabled={
+                  isSaving ||
+                  isDeleting
+                }
                 onChange={(event) => {
                   setCurrentValue(
                     event.target.value,
@@ -313,6 +399,8 @@ export default function GoalEditor() {
                   focus:border-success/40
                   focus:ring-2
                   focus:ring-success/10
+                  disabled:cursor-not-allowed
+                  disabled:opacity-50
                 "
               />
             </div>
@@ -328,6 +416,7 @@ export default function GoalEditor() {
                 size={15}
                 className="text-warning"
               />
+
               Soňky möhlet
             </label>
 
@@ -335,6 +424,10 @@ export default function GoalEditor() {
               id="goal-deadline"
               type="date"
               value={deadlineValue}
+              disabled={
+                isSaving ||
+                isDeleting
+              }
               onChange={(event) => {
                 setDeadlineValue(
                   event.target.value,
@@ -353,6 +446,8 @@ export default function GoalEditor() {
                 focus:border-warning/40
                 focus:ring-2
                 focus:ring-warning/10
+                disabled:cursor-not-allowed
+                disabled:opacity-50
               "
             />
           </div>
@@ -372,7 +467,9 @@ export default function GoalEditor() {
           <div>
             {saved ? (
               <div className="flex items-center gap-2 text-success">
-                <CheckCircle2 size={17} />
+                <CheckCircle2
+                  size={17}
+                />
 
                 <p className="text-sm font-medium">
                   Maglumatlar üstünlikli
@@ -388,23 +485,70 @@ export default function GoalEditor() {
             )}
           </div>
 
-          <button
-            type="submit"
-            className="
-              inline-flex h-11 items-center
-              gap-2 rounded-xl
-              bg-primary px-5
-              text-sm font-semibold
-              text-slate-950
-              shadow-[0_8px_24px_rgba(34,214,111,0.12)]
-              transition-all duration-200
-              hover:-translate-y-0.5
-              hover:bg-primary-hover
-            "
-          >
-            <Save size={17} />
-            Ýatda sakla
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            {hasExistingGoal && (
+              <button
+                type="button"
+                onClick={() =>
+                  void handleDelete()
+                }
+                disabled={
+                  isSaving ||
+                  isDeleting
+                }
+                className="
+                  inline-flex h-11
+                  items-center gap-2
+                  rounded-xl
+                  border border-danger/20
+                  bg-danger/10
+                  px-4
+                  text-sm font-semibold
+                  text-danger
+                  transition-all duration-200
+                  hover:border-danger/35
+                  hover:bg-danger/15
+                  disabled:cursor-not-allowed
+                  disabled:opacity-50
+                "
+              >
+                <Trash2 size={17} />
+
+                {isDeleting
+                  ? "Pozulýar..."
+                  : "Maksady poz"}
+              </button>
+            )}
+
+            <button
+              type="submit"
+              disabled={
+                isSaving ||
+                isDeleting
+              }
+              className="
+                inline-flex h-11
+                items-center gap-2
+                rounded-xl
+                bg-primary px-5
+                text-sm font-semibold
+                text-slate-950
+                shadow-[0_8px_24px_rgba(34,214,111,0.12)]
+                transition-all duration-200
+                hover:-translate-y-0.5
+                hover:bg-primary-hover
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+                disabled:hover:translate-y-0
+              "
+            >
+              <Save size={17} />
+
+              {isSaving
+                ? "Ýatda saklanýar..."
+                : "Ýatda sakla"}
+            </button>
+          </div>
         </div>
       </div>
     </motion.form>

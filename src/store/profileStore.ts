@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
 type ProfileState = {
   name: string;
@@ -12,34 +11,29 @@ type ProfileState = {
 };
 
 const initialState = {
-  name: "Alem",
-  role: "Founder",
+  name: "",
+  role: "Şahsy profil",
 };
 
 export const useProfileStore =
-  create<ProfileState>()(
-    persist(
-      (set) => ({
+  create<ProfileState>()((set) => ({
+    ...initialState,
+
+    setName: (name) => {
+      set({
+        name: name.trim(),
+      });
+    },
+
+    setRole: (role) => {
+      set({
+        role: role.trim() || "Şahsy profil",
+      });
+    },
+
+    resetProfile: () => {
+      set({
         ...initialState,
-
-        setName: (name) => {
-          set({
-            name,
-          });
-        },
-
-        setRole: (role) => {
-          set({
-            role,
-          });
-        },
-
-        resetProfile: () => {
-          set(initialState);
-        },
-      }),
-      {
-        name: "osus-profile-storage",
-      },
-    ),
-  );
+      });
+    },
+  }));
