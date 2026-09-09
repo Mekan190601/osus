@@ -15,7 +15,6 @@ import { useTranslation } from "../../../../hooks/useTranslation";
 import { useGoalStore } from "../../../../store/goalStore";
 import { usePlannerStore } from "../../../../store/plannerStore";
 
-
 import {
   calculateFinancialProgress,
 } from "../../../analytics/utils/analytics";
@@ -128,48 +127,56 @@ export default function ExecutiveProgress() {
         }}
         className="
           relative overflow-hidden
-          rounded-2xl
+          rounded-[20px]
           border border-border
           bg-surface
-          p-6
+          p-4
           shadow-[var(--app-shadow)]
+          sm:rounded-2xl
+          sm:p-6
         "
       >
         <div
           className="
             pointer-events-none
             absolute -right-20 -top-20
-            h-52 w-52
+            h-40 w-40
             rounded-full
             bg-violet-500/[0.06]
             blur-3xl
+            sm:h-52 sm:w-52
           "
         />
 
-        <div className="relative flex items-start gap-4">
+        <div className="relative flex items-center gap-3 sm:items-start sm:gap-4">
           <div
             className="
-              flex h-12 w-12 shrink-0
+              flex h-9 w-9 shrink-0
               items-center justify-center
-              rounded-xl
+              rounded-lg
               border border-violet-400/15
               bg-violet-500/10
               text-violet-400
+              sm:h-12 sm:w-12
+              sm:rounded-xl
             "
           >
-            <BarChart3 size={21} />
+            <BarChart3
+              size={17}
+              className="sm:h-[21px] sm:w-[21px]"
+            />
           </div>
 
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-violet-400">
+            <p className="text-[10px] font-semibold text-violet-400 sm:text-sm">
               {t.dashboard.overallProgress}
             </p>
 
-            <h3 className="mt-2 text-xl font-bold text-text-primary">
+            <h3 className="mt-1 text-[15px] font-bold text-text-primary sm:mt-2 sm:text-xl">
               Strategik analiz üçin maksat gerek
             </h3>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-text-muted">
+            <p className="mt-1 hidden max-w-2xl text-sm leading-6 text-text-muted sm:mt-2 sm:block">
               Esasy maksadyňy girizeniňden
               soň maliýe we Planner ösüşi
               birleşdirilip, umumy ösüş
@@ -179,25 +186,27 @@ export default function ExecutiveProgress() {
             <Link
               to={ROUTES.goals}
               className="
-                group mt-5 inline-flex
-                h-10 items-center gap-2
-                rounded-xl
-                bg-primary px-4
-                text-sm font-semibold
+                group mt-2.5 inline-flex
+                h-9 items-center gap-1.5
+                rounded-lg
+                bg-primary px-3
+                text-[11px] font-semibold
                 text-slate-950
                 transition-all duration-200
-                hover:-translate-y-0.5
                 hover:bg-primary-hover
+                sm:mt-5
+                sm:h-10
+                sm:gap-2
+                sm:rounded-xl
+                sm:px-4
+                sm:text-sm
               "
             >
               Maksat döret
 
               <ArrowRight
-                size={16}
-                className="
-                  transition-transform
-                  group-hover:translate-x-0.5
-                "
+                size={14}
+                className="sm:h-4 sm:w-4"
               />
             </Link>
           </div>
@@ -222,63 +231,72 @@ export default function ExecutiveProgress() {
       }}
       className="
         relative overflow-hidden
-        rounded-3xl
+        rounded-[20px]
         border border-border
         bg-surface
-        p-5
+        p-4
         shadow-[var(--app-shadow)]
-        sm:p-6
+        sm:rounded-3xl
+        sm:p-5
+        lg:p-6
       "
     >
-      {/* BACKGROUND ATMOSPHERE */}
-
+      {/* BACKGROUND */}
       <div className="pointer-events-none absolute inset-0">
         <div
           className="
             absolute -right-28 -top-28
-            h-72 w-72
+            h-56 w-56
             rounded-full
             bg-violet-500/[0.055]
-            blur-[90px]
+            blur-[80px]
+            sm:h-72 sm:w-72
+            sm:blur-[90px]
           "
         />
 
         <div
           className="
             absolute -bottom-32 left-[25%]
-            h-64 w-64
+            hidden h-64 w-64
             rounded-full
             bg-info/[0.04]
             blur-[90px]
+            sm:block
           "
         />
       </div>
 
       <div className="relative z-10">
         {/* HEADER */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 text-violet-400 sm:gap-2">
+              <BarChart3
+                size={15}
+                className="sm:h-[18px] sm:w-[18px]"
+              />
 
-        <div
-          className="
-            flex flex-col gap-5
-            lg:flex-row
-            lg:items-start
-            lg:justify-between
-          "
-        >
-          <div>
-            <div className="flex items-center gap-2 text-violet-400">
-              <BarChart3 size={18} />
-
-              <span className="text-sm font-semibold">
+              <span className="text-[10px] font-semibold sm:text-sm">
                 {t.dashboard.overallProgress}
               </span>
             </div>
 
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-primary">
+            <h2
+              className="
+                mt-1
+                text-[17px]
+                font-bold
+                tracking-tight
+                text-text-primary
+                sm:mt-2
+                sm:text-2xl
+              "
+            >
               Strategik ösüş merkezi
             </h2>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-text-muted">
+            <p className="mt-2 hidden max-w-2xl text-sm leading-6 text-text-muted sm:block">
               Maliýe we Planner netijeleri
               birleşdirilip, maksadyň boýunça
               umumy ösüş depgini görkezilýär.
@@ -287,7 +305,14 @@ export default function ExecutiveProgress() {
 
           <span
             className={[
-              "inline-flex w-fit rounded-full border px-3 py-1.5 text-xs font-semibold",
+              `
+                inline-flex shrink-0
+                rounded-full border
+                px-2 py-1
+                text-[9px] font-semibold
+                sm:px-3 sm:py-1.5
+                sm:text-xs
+              `,
               statusClasses,
             ].join(" ")}
           >
@@ -296,22 +321,22 @@ export default function ExecutiveProgress() {
         </div>
 
         {/* MAIN GRID */}
-
         <div
           className="
-            mt-6 grid grid-cols-1 gap-4
+            mt-3 grid grid-cols-1 gap-2
+            sm:mt-6 sm:gap-4
             xl:grid-cols-[0.9fr_1.1fr]
           "
         >
-          {/* OVERALL SCORE */}
-
+          {/* OVERALL */}
           <div
             className="
               relative overflow-hidden
-              rounded-2xl
+              rounded-xl
               border border-violet-400/15
               bg-violet-500/[0.035]
-              p-5
+              p-3
+              sm:rounded-2xl
               sm:p-6
             "
           >
@@ -319,74 +344,71 @@ export default function ExecutiveProgress() {
               className="
                 pointer-events-none
                 absolute -right-16 -top-16
-                h-44 w-44
+                h-36 w-36
                 rounded-full
                 bg-violet-500/10
                 blur-3xl
+                sm:h-44 sm:w-44
               "
             />
 
             <div className="relative">
-              <div className="flex items-center gap-2 text-violet-400">
-                <Target size={17} />
-
-                <span className="text-xs font-semibold uppercase tracking-[0.12em]">
-                  Umumy ösüş
-                </span>
-              </div>
-
-              <div className="mt-5 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <motion.p
-                    initial={{
-                      opacity: 0,
-                      scale: 0.9,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      scale: 1,
-                    }}
-                    transition={{
-                      duration: 0.45,
-                      delay: 0.15,
-                    }}
-                    className="
-                      text-5xl font-black
-                      tracking-[-0.05em]
-                      text-text-primary
-                      sm:text-6xl
-                    "
-                  >
-                    {overallProgress}
-                    <span className="ml-1 text-2xl font-bold text-violet-400">
-                      %
-                    </span>
-                  </motion.p>
+                  <div className="flex items-center gap-1.5 text-violet-400">
+                    <Target size={14} />
 
-                  <p className="mt-2 text-sm text-text-muted">
-                    Umumy ösüş derejesi
-                  </p>
+                    <span className="text-[9px] font-semibold uppercase tracking-[0.1em] sm:text-xs">
+                      Umumy ösüş
+                    </span>
+                  </div>
+
+                  <div className="mt-1.5 flex items-end gap-2 sm:mt-5">
+                    <motion.p
+                      initial={{
+                        opacity: 0,
+                        scale: 0.9,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        scale: 1,
+                      }}
+                      transition={{
+                        duration: 0.45,
+                        delay: 0.15,
+                      }}
+                      className="
+                        text-[32px]
+                        font-black
+                        leading-none
+                        tracking-[-0.05em]
+                        text-text-primary
+                        sm:text-6xl
+                      "
+                    >
+                      {overallProgress}
+                      <span className="ml-0.5 text-base font-bold text-violet-400 sm:ml-1 sm:text-2xl">
+                        %
+                      </span>
+                    </motion.p>
+                  </div>
                 </div>
 
-                <div className="sm:text-right">
-                  <p className="text-xs text-text-muted">
+                <div className="min-w-0 max-w-[48%] text-right sm:max-w-[240px]">
+                  <p className="text-[9px] text-text-muted sm:text-xs">
                     Esasy maksat
                   </p>
 
-                  <p className="mt-1 max-w-[240px] truncate text-sm font-semibold text-text-primary">
+                  <p className="mt-0.5 truncate text-[11px] font-semibold text-text-primary sm:mt-1 sm:text-sm">
                     {mainGoal}
                   </p>
                 </div>
               </div>
 
-              {/* overall progress */}
-
-              <div className="mt-6">
-                <div className="h-2.5 overflow-hidden rounded-full bg-background">
+              <div className="mt-2.5 sm:mt-6">
+                <div className="h-1.5 overflow-hidden rounded-full bg-background sm:h-2.5">
                   <motion.div
-                    initial={{
-                      width: 0,
-                    }}
+                    initial={{ width: 0 }}
                     animate={{
                       width: `${overallProgress}%`,
                     }}
@@ -405,7 +427,7 @@ export default function ExecutiveProgress() {
                   />
                 </div>
 
-                <div className="mt-2 flex justify-between text-[10px] text-text-disabled">
+                <div className="mt-1 hidden justify-between text-[10px] text-text-disabled sm:mt-2 sm:flex">
                   <span>0%</span>
                   <span>50%</span>
                   <span>100%</span>
@@ -415,54 +437,56 @@ export default function ExecutiveProgress() {
           </div>
 
           {/* FINANCE + PLANNER */}
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             {/* FINANCE */}
-
             <motion.div
-              whileHover={{
-                y: -3,
-              }}
+              whileHover={{ y: -3 }}
               className="
-                rounded-2xl
+                rounded-xl
                 border border-info/15
                 bg-info/[0.035]
-                p-5
+                p-3
                 transition-colors duration-200
                 hover:border-info/25
+                sm:rounded-2xl
+                sm:p-5
               "
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center justify-between gap-2">
                 <div
                   className="
-                    flex h-11 w-11
-                    items-center justify-center
-                    rounded-xl
+                    flex h-8 w-8
+                    shrink-0 items-center
+                    justify-center
+                    rounded-lg
                     border border-info/15
                     bg-info/10
                     text-info
+                    sm:h-11 sm:w-11
+                    sm:rounded-xl
                   "
                 >
                   <CircleDollarSign
-                    size={19}
+                    size={15}
+                    className="sm:h-[19px] sm:w-[19px]"
                   />
                 </div>
 
-                <span className="text-2xl font-bold text-info">
+                <span className="text-[18px] font-bold text-info sm:text-2xl">
                   {financialProgress}%
                 </span>
               </div>
 
-              <p className="mt-5 text-sm font-semibold text-text-primary">
+              <p className="mt-2 text-[11px] font-semibold text-text-primary sm:mt-5 sm:text-sm">
                 Maliýe ösüşi
               </p>
 
-              <p className="mt-1 text-xs leading-5 text-text-muted">
+              <p className="mt-1 hidden text-xs leading-5 text-text-muted sm:block">
                 Maksat puly boýunça häzirki
                 maliýe depgini.
               </p>
 
-              <div className="mt-5 h-2 overflow-hidden rounded-full bg-background">
+              <div className="mt-2 h-1 overflow-hidden rounded-full bg-background sm:mt-5 sm:h-2">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{
@@ -479,51 +503,54 @@ export default function ExecutiveProgress() {
             </motion.div>
 
             {/* PLANNER */}
-
             <motion.div
-              whileHover={{
-                y: -3,
-              }}
+              whileHover={{ y: -3 }}
               className="
-                rounded-2xl
+                rounded-xl
                 border border-violet-400/15
                 bg-violet-500/[0.035]
-                p-5
+                p-3
                 transition-colors duration-200
                 hover:border-violet-400/25
+                sm:rounded-2xl
+                sm:p-5
               "
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-center justify-between gap-2">
                 <div
                   className="
-                    flex h-11 w-11
-                    items-center justify-center
-                    rounded-xl
+                    flex h-8 w-8
+                    shrink-0 items-center
+                    justify-center
+                    rounded-lg
                     border border-violet-400/15
                     bg-violet-500/10
                     text-violet-400
+                    sm:h-11 sm:w-11
+                    sm:rounded-xl
                   "
                 >
                   <CalendarCheck2
-                    size={19}
+                    size={15}
+                    className="sm:h-[19px] sm:w-[19px]"
                   />
                 </div>
 
-                <span className="text-2xl font-bold text-violet-400">
+                <span className="text-[18px] font-bold text-violet-400 sm:text-2xl">
                   {plannerProgress}%
                 </span>
               </div>
 
-              <p className="mt-5 text-sm font-semibold text-text-primary">
+              <p className="mt-2 text-[11px] font-semibold text-text-primary sm:mt-5 sm:text-sm">
                 Meýilnama ösüşi
               </p>
 
-              <p className="mt-1 text-xs leading-5 text-text-muted">
+              <p className="mt-1 hidden text-xs leading-5 text-text-muted sm:block">
                 Maksada bagly işleriň ýerine
                 ýetiriliş derejesi.
               </p>
 
-              <div className="mt-5 h-2 overflow-hidden rounded-full bg-background">
+              <div className="mt-2 h-1 overflow-hidden rounded-full bg-background sm:mt-5 sm:h-2">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{
@@ -541,8 +568,7 @@ export default function ExecutiveProgress() {
           </div>
         </div>
 
-        {/* AI NEXT ACTION */}
-
+        {/* NEXT ACTION */}
         <motion.div
           initial={{
             opacity: 0,
@@ -557,90 +583,114 @@ export default function ExecutiveProgress() {
             delay: 0.35,
           }}
           className="
-            mt-4
-            rounded-2xl
+            mt-2
+            rounded-xl
             border border-violet-400/15
             bg-gradient-to-r
             from-violet-500/[0.06]
             via-background/30
             to-info/[0.04]
-            p-5
+            p-3
+            sm:mt-4
+            sm:rounded-2xl
+            sm:p-5
           "
         >
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-start gap-4">
-              <div
+          <div className="flex items-start gap-2.5 sm:gap-4">
+            <div
+              className="
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-lg
+                border border-violet-400/15
+                bg-violet-500/10
+                text-violet-400
+                sm:h-10 sm:w-10
+                sm:rounded-xl
+              "
+            >
+              <Brain
+                size={15}
+                className="sm:h-[18px] sm:w-[18px]"
+              />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5">
+                <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-violet-400 sm:text-xs">
+                  Indiki ädim
+                </p>
+
+                <Sparkles
+                  size={11}
+                  className="text-info sm:h-[13px] sm:w-[13px]"
+                />
+              </div>
+
+              <p
                 className="
-                  flex h-10 w-10 shrink-0
-                  items-center justify-center
-                  rounded-xl
-                  border border-violet-400/15
-                  bg-violet-500/10
-                  text-violet-400
+                  mt-1
+                  line-clamp-2
+                  text-[11px]
+                  leading-[1.45]
+                  text-text-secondary
+                  sm:mt-2
+                  sm:line-clamp-none
+                  sm:text-sm
+                  sm:leading-6
                 "
               >
-                <Brain size={18} />
-              </div>
-
-              <div>
-                <div className="flex items-center gap-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.12em] text-violet-400">
-                    Indiki ädim
-                  </p>
-
-                  <Sparkles
-                    size={13}
-                    className="text-info"
-                  />
-                </div>
-
-                <p className="mt-2 max-w-3xl text-sm leading-6 text-text-secondary">
-                  {nextAction}
-                </p>
-              </div>
+                {nextAction}
+              </p>
             </div>
 
             <Link
               to={ROUTES.goals}
+              aria-label="Giňişleýin gör"
               className="
-                group inline-flex
-                shrink-0 items-center gap-2
-                text-sm font-semibold
+                flex h-8 w-8
+                shrink-0 items-center
+                justify-center
+                rounded-lg
+                border border-violet-400/15
                 text-violet-400
                 transition
-                hover:text-violet-300
+                hover:bg-violet-500/10
+                sm:h-auto sm:w-auto
+                sm:border-0
               "
             >
-              Giňişleýin gör
+              <span className="hidden text-sm font-semibold sm:inline">
+                Giňişleýin gör
+              </span>
 
               <ArrowRight
-                size={16}
-                className="
-                  transition-transform
-                  group-hover:translate-x-0.5
-                "
+                size={15}
+                className="sm:ml-2 sm:h-4 sm:w-4"
               />
             </Link>
           </div>
         </motion.div>
 
-        {/* FOOTER */}
-
+        {/* DESKTOP FOOTER */}
         <div
           className="
-            mt-5 flex flex-col gap-3
+            mt-5 hidden
             border-t border-border/70
             pt-4
-            sm:flex-row
+            sm:flex
             sm:items-center
             sm:justify-between
+            sm:gap-3
           "
         >
           <p className="text-xs text-text-muted">
-            Umumy ösüş 50% maliýe + 50% meýilnama netijesi boýunça hasaplanýar.
+            Umumy ösüş 50% maliýe + 50%
+            meýilnama netijesi boýunça
+            hasaplanýar.
           </p>
 
-          <div className="flex items-center gap-2 text-[11px] text-text-disabled">
+          <div className="flex shrink-0 items-center gap-2 text-[11px] text-text-disabled">
             <span className="h-2 w-2 rounded-full bg-info" />
             Maliýe
 

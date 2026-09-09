@@ -158,24 +158,24 @@ export default function GoalFundingForecast() {
       : null;
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-6">
+    <section className="rounded-[20px] border border-border bg-surface p-4 sm:rounded-2xl sm:p-6">
       {/* HEADER */}
 
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+      <div className="flex items-start justify-between gap-3 lg:gap-5">
         <div>
           <div className="flex items-center gap-2 text-primary">
             <TrendingUp size={18} />
 
-            <span className="text-sm font-semibold">
+            <span className="text-[11px] font-semibold sm:text-[10px] sm:text-sm">
               Maksat prognozy
             </span>
           </div>
 
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-primary">
+          <h2 className="mt-1 text-[20px] font-bold tracking-tight text-text-primary sm:mt-2 sm:text-2xl">
             Maksada ýetmek prognozy
           </h2>
 
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-text-muted">
+          <p className="mt-1.5 max-w-3xl text-[11px] leading-5 text-text-muted sm:mt-2 sm:text-[10px] sm:text-sm sm:leading-6">
             Häzirki aýyň esasy we
             goşmaça girdeji-çykdajy
             depginine görä maksadyň
@@ -184,35 +184,35 @@ export default function GoalFundingForecast() {
           </p>
         </div>
 
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
-          <Target size={20} />
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary sm:h-11 sm:w-11 sm:rounded-xl">
+          <Target size={17} className="sm:h-5 sm:w-5" />
         </div>
       </div>
 
       {/* ESASY MAKSAT */}
 
-      <div className="mt-6 rounded-xl border border-border bg-background/40 p-5">
-        <p className="text-xs font-medium uppercase tracking-[0.14em] text-text-muted">
+      <div className="mt-3 rounded-xl border border-border bg-background/40 p-3 sm:mt-6 sm:p-5">
+        <p className="text-[9px] font-medium uppercase tracking-[0.12em] text-text-muted sm:text-xs sm:tracking-[0.14em]">
           Esasy maksat
         </p>
 
-        <h3 className="mt-2 text-xl font-bold text-text-primary">
+        <h3 className="mt-1 text-base font-bold text-text-primary sm:mt-2 sm:text-xl">
           {mainGoal.trim()
             ? mainGoal
             : "Maksat girizilmedi"}
         </h3>
 
-        <div className="mt-5 flex items-center justify-between gap-4">
-          <span className="text-sm text-text-muted">
+        <div className="mt-3 flex items-center justify-between gap-3 sm:mt-3 sm:mt-5 sm:gap-4">
+          <span className="text-[10px] text-text-muted sm:text-[10px] sm:text-sm">
             Maliýe ösüşi
           </span>
 
-          <span className="text-lg font-bold text-primary">
+          <span className="text-base font-bold text-primary sm:text-lg">
             {progress}%
           </span>
         </div>
 
-        <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-background">
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-background sm:mt-3 sm:h-2.5">
           <div
             className="h-full rounded-full bg-primary transition-all duration-500"
             style={{
@@ -221,7 +221,7 @@ export default function GoalFundingForecast() {
           />
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-4 text-xs text-text-muted">
+        <div className="mt-2 flex items-center justify-between gap-3 text-[10px] text-text-muted sm:mt-3 sm:gap-4 sm:text-xs">
           <span>
             {money(currentMoney)}
           </span>
@@ -234,37 +234,37 @@ export default function GoalFundingForecast() {
 
       {/* PROGNOZ KARTLARY */}
 
-      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-        <article className="rounded-xl border border-border bg-background/40 p-5">
-          <div className="flex items-center gap-2 text-text-muted">
+      <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-4 md:grid-cols-3">
+        <article className="rounded-xl border border-border bg-background/40 p-3 sm:p-5">
+          <div className="flex items-center gap-1.5 text-text-muted sm:gap-2">
             <CircleDollarSign
               size={17}
             />
 
-            <span className="text-sm">
+            <span className="text-[10px] sm:text-sm">
               Galan pul
             </span>
           </div>
 
-          <p className="mt-3 text-2xl font-bold text-text-primary">
+          <p className="mt-1.5 text-lg font-bold text-text-primary sm:mt-3 sm:text-2xl">
             {money(
               forecast.remainingMoney,
             )}
           </p>
         </article>
 
-        <article className="rounded-xl border border-border bg-background/40 p-5">
-          <div className="flex items-center gap-2 text-text-muted">
+        <article className="rounded-xl border border-border bg-background/40 p-3 sm:p-5">
+          <div className="flex items-center gap-1.5 text-text-muted sm:gap-2">
             <TrendingUp size={17} />
 
-            <span className="text-sm">
+            <span className="text-[10px] sm:text-sm">
               Aýlyk arassa girdeji
             </span>
           </div>
 
           <p
             className={[
-              "mt-3 text-2xl font-bold",
+              "mt-1.5 text-lg font-bold sm:mt-3 sm:text-2xl",
               forecast.monthlyNetIncome >
               0
                 ? "text-success"
@@ -279,7 +279,7 @@ export default function GoalFundingForecast() {
             )}
           </p>
 
-          <div className="mt-3 space-y-1 text-xs text-text-muted">
+          <div className="mt-2 space-y-0.5 text-[9px] text-text-muted sm:mt-3 sm:space-y-1 sm:text-xs">
             <div className="flex justify-between gap-3">
               <span>
                 Jemi girdeji
@@ -306,16 +306,16 @@ export default function GoalFundingForecast() {
           </div>
         </article>
 
-        <article className="rounded-xl border border-border bg-background/40 p-5">
-          <div className="flex items-center gap-2 text-text-muted">
+        <article className="rounded-xl border border-border bg-background/40 p-3 sm:p-5">
+          <div className="flex items-center gap-1.5 text-text-muted sm:gap-2">
             <CalendarClock size={17} />
 
-            <span className="text-sm">
+            <span className="text-[10px] sm:text-sm">
               Takmynan wagt
             </span>
           </div>
 
-          <p className="mt-3 text-2xl font-bold text-text-primary">
+          <p className="mt-1.5 text-lg font-bold text-text-primary sm:mt-3 sm:text-2xl">
             {forecast.estimatedMonths ===
             null
               ? "—"
@@ -328,7 +328,7 @@ export default function GoalFundingForecast() {
           {estimatedDateLabel &&
             forecast.estimatedMonths !==
               0 && (
-              <p className="mt-2 text-xs text-text-muted">
+              <p className="mt-1 text-[9px] text-text-muted sm:mt-2 sm:text-xs">
                 ≈ {estimatedDateLabel}
               </p>
             )}
@@ -337,25 +337,25 @@ export default function GoalFundingForecast() {
 
       {/* ŞU AÝYŇ GOŞMAÇA HEREKETLERI */}
 
-      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border border-success/15 bg-success/[0.035] p-4">
-          <p className="text-xs text-text-muted">
+      <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-4 sm:gap-3">
+        <div className="rounded-xl border border-success/15 bg-success/[0.035] p-3 sm:p-4">
+          <p className="text-[9px] leading-4 text-text-muted sm:text-xs">
             Şu aýyň goşmaça girdejisi
           </p>
 
-          <p className="mt-2 text-lg font-bold text-success">
+          <p className="mt-1 text-sm font-bold text-success sm:mt-2 sm:text-lg">
             +{money(
               additionalIncome,
             )}
           </p>
         </div>
 
-        <div className="rounded-xl border border-danger/15 bg-danger/[0.03] p-4">
-          <p className="text-xs text-text-muted">
+        <div className="rounded-xl border border-danger/15 bg-danger/[0.03] p-3 sm:p-4">
+          <p className="text-[9px] leading-4 text-text-muted sm:text-xs">
             Şu aýyň goşmaça çykdajysy
           </p>
 
-          <p className="mt-2 text-lg font-bold text-danger">
+          <p className="mt-1 text-sm font-bold text-danger sm:mt-2 sm:text-lg">
             -{money(
               additionalExpense,
             )}
@@ -365,11 +365,11 @@ export default function GoalFundingForecast() {
 
       {/* STATUS */}
 
-      <div className="mt-5">
+      <div className="mt-3 sm:mt-5">
         {forecast.status ===
           "completed" && (
-          <div className="rounded-xl border border-success/20 bg-success/5 px-4 py-4">
-            <p className="text-sm font-semibold text-success">
+          <div className="rounded-xl border border-success/20 bg-success/5 px-3 py-3 sm:px-4 sm:py-4">
+            <p className="text-[11px] font-semibold sm:text-[10px] sm:text-sm text-success">
               Maksadyň maliýe bölegi
               100% ýerine ýetirildi.
             </p>
@@ -378,8 +378,8 @@ export default function GoalFundingForecast() {
 
         {forecast.status ===
           "active" && (
-          <div className="rounded-xl border border-primary/20 bg-primary/5 px-4 py-4">
-            <p className="text-sm font-semibold text-primary">
+          <div className="rounded-xl border border-primary/20 bg-primary/5 px-3 py-3 sm:px-4 sm:py-4">
+            <p className="text-[11px] font-semibold sm:text-[10px] sm:text-sm text-primary">
               Häzirki depgin bilen
               maksada takmynan{" "}
               {
@@ -392,8 +392,8 @@ export default function GoalFundingForecast() {
 
         {forecast.status ===
           "blocked" && (
-          <div className="rounded-xl border border-warning/20 bg-warning/5 px-4 py-4">
-            <p className="text-sm font-semibold text-warning">
+          <div className="rounded-xl border border-warning/20 bg-warning/5 px-3 py-3 sm:px-4 sm:py-4">
+            <p className="text-[11px] font-semibold sm:text-[10px] sm:text-sm text-warning">
               Häzirki aýlyk arassa
               girdeji 0 ýa-da 0-dan
               pes. Takyk wagt
@@ -405,8 +405,8 @@ export default function GoalFundingForecast() {
 
         {forecast.status ===
           "no-goal" && (
-          <div className="rounded-xl border border-border bg-background/40 px-4 py-4">
-            <p className="text-sm text-text-muted">
+          <div className="rounded-xl border border-border bg-background/40 px-3 py-3 sm:px-4 sm:py-4">
+            <p className="text-[10px] text-text-muted sm:text-[10px] sm:text-sm">
               Prognoz görmek üçin
               ilki maksat puluny giriz.
             </p>
@@ -416,8 +416,8 @@ export default function GoalFundingForecast() {
 
       {/* FOOTER */}
 
-      <div className="mt-5 border-t border-border pt-5">
-        <p className="text-xs leading-5 text-text-muted">
+      <div className="mt-3 sm:mt-3 border-t border-border pt-3 sm:mt-5 sm:pt-5">
+        <p className="text-[9px] leading-4 text-text-muted sm:text-xs sm:leading-5">
           Bank balansy:{" "}
           <strong className="text-text-primary">
             {money(bankBalance)}

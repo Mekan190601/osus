@@ -61,142 +61,259 @@ export default function PlannerStats({
   return (
     <section
       className="
-        rounded-2xl
-        border border-border
-        bg-surface
-        p-4
-        sm:p-5
+        grid grid-cols-2
+        gap-2
+        sm:gap-3
+        lg:grid-cols-4
       "
     >
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        {/* ÄHLI IŞLER */}
-        <div
+      {/* ÄHLI IŞLER */}
+      <div
+        className="
+          min-w-0
+          rounded-[14px]
+          border border-primary/15
+          bg-primary/[0.025]
+          p-3
+          sm:rounded-xl
+          sm:p-4
+        "
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div
+            className="
+              flex h-8 w-8
+              shrink-0 items-center
+              justify-center
+              rounded-lg
+              bg-primary/10
+              text-primary
+              sm:h-9 sm:w-9
+            "
+          >
+            <ListTodo
+              size={15}
+              className="sm:h-[18px] sm:w-[18px]"
+            />
+          </div>
+
+          <span
+            className="
+              text-[22px]
+              font-bold
+              leading-none
+              text-text-primary
+              sm:text-2xl
+            "
+          >
+            {periodTasks.length}
+          </span>
+        </div>
+
+        <p
           className="
-            rounded-xl
-            border border-primary/15
-            bg-primary/[0.025]
-            p-4
+            mt-2
+            truncate
+            text-[10px]
+            font-medium
+            text-text-muted
+            sm:mt-3
+            sm:text-sm
           "
         >
-          <div className="flex items-center justify-between gap-3">
-            <div
+          Ähli işler
+        </p>
+      </div>
+
+      {/* TAMAMLANAN */}
+      <div
+        className="
+          min-w-0
+          rounded-[14px]
+          border border-success/15
+          bg-success/[0.025]
+          p-3
+          sm:rounded-xl
+          sm:p-4
+        "
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div
+            className="
+              flex h-8 w-8
+              shrink-0 items-center
+              justify-center
+              rounded-lg
+              bg-success/10
+              text-success
+              sm:h-9 sm:w-9
+            "
+          >
+            <CheckCircle2
+              size={15}
+              className="sm:h-[18px] sm:w-[18px]"
+            />
+          </div>
+
+          <span
+            className="
+              text-[22px]
+              font-bold
+              leading-none
+              text-success
+              sm:text-2xl
+            "
+          >
+            {completedTasks.length}
+          </span>
+        </div>
+
+        <p
+          className="
+            mt-2
+            truncate
+            text-[10px]
+            font-medium
+            text-text-muted
+            sm:mt-3
+            sm:text-sm
+          "
+        >
+          Tamamlanan
+        </p>
+      </div>
+
+      {/* HÄZIR ETMELI */}
+      <div
+        className="
+          min-w-0
+          rounded-[14px]
+          border border-warning/15
+          bg-warning/[0.025]
+          p-3
+          sm:rounded-xl
+          sm:p-4
+        "
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div
+            className="
+              flex h-8 w-8
+              shrink-0 items-center
+              justify-center
+              rounded-lg
+              bg-warning/10
+              text-warning
+              sm:h-9 sm:w-9
+            "
+          >
+            <AlertTriangle
+              size={15}
+              className="sm:h-[18px] sm:w-[18px]"
+            />
+          </div>
+
+          <span
+            className="
+              text-[22px]
+              font-bold
+              leading-none
+              text-warning
+              sm:text-2xl
+            "
+          >
+            {urgentImportantTasks.length}
+          </span>
+        </div>
+
+        <p
+          className="
+            mt-2
+            truncate
+            text-[10px]
+            font-medium
+            text-text-muted
+            sm:mt-3
+            sm:text-sm
+          "
+        >
+          Häzir etmeli
+        </p>
+      </div>
+
+      {/* ÝERINE ÝETIRILIŞ */}
+      <div
+        className="
+          min-w-0
+          rounded-[14px]
+          border border-info/15
+          bg-info/[0.025]
+          p-3
+          sm:rounded-xl
+          sm:p-4
+        "
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div
+            className="
+              flex h-8 w-8
+              shrink-0 items-center
+              justify-center
+              rounded-lg
+              bg-info/10
+              text-info
+              sm:h-9 sm:w-9
+            "
+          >
+            <TrendingUp
+              size={15}
+              className="sm:h-[18px] sm:w-[18px]"
+            />
+          </div>
+
+          <span
+            className="
+              text-[22px]
+              font-bold
+              leading-none
+              text-info
+              sm:text-2xl
+            "
+          >
+            {progress}%
+          </span>
+        </div>
+
+        <div className="mt-2 sm:mt-3">
+          <div className="flex items-center justify-between gap-2">
+            <p
               className="
-                flex h-9 w-9
-                items-center justify-center
-                rounded-lg
-                bg-primary/10
-                text-primary
+                truncate
+                text-[10px]
+                font-medium
+                text-text-muted
+                sm:text-sm
               "
             >
-              <ListTodo size={18} />
-            </div>
+              Ýerine ýetiriliş
+            </p>
 
-            <span className="text-2xl font-bold text-text-primary">
+            <span className="text-[9px] font-semibold text-info sm:hidden">
+              {completedTasks.length}/
               {periodTasks.length}
             </span>
           </div>
 
-          <p className="mt-3 text-sm font-medium text-text-muted">
-            Ähli işler
-          </p>
-        </div>
-
-        {/* TAMAMLANAN */}
-        <div
-          className="
-            rounded-xl
-            border border-success/15
-            bg-success/[0.025]
-            p-4
-          "
-        >
-          <div className="flex items-center justify-between gap-3">
-            <div
-              className="
-                flex h-9 w-9
-                items-center justify-center
-                rounded-lg
-                bg-success/10
-                text-success
-              "
-            >
-              <CheckCircle2 size={18} />
-            </div>
-
-            <span className="text-2xl font-bold text-success">
-              {completedTasks.length}
-            </span>
-          </div>
-
-          <p className="mt-3 text-sm font-medium text-text-muted">
-            Tamamlanan
-          </p>
-        </div>
-
-        {/* HÄZIR ETMELI */}
-        <div
-          className="
-            rounded-xl
-            border border-warning/15
-            bg-warning/[0.025]
-            p-4
-          "
-        >
-          <div className="flex items-center justify-between gap-3">
-            <div
-              className="
-                flex h-9 w-9
-                items-center justify-center
-                rounded-lg
-                bg-warning/10
-                text-warning
-              "
-            >
-              <AlertTriangle size={18} />
-            </div>
-
-            <span className="text-2xl font-bold text-warning">
-              {urgentImportantTasks.length}
-            </span>
-          </div>
-
-          <p className="mt-3 text-sm font-medium text-text-muted">
-            Häzir etmeli
-          </p>
-        </div>
-
-        {/* ÝERINE ÝETIRILIŞ */}
-        <div
-          className="
-            rounded-xl
-            border border-info/15
-            bg-info/[0.025]
-            p-4
-          "
-        >
-          <div className="flex items-center justify-between gap-3">
-            <div
-              className="
-                flex h-9 w-9
-                items-center justify-center
-                rounded-lg
-                bg-info/10
-                text-info
-              "
-            >
-              <TrendingUp size={18} />
-            </div>
-
-            <span className="text-2xl font-bold text-info">
-              {progress}%
-            </span>
-          </div>
-
-          <p className="mt-3 text-sm font-medium text-text-muted">
-            Ýerine ýetiriliş
-          </p>
-
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-background">
+          <div
+            className="
+              mt-1.5 h-1
+              overflow-hidden
+              rounded-full
+              bg-background
+              sm:mt-3
+              sm:h-1.5
+            "
+          >
             <div
               className="
                 h-full rounded-full

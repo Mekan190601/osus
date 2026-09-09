@@ -265,12 +265,12 @@ const weeklyStatus =
   });
 
   return (
-  <div className="space-y-6 pb-10 lg:space-y-8">
+  <div className="space-y-3 pb-6 sm:space-y-5 sm:pb-8 lg:space-y-8 lg:pb-10">
     {/* ======================================
         HEADER
     ====================================== */}
 
-    <section className="rounded-3xl border border-border bg-surface p-6 shadow-[var(--app-shadow)] sm:p-8">
+    <section className="rounded-[20px] border border-border bg-surface p-4 shadow-[var(--app-shadow)] sm:rounded-3xl sm:p-6 lg:p-8">
       <div className="flex items-center gap-2 text-primary">
         <Brain size={19} />
 
@@ -279,11 +279,11 @@ const weeklyStatus =
         </span>
       </div>
 
-      <h1 className="mt-3 text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+      <h1 className="mt-2 text-[21px] font-bold leading-7 tracking-tight text-text-primary sm:mt-3 sm:text-3xl sm:leading-normal lg:text-4xl">
         Akylly ösüş maslahatlary
       </h1>
 
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-text-muted sm:text-base">
+      <p className="mt-1.5 max-w-3xl text-[10px] leading-4 text-text-muted sm:mt-3 sm:text-sm sm:leading-6 lg:text-base lg:leading-7">
         Maksat, maliýe we meýilnama maglumatlaryň
   esasynda häzirki ýagdaýyň seljerilip,
   iň möhüm maslahatlar saýlanýar.
@@ -294,30 +294,30 @@ const weeklyStatus =
         TOP OVERVIEW
     ====================================== */}
 
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+    <div className="grid grid-cols-1 gap-2.5 sm:gap-4 xl:grid-cols-[0.8fr_1.2fr] xl:gap-6">
       {/* GROWTH STATUS */}
 
-      <section className="rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-[var(--app-shadow)]">
+      <section className="rounded-xl border border-primary/20 bg-primary/5 p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
         <p className="text-sm font-semibold text-primary">
           Umumy ösüş ýagdaýy
         </p>
 
         <div className="mt-5">
-          <p className="text-4xl font-bold tracking-tight text-text-primary">
+          <p className="text-[30px] font-bold tracking-tight text-text-primary sm:text-4xl">
             {growth.overallProgress}%
           </p>
 
-          <p className="mt-3 text-sm leading-6 text-text-secondary">
+          <p className="mt-1.5 line-clamp-2 text-[10px] leading-4 text-text-secondary sm:mt-3 sm:line-clamp-none sm:text-sm sm:leading-6">
             {growthAdvice}
           </p>
         </div>
 
-        <div className="mt-6 border-t border-primary/10 pt-5">
+        <div className="mt-3 border-t border-primary/10 pt-3 sm:mt-6 sm:pt-5">
           <p className="text-xs font-medium uppercase tracking-[0.12em] text-text-muted">
             Maliýe / Meýilnama
           </p>
 
-          <div className="mt-3 flex items-end justify-between gap-4">
+          <div className="mt-2 flex items-end justify-between gap-3 sm:mt-3 sm:gap-4">
             <div>
               <p className="text-xs text-text-muted">
                 Maliýe ösüşi
@@ -339,7 +339,7 @@ const weeklyStatus =
             </div>
           </div>
 
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-background/60">
+          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-background/60 sm:mt-4 sm:h-2">
             <div
               className="h-full rounded-full bg-primary transition-all duration-500"
               style={{
@@ -359,8 +359,8 @@ const weeklyStatus =
       {/* PRIMARY ACTION */}
 
       {primaryRecommendation ? (
-        <section className="rounded-2xl border border-primary/25 bg-primary/5 p-6 shadow-[var(--app-shadow)] sm:p-7">
-          <div className="flex h-full flex-col justify-between gap-6">
+        <section className="rounded-xl border border-primary/25 bg-primary/5 p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6 lg:p-7">
+          <div className="flex h-full flex-col justify-between gap-3 sm:gap-6">
             <div>
               <div className="flex items-center gap-2 text-primary">
                 <Brain size={18} />
@@ -370,49 +370,49 @@ const weeklyStatus =
                 </span>
               </div>
 
-              <h2 className="mt-4 max-w-3xl text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
+              <h2 className="mt-2 max-w-3xl text-lg font-bold leading-6 tracking-tight text-text-primary sm:mt-4 sm:text-2xl sm:leading-normal lg:text-3xl">
                 {primaryRecommendation.title}
               </h2>
 
-              <p className="mt-3 max-w-3xl text-sm leading-7 text-text-muted">
+              <p className="mt-1.5 line-clamp-3 max-w-3xl text-[10px] leading-4 text-text-muted sm:mt-3 sm:line-clamp-none sm:text-sm sm:leading-7">
                 {
                   primaryRecommendation.description
                 }
               </p>
 
               {!["no-goal", "expired", "completed"].includes(goalAnalysis.status) && (
-                <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <div className="rounded-xl border border-border bg-background/35 p-4">
+                <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-6 sm:grid-cols-4 sm:gap-3">
+                  <div className="rounded-lg border border-border bg-background/35 p-2.5 sm:rounded-xl sm:p-4">
                     <p className="text-xs text-text-muted">Galan pul</p>
-                    <p className="mt-2 text-lg font-bold text-text-primary">
+                    <p className="mt-1 text-sm font-bold text-text-primary sm:mt-2 sm:text-lg">
                       {money(goalAnalysis.remainingMoney)}
                     </p>
                   </div>
 
-                  <div className="rounded-xl border border-border bg-background/35 p-4">
+                  <div className="rounded-lg border border-border bg-background/35 p-2.5 sm:rounded-xl sm:p-4">
                     <p className="text-xs text-text-muted">Aýda gerek</p>
-                    <p className="mt-2 text-lg font-bold text-warning">
+                    <p className="mt-1 text-sm font-bold text-warning sm:mt-2 sm:text-lg">
                       {money(goalAnalysis.requiredMonthly)}
                     </p>
                   </div>
 
-                  <div className="rounded-xl border border-border bg-background/35 p-4">
+                  <div className="rounded-lg border border-border bg-background/35 p-2.5 sm:rounded-xl sm:p-4">
                     <p className="text-xs text-text-muted">Hepdede gerek</p>
-                    <p className="mt-2 text-lg font-bold text-primary">
+                    <p className="mt-1 text-sm font-bold text-primary sm:mt-2 sm:text-lg">
                       {money(goalAnalysis.requiredWeekly)}
                     </p>
                   </div>
 
-                  <div className="rounded-xl border border-border bg-background/35 p-4">
+                  <div className="rounded-lg border border-border bg-background/35 p-2.5 sm:rounded-xl sm:p-4">
                     <p className="text-xs text-text-muted">Günde gerek</p>
-                    <p className="mt-2 text-lg font-bold text-success">
+                    <p className="mt-1 text-sm font-bold text-success sm:mt-2 sm:text-lg">
                       {money(goalAnalysis.requiredDaily)}
                     </p>
                   </div>
                 </div>
               )}
 
-              <div className="mt-5 flex flex-wrap items-center gap-2">
+              <div className="mt-3 flex flex-wrap items-center gap-1.5 sm:mt-5 sm:gap-2">
                 <span
                   className={[
                     "rounded-full border px-3 py-1 text-xs font-semibold",
@@ -457,7 +457,7 @@ const weeklyStatus =
                     primaryRecommendation.category,
                   )
                 }
-                className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary-hover"
+                className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-[11px] font-semibold text-slate-950 transition hover:bg-primary-hover sm:h-11 sm:rounded-xl sm:px-5 sm:text-sm"
               >
                 Şu häzir et
               </button>
@@ -475,13 +475,13 @@ const weeklyStatus =
     {["behind", "on-track", "no-income"].includes(goalAnalysis.status) && (
       <section
         className={[
-          "rounded-2xl border p-6 shadow-[var(--app-shadow)]",
+          "rounded-xl border p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6",
           weeklyStatus === "behind"
             ? "border-warning/20 bg-warning/[0.035]"
             : "border-success/20 bg-success/[0.035]",
         ].join(" ")}
       >
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col gap-2.5 sm:gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <p
               className={[
@@ -494,13 +494,13 @@ const weeklyStatus =
               Şu hepdäniň maliýe ädimi
             </p>
 
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-primary">
+            <h2 className="mt-1.5 text-lg font-bold tracking-tight text-text-primary sm:mt-2 sm:text-2xl">
               {weeklyStatus === "behind"
                 ? `Şu hepde ýene ${money(weeklyGap)} tap`
                 : "Şu hepdäniň depgini ýeterlik"}
             </h2>
 
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-text-muted">
+            <p className="mt-1.5 line-clamp-2 max-w-3xl text-[10px] leading-4 text-text-muted sm:mt-3 sm:line-clamp-none sm:text-sm sm:leading-6">
               Maksada möhletinde ýetmek üçin şu hepde takmynan{" "}
               <strong className="text-text-primary">
                 {money(goalAnalysis.requiredWeekly)}
@@ -527,17 +527,17 @@ const weeklyStatus =
           </span>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <div className="rounded-xl border border-border bg-background/35 p-4">
+        <div className="mt-3 grid grid-cols-3 gap-1.5 sm:mt-6 sm:gap-3">
+          <div className="rounded-lg border border-border bg-background/35 p-2.5 sm:rounded-xl sm:p-4">
             <p className="text-xs text-text-muted">
               Hepdede gerek
             </p>
-            <p className="mt-2 text-lg font-bold text-text-primary">
+            <p className="mt-1 text-sm font-bold text-text-primary sm:mt-2 sm:text-lg">
               {money(goalAnalysis.requiredWeekly)}
             </p>
           </div>
 
-          <div className="rounded-xl border border-border bg-background/35 p-4">
+          <div className="rounded-lg border border-border bg-background/35 p-2.5 sm:rounded-xl sm:p-4">
             <p className="text-xs text-text-muted">
               Häzirki hepdelik depgin
             </p>
@@ -553,7 +553,7 @@ const weeklyStatus =
             </p>
           </div>
 
-          <div className="rounded-xl border border-border bg-background/35 p-4">
+          <div className="rounded-lg border border-border bg-background/35 p-2.5 sm:rounded-xl sm:p-4">
             <p className="text-xs text-text-muted">
               Tapawut
             </p>
@@ -572,7 +572,7 @@ const weeklyStatus =
           </div>
         </div>
 
-        <div className="mt-5 flex flex-col gap-4 border-t border-border/70 pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-3 flex flex-col gap-2 border-t border-border/70 pt-3 sm:mt-5 sm:gap-4 sm:pt-5 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-3xl text-xs leading-5 text-text-muted">
             {weeklyStatus === "behind"
               ? `Şu hepdede ${money(weeklyGap)} goşmaça boş pul döretmek üçin girdejini artdyr ýa-da zerur däl çykdajylary azalt.`
@@ -598,27 +598,27 @@ const weeklyStatus =
         RECOMMENDATIONS + INSIGHTS
     ====================================== */}
 
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+    <div className="grid grid-cols-1 gap-2.5 sm:gap-4 xl:grid-cols-2 xl:gap-6">
       {/* SMART RECOMMENDATIONS */}
 
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
+      <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
         <div>
           <p className="text-sm font-semibold text-primary">
             Akylly maslahatlar
           </p>
 
-          <h2 className="mt-2 text-2xl font-bold text-text-primary">
+          <h2 className="mt-1 text-lg font-bold text-text-primary sm:mt-2 sm:text-2xl">
             Indiki möhüm ädimler
           </h2>
 
-          <p className="mt-2 text-sm leading-6 text-text-muted">
+          <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-text-muted sm:mt-2 sm:line-clamp-none sm:text-sm sm:leading-6">
             Häzirki ýagdaýyň boýunça iň ýokary
             täsirli maslahatlar prioritet boýunça
             tertiplendi.
           </p>
         </div>
 
-        <div className="mt-6 space-y-3">
+        <div className="mt-3 space-y-2 sm:mt-6 sm:space-y-3">
           {smartRecommendations
             .slice(
               primaryRecommendation ? 1 : 0,
@@ -631,9 +631,9 @@ const weeklyStatus =
               ) => (
                 <article
                   key={recommendation.id}
-                  className="rounded-xl border border-border bg-background/40 p-4 transition hover:border-primary/20"
+                  className="rounded-lg border border-border bg-background/40 p-3 transition hover:border-primary/20 sm:rounded-xl sm:p-4"
                 >
-                  <div className="flex items-start gap-4">
+                  <div className="flex items-start gap-2.5 sm:gap-4">
                     <div
                       className={[
                         "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-sm font-bold",
@@ -675,7 +675,7 @@ const weeklyStatus =
                         </span>
                       </div>
 
-                      <p className="mt-2 text-sm leading-6 text-text-secondary">
+                      <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-text-secondary sm:mt-2 sm:line-clamp-none sm:text-sm sm:leading-6">
                         {
                           recommendation.description
                         }
@@ -688,7 +688,7 @@ const weeklyStatus =
                             recommendation.category,
                           )
                         }
-                        className="mt-4 inline-flex h-9 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 px-4 text-xs font-semibold text-primary transition hover:bg-primary/15"
+                        className="mt-2 inline-flex h-8 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 px-3 text-[10px] font-semibold text-primary transition hover:bg-primary/15 sm:mt-4 sm:h-9 sm:px-4 sm:text-xs"
                       >
                         Şu häzir et
                       </button>
@@ -722,23 +722,23 @@ const weeklyStatus =
 
       {/* CURRENT ANALYSIS */}
 
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
+      <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
         <div>
           <p className="text-sm font-semibold text-primary">
             Häzirki analiz
           </p>
 
-          <h2 className="mt-2 text-2xl font-bold text-text-primary">
+          <h2 className="mt-1 text-lg font-bold text-text-primary sm:mt-2 sm:text-2xl">
   {insights.length} möhüm maglumat
 </h2>
 
-          <p className="mt-2 text-sm leading-6 text-text-muted">
+          <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-text-muted sm:mt-2 sm:line-clamp-none sm:text-sm sm:leading-6">
             Sistemanyň häzirki maglumatlardan
             ýüze çykaran esasy signallary.
           </p>
         </div>
 
-        <div className="mt-6 space-y-3">
+        <div className="mt-3 space-y-2 sm:mt-6 sm:space-y-3">
           {insights.map((insight) => {
             const Icon =
               getInsightIcon(
@@ -758,7 +758,7 @@ const weeklyStatus =
                   classes.container,
                 ].join(" ")}
               >
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-2.5 sm:gap-4">
                   <div
                     className={[
                       "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-current/10 bg-background/30",
@@ -773,7 +773,7 @@ const weeklyStatus =
                       {insight.title}
                     </h3>
 
-                    <p className="mt-2 text-sm leading-6 text-text-muted">
+                    <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-text-muted sm:mt-2 sm:line-clamp-none sm:text-sm sm:leading-6">
                       {
                         insight.description
                       }
@@ -809,13 +809,13 @@ const weeklyStatus =
         ACTION PLAN
     ====================================== */}
 
-    <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-      <div className="mb-5">
+    <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+      <div className="mb-3 sm:mb-5">
         <p className="text-sm font-semibold text-primary">
           Hereket meýilnamasy
         </p>
 
-        <h2 className="mt-2 text-2xl font-bold text-text-primary">
+        <h2 className="mt-1 text-lg font-bold text-text-primary sm:mt-2 sm:text-2xl">
           Maslahatlary real ädimlere öwür
         </h2>
 

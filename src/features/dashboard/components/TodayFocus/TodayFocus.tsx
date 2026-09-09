@@ -52,7 +52,7 @@ function getPriorityMeta(quadrant: string) {
   }
 
   return {
-    label: "Soňrak edip bolýar",
+    label: "Soňrak",
     badge:
       "border-border bg-background/50 text-text-muted",
     icon:
@@ -76,41 +76,44 @@ export default function TodayFocus() {
     "daily",
   );
 
-  // Baş sahypada diňe şu gün döredilen işleri däl,
-  // öňki günlerden galan tamamlanmadyk işleri hem görkezýäris.
-  // Şeýlelikde, düýn/öňki gün meýilnama goşulan, ýöne ýerine
-  // ýetirilmedik möhüm iş "ýitip gitmeýär".
   const todayTasks = tasks.filter((task) => {
     if (task.period !== "daily") {
       return false;
     }
 
-    const isToday = task.dateKey === todayKey;
+    const isToday =
+      task.dateKey === todayKey;
+
     const isOverdue =
-      task.dateKey < todayKey && !task.completed;
+      task.dateKey < todayKey &&
+      !task.completed;
 
     return isToday || isOverdue;
   });
 
-  const completedToday = todayTasks.filter(
-    (task) => task.completed,
-  ).length;
+  const completedToday =
+    todayTasks.filter(
+      (task) => task.completed,
+    ).length;
 
-  const unfinishedTasks = todayTasks.filter(
-    (task) => !task.completed,
-  );
+  const unfinishedTasks =
+    todayTasks.filter(
+      (task) => !task.completed,
+    );
 
   const urgentImportantTasks =
     unfinishedTasks.filter(
       (task) =>
-        task.quadrant === "urgent-important",
+        task.quadrant ===
+        "urgent-important",
     );
 
-  const importantTasks = unfinishedTasks.filter(
-    (task) =>
-      task.quadrant ===
-      "important-not-urgent",
-  );
+  const importantTasks =
+    unfinishedTasks.filter(
+      (task) =>
+        task.quadrant ===
+        "important-not-urgent",
+    );
 
   const focusTasks =
     urgentImportantTasks.length > 0
@@ -125,7 +128,8 @@ export default function TodayFocus() {
   const completionRate =
     todayTasks.length > 0
       ? Math.round(
-          (completedToday / todayTasks.length) *
+          (completedToday /
+            todayTasks.length) *
             100,
         )
       : 0;
@@ -146,128 +150,144 @@ export default function TodayFocus() {
       }}
       className="
         relative overflow-hidden
-        rounded-3xl
+        rounded-[20px]
         border border-border
         bg-surface
-        p-5
+        p-4
         shadow-[0_16px_60px_rgba(0,0,0,0.12)]
-        sm:p-6
+        sm:rounded-3xl
+        sm:p-5
+        lg:p-6
       "
     >
       <div className="pointer-events-none absolute inset-0">
         <div
           className="
             absolute -right-20 -top-24
-            h-56 w-56
+            h-44 w-44
             rounded-full
             bg-info/[0.05]
             blur-3xl
+            sm:h-56 sm:w-56
           "
         />
 
         <div
           className="
             absolute -bottom-24 left-[30%]
-            h-52 w-52
+            hidden h-52 w-52
             rounded-full
             bg-primary/[0.045]
             blur-3xl
+            sm:block
           "
         />
       </div>
 
       <div className="relative z-10">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-          <div>
-            <div className="flex items-center gap-2 text-primary">
-              <Focus size={18} />
+        {/* HEADER */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 text-primary sm:gap-2">
+              <Focus
+                size={15}
+                className="sm:h-[18px] sm:w-[18px]"
+              />
 
-              <span className="text-sm font-semibold">
-                Ilki şu işleri ýerine ýetir
+              <span className="text-[10px] font-semibold sm:text-sm">
+                Şu günki fokus
               </span>
             </div>
 
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">
+            <h2
+              className="
+                mt-1
+                text-[17px]
+                font-bold
+                tracking-tight
+                text-text-primary
+                sm:mt-2
+                sm:text-2xl
+                lg:text-3xl
+              "
+            >
               Ilki şu işleri ýerine ýetir
             </h2>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-text-muted">
+            <p className="mt-2 hidden max-w-2xl text-sm leading-6 text-text-muted sm:block">
               Şu gün üçin iň möhüm işler
               möhümlik derejesine görä
               awtomatik saýlandy.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {todayTasks.length > 0 && (
-              <div
-                className="
-                  rounded-xl
-                  border border-border
-                  bg-background/35
-                  px-4 py-3
-                  text-right
-                "
-              >
-                <p className="text-[11px] font-medium text-text-muted">
-                  Günüň ýerine ýetirilişi
-                </p>
+          <Link
+            to={ROUTES.planner}
+            className="
+              group inline-flex
+              h-8 shrink-0
+              items-center gap-1
+              rounded-lg
+              border border-border
+              bg-background/35
+              px-2.5
+              text-[10px] font-semibold
+              text-text-primary
+              transition-all duration-200
+              hover:border-primary/25
+              hover:bg-surface-hover
+              sm:h-10
+              sm:gap-2
+              sm:rounded-xl
+              sm:px-4
+              sm:text-sm
+            "
+          >
+            Meýilnama
 
-                <p className="mt-1 text-lg font-bold text-text-primary">
-                  {completedToday} /{" "}
-                  {todayTasks.length}
-                </p>
-              </div>
-            )}
-
-            <Link
-              to={ROUTES.planner}
+            <ArrowRight
+              size={13}
               className="
-                group inline-flex h-10
-                items-center gap-2
-                rounded-xl
-                border border-border
-                bg-background/35
-                px-4
-                text-sm font-semibold
-                text-text-primary
-                transition-all duration-200
-                hover:-translate-y-0.5
-                hover:border-primary/25
-                hover:bg-surface-hover
+                text-primary
+                transition-transform
+                group-hover:translate-x-0.5
+                sm:h-4 sm:w-4
               "
-            >
-              Meýilnama
-
-              <ArrowRight
-                size={16}
-                className="
-                  text-primary
-                  transition-transform duration-200
-                  group-hover:translate-x-0.5
-                "
-              />
-            </Link>
-          </div>
+            />
+          </Link>
         </div>
 
+        {/* PROGRESS */}
         {todayTasks.length > 0 && (
-          <div className="mt-5">
-            <div className="mb-2 flex items-center justify-between gap-4">
-              <span className="text-xs text-text-muted">
+          <div
+            className="
+              mt-3
+              rounded-xl
+              border border-border
+              bg-background/30
+              px-3 py-2.5
+              sm:mt-5
+              sm:bg-transparent
+              sm:px-0 sm:py-0
+              sm:border-0
+            "
+          >
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-[10px] text-text-muted sm:text-xs">
                 Günlük ösüş
               </span>
 
-              <span className="text-xs font-semibold text-primary">
+              <span className="text-[10px] font-semibold text-primary sm:text-xs">
+                {completedToday}/
+                {todayTasks.length}
+                {" · "}
                 {completionRate}%
               </span>
             </div>
 
-            <div className="h-1.5 overflow-hidden rounded-full bg-background">
+            <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-background sm:mt-2 sm:h-1.5">
               <motion.div
-                initial={{
-                  width: 0,
-                }}
+                initial={{ width: 0 }}
                 animate={{
                   width: `${completionRate}%`,
                 }}
@@ -281,6 +301,7 @@ export default function TodayFocus() {
           </div>
         )}
 
+        {/* EMPTY */}
         {focusTasks.length === 0 ? (
           <motion.div
             initial={{
@@ -296,65 +317,77 @@ export default function TodayFocus() {
               delay: 0.1,
             }}
             className="
-              mt-6
-              grid items-center gap-5
-              rounded-2xl
+              mt-3
+              flex items-center
+              gap-3
+              rounded-xl
               border border-dashed border-border
               bg-background/25
-              p-5
+              p-3
+              sm:mt-6
+              sm:grid
               sm:grid-cols-[auto_1fr_auto]
+              sm:gap-5
+              sm:rounded-2xl
               sm:p-6
             "
           >
             <div
               className="
-                flex h-12 w-12
+                flex h-9 w-9 shrink-0
                 items-center justify-center
-                rounded-xl
+                rounded-lg
                 border border-success/20
                 bg-success/10
                 text-success
+                sm:h-12 sm:w-12
+                sm:rounded-xl
               "
             >
-              <CheckCircle2 size={22} />
+              <CheckCircle2
+                size={17}
+                className="sm:h-[22px] sm:w-[22px]"
+              />
             </div>
 
-            <div>
-              <p className="font-bold text-text-primary">
-                Şu gün üçin garaşýan möhüm
-                iş ýok
+            <div className="min-w-0 flex-1">
+              <p className="text-[12px] font-bold text-text-primary sm:text-base">
+                Möhüm iş galmady
               </p>
 
-              <p className="mt-1 text-sm leading-6 text-text-muted">
-                Täze günlük iş goşup, günüň
-                esasy ugruny öňünden
-                kesgitläp bilersiň.
+              <p className="mt-0.5 truncate text-[9px] text-text-muted sm:mt-1 sm:text-sm sm:leading-6">
+                Täze günlük iş goşup
+                bilersiň.
               </p>
             </div>
 
             <Link
               to={ROUTES.planner}
               className="
-                inline-flex h-10
-                items-center
-                justify-center gap-2
-                rounded-xl
+                inline-flex h-8
+                shrink-0 items-center
+                justify-center gap-1
+                rounded-lg
                 bg-primary
-                px-4
-                text-sm font-semibold
+                px-2.5
+                text-[10px] font-semibold
                 text-slate-950
-                transition-all duration-200
-                hover:-translate-y-0.5
+                transition
                 hover:bg-primary-hover
+                sm:h-10
+                sm:gap-2
+                sm:rounded-xl
+                sm:px-4
+                sm:text-sm
               "
             >
-              Täze iş goş
-              <ArrowRight size={16} />
+              Täze iş
+              <ArrowRight size={13} />
             </Link>
           </motion.div>
         ) : (
           <>
-            <div className="mt-6 grid grid-cols-1 gap-3 xl:grid-cols-3">
+            <div className="mt-3 space-y-2 sm:mt-6 sm:grid sm:grid-cols-1 sm:gap-3 sm:space-y-0 xl:grid-cols-3">
               {focusTasks.map(
                 (task, index) => {
                   const priority =
@@ -382,31 +415,104 @@ export default function TodayFocus() {
                           0.08 +
                           index * 0.06,
                       }}
-                      whileHover={{
-                        y: -3,
-                        transition: {
-                          duration: 0.18,
-                        },
-                      }}
                       className={[
-                        "group relative overflow-hidden rounded-2xl border p-4 transition-colors duration-200",
+                        `
+                          relative overflow-hidden
+                          rounded-xl border
+                          p-3
+                          sm:rounded-2xl
+                          sm:p-4
+                        `,
                         isPrimary
                           ? "border-primary/25 bg-background/45"
-                          : "border-border bg-background/30 hover:border-primary/15",
+                          : "border-border bg-background/30",
                       ].join(" ")}
                     >
-                      <div
-                        className={[
-                          "pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b opacity-70",
-                          priority.accent,
-                        ].join(" ")}
-                      />
+                      {/* MOBILE */}
+                      <div className="flex items-center gap-2.5 sm:hidden">
+                        <div
+                          className={[
+                            `
+                              flex h-8 w-8
+                              shrink-0 items-center
+                              justify-center
+                              rounded-lg border
+                            `,
+                            priority.icon,
+                          ].join(" ")}
+                        >
+                          {isPrimary ? (
+                            <Target size={14} />
+                          ) : task.quadrant ===
+                            "urgent-important" ? (
+                            <Clock3 size={14} />
+                          ) : (
+                            <Sparkles size={14} />
+                          )}
+                        </div>
 
-                      <div className="relative z-10">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <p className="truncate text-[11px] font-bold text-text-primary">
+                              {task.title}
+                            </p>
+
+                            <span
+                              className={[
+                                `
+                                  shrink-0 rounded-full
+                                  border px-1.5 py-0.5
+                                  text-[7px] font-semibold
+                                `,
+                                priority.badge,
+                              ].join(" ")}
+                            >
+                              {priority.label}
+                            </span>
+                          </div>
+
+                          {task.description && (
+                            <p className="mt-0.5 truncate text-[8px] text-text-muted">
+                              {task.description}
+                            </p>
+                          )}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            toggleTask(
+                              task.id,
+                            )
+                          }
+                          aria-label="Işi tamamla"
+                          className="
+                            flex h-8 w-8
+                            shrink-0 items-center
+                            justify-center
+                            rounded-lg
+                            border border-border
+                            text-text-muted
+                            transition
+                            hover:border-success/25
+                            hover:text-success
+                          "
+                        >
+                          <Circle size={15} />
+                        </button>
+                      </div>
+
+                      {/* DESKTOP */}
+                      <div className="relative z-10 hidden sm:block">
                         <div className="flex items-start justify-between gap-3">
                           <div
                             className={[
-                              "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border",
+                              `
+                                flex h-10 w-10
+                                shrink-0 items-center
+                                justify-center
+                                rounded-xl border
+                              `,
                               priority.icon,
                             ].join(" ")}
                           >
@@ -428,7 +534,12 @@ export default function TodayFocus() {
                         <div className="mt-5">
                           <span
                             className={[
-                              "inline-flex rounded-full border px-2.5 py-1 text-[10px] font-semibold",
+                              `
+                                inline-flex
+                                rounded-full border
+                                px-2.5 py-1
+                                text-[10px] font-semibold
+                              `,
                               priority.badge,
                             ].join(" ")}
                           >
@@ -441,9 +552,7 @@ export default function TodayFocus() {
 
                           {task.description && (
                             <p className="mt-2 line-clamp-2 text-xs leading-5 text-text-muted">
-                              {
-                                task.description
-                              }
+                              {task.description}
                             </p>
                           )}
                         </div>
@@ -456,9 +565,8 @@ export default function TodayFocus() {
                                 task.id,
                               )
                             }
-                            aria-label="Işi tamamla"
                             className="
-                              group/check inline-flex
+                              inline-flex
                               items-center gap-2
                               text-xs font-semibold
                               text-text-muted
@@ -466,14 +574,7 @@ export default function TodayFocus() {
                               hover:text-success
                             "
                           >
-                            <Circle
-                              size={17}
-                              className="
-                                transition-transform
-                                group-hover/check:scale-110
-                              "
-                            />
-
+                            <Circle size={17} />
                             Tamamla
                           </button>
                         </div>
@@ -499,46 +600,46 @@ export default function TodayFocus() {
                   delay: 0.18,
                 }}
                 className="
-                  mt-4
-                  flex flex-col gap-4
-                  rounded-2xl
+                  mt-2
+                  flex items-center
+                  gap-2.5
+                  rounded-xl
                   border border-warning/20
                   bg-warning/[0.04]
-                  p-4
-                  sm:flex-row
-                  sm:items-center
-                  sm:justify-between
+                  p-3
+                  sm:mt-4
+                  sm:gap-4
+                  sm:rounded-2xl
+                  sm:p-4
                 "
               >
-                <div className="flex min-w-0 items-start gap-3">
-                  <div
-                    className="
-                      flex h-10 w-10
-                      shrink-0
-                      items-center justify-center
-                      rounded-xl
-                      border border-warning/20
-                      bg-warning/10
-                      text-warning
-                    "
-                  >
-                    <Sparkles size={18} />
-                  </div>
+                <div
+                  className="
+                    flex h-8 w-8
+                    shrink-0 items-center
+                    justify-center
+                    rounded-lg
+                    border border-warning/20
+                    bg-warning/10
+                    text-warning
+                    sm:h-10 sm:w-10
+                    sm:rounded-xl
+                  "
+                >
+                  <Sparkles
+                    size={14}
+                    className="sm:h-[18px] sm:w-[18px]"
+                  />
+                </div>
 
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-warning">
-                      Soňra şu möhüm işi et
-                    </p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[8px] font-semibold text-warning sm:text-xs">
+                    Soňra şu möhüm işi et
+                  </p>
 
-                    <p className="mt-1 font-bold text-text-primary">
-                      {secondaryTask.title}
-                    </p>
-
-                    <p className="mt-1 text-xs text-text-muted">
-                      Möhüm, ýöne häzir
-                      gyssagly däl.
-                    </p>
-                  </div>
+                  <p className="mt-0.5 truncate text-[11px] font-bold text-text-primary sm:mt-1 sm:text-base">
+                    {secondaryTask.title}
+                  </p>
                 </div>
 
                 <button
@@ -548,23 +649,28 @@ export default function TodayFocus() {
                       secondaryTask.id,
                     )
                   }
+                  aria-label="Işi tamamla"
                   className="
-                    inline-flex h-10
-                    shrink-0
-                    items-center
-                    justify-center gap-2
-                    rounded-xl
+                    flex h-8 w-8
+                    shrink-0 items-center
+                    justify-center
+                    rounded-lg
                     border border-warning/20
                     bg-warning/10
-                    px-4
-                    text-xs font-semibold
                     text-warning
-                    transition
-                    hover:bg-warning/15
+                    sm:h-10 sm:w-auto
+                    sm:gap-2
+                    sm:rounded-xl
+                    sm:px-4
+                    sm:text-xs
+                    sm:font-semibold
                   "
                 >
-                  <Circle size={16} />
-                  Tamamla
+                  <Circle size={15} />
+
+                  <span className="hidden sm:inline">
+                    Tamamla
+                  </span>
                 </button>
               </motion.div>
             )}

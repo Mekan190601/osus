@@ -33,11 +33,17 @@ export default function PlannerTabs({
   return (
     <div
       className="
-        inline-flex w-full
-        rounded-2xl
+        grid w-full
+        grid-cols-4
+        gap-1
+        rounded-xl
         border border-border
-        bg-surface p-1.5
+        bg-background/35
+        p-1
+        sm:inline-grid
         sm:w-auto
+        sm:rounded-2xl
+        sm:p-1.5
       "
     >
       {PLANNER_PERIODS.map((period) => {
@@ -52,7 +58,22 @@ export default function PlannerTabs({
               onChange(period.value)
             }
             className={[
-              "relative flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors duration-200 sm:flex-none",
+              `
+                relative
+                min-w-0
+                rounded-lg
+                px-1
+                py-2
+                text-[10px]
+                font-semibold
+                transition-colors
+                duration-200
+
+                sm:rounded-xl
+                sm:px-4
+                sm:py-2.5
+                sm:text-sm
+              `,
               isActive
                 ? "text-slate-950"
                 : "text-text-muted hover:text-text-primary",
@@ -68,13 +89,14 @@ export default function PlannerTabs({
                 }}
                 className="
                   absolute inset-0
-                  rounded-xl
+                  rounded-lg
                   bg-primary
+                  sm:rounded-xl
                 "
               />
             )}
 
-            <span className="relative z-10">
+            <span className="relative z-10 whitespace-nowrap">
               {getPeriodLabel(
                 period.value,
               )}

@@ -27,8 +27,7 @@ function moveDate(
 
   if (period === "weekly") {
     nextDate.setDate(
-      nextDate.getDate() +
-        direction * 7,
+      nextDate.getDate() + direction * 7,
     );
   }
 
@@ -40,8 +39,7 @@ function moveDate(
 
   if (period === "yearly") {
     nextDate.setFullYear(
-      nextDate.getFullYear() +
-        direction,
+      nextDate.getFullYear() + direction,
     );
   }
 
@@ -130,8 +128,7 @@ export default function PlannerDateNavigator({
 
   const setSelectedDate =
     usePlannerStore(
-      (state) =>
-        state.setSelectedDate,
+      (state) => state.setSelectedDate,
     );
 
   const currentDate =
@@ -171,48 +168,69 @@ export default function PlannerDateNavigator({
     <div
       className="
         flex items-center
-        rounded-2xl
+        rounded-xl
         border border-border
         bg-surface
-        p-2
+        p-1
+        sm:rounded-2xl
+        sm:p-2
       "
     >
+      {/* PREVIOUS */}
       <button
         type="button"
         onClick={handlePrevious}
         className="
-          flex h-10 w-10
+          flex h-8 w-8
           shrink-0 items-center
-          justify-center rounded-xl
+          justify-center
+          rounded-lg
           text-text-muted
           transition-all duration-200
           hover:bg-background
           hover:text-text-primary
+
+          sm:h-10 sm:w-10
+          sm:rounded-xl
         "
         aria-label="Öňki döwür"
       >
-        <ChevronLeft size={18} />
+        <ChevronLeft
+          size={16}
+          className="sm:h-[18px] sm:w-[18px]"
+        />
       </button>
 
+      {/* DATE */}
       <motion.div
         key={`${period}-${selectedDate}`}
         initial={{
           opacity: 0,
-          y: 4,
+          y: 3,
         }}
         animate={{
           opacity: 1,
           y: 0,
         }}
         transition={{
-          duration: 0.2,
+          duration: 0.18,
         }}
         className="
           min-w-0 flex-1
-          px-3 text-center
+          px-1.5
+          text-center
+          sm:px-3
         "
       >
-        <p className="truncate text-sm font-semibold text-text-primary sm:text-base">
+        <p
+          className="
+            truncate
+            text-[11px]
+            font-semibold
+            text-text-primary
+            sm:text-base
+          "
+        >
           {formatDateLabel(
             currentDate,
             period,
@@ -220,40 +238,64 @@ export default function PlannerDateNavigator({
         </p>
       </motion.div>
 
+      {/* CURRENT PERIOD */}
       <button
         type="button"
         onClick={handleCurrentPeriod}
         className="
-          hidden h-10
-          items-center gap-2
-          rounded-xl px-3
-          text-xs font-semibold
+          flex h-8 w-8
+          shrink-0 items-center
+          justify-center
+          rounded-lg
           text-text-muted
           transition-all duration-200
           hover:bg-background
-          hover:text-text-primary
-          sm:inline-flex
+          hover:text-primary
+
+          sm:h-10
+          sm:w-auto
+          sm:gap-2
+          sm:rounded-xl
+          sm:px-3
+          sm:text-xs
+          sm:font-semibold
         "
+        aria-label="Häzirki döwre dolan"
+        title="Häzirki döwür"
       >
-        <RotateCcw size={14} />
-        Häzirki döwür
+        <RotateCcw
+          size={13}
+          className="sm:h-[14px] sm:w-[14px]"
+        />
+
+        <span className="hidden sm:inline">
+          Häzirki döwür
+        </span>
       </button>
 
+      {/* NEXT */}
       <button
         type="button"
         onClick={handleNext}
         className="
-          flex h-10 w-10
+          flex h-8 w-8
           shrink-0 items-center
-          justify-center rounded-xl
+          justify-center
+          rounded-lg
           text-text-muted
           transition-all duration-200
           hover:bg-background
           hover:text-text-primary
+
+          sm:h-10 sm:w-10
+          sm:rounded-xl
         "
         aria-label="Indiki döwür"
       >
-        <ChevronRight size={18} />
+        <ChevronRight
+          size={16}
+          className="sm:h-[18px] sm:w-[18px]"
+        />
       </button>
     </div>
   );

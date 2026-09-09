@@ -191,6 +191,18 @@ export const usePlannerStore =
       ...createInitialState(),
 
       loadPlanner: async () => {
+        /*
+         * Planner AppLayout-da bir gezek ýüklenenden soň,
+         * sahypa her gezek açylanda gaýtadan cloud sync etme.
+         * Täze sync-lar syncEngine tarapyndan dolandyrylýar.
+         */
+        if (
+          get().isInitialized ||
+          get().isLoading
+        ) {
+          return;
+        }
+
         set({
           isLoading: true,
           error: null,

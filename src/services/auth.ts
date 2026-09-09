@@ -1,5 +1,52 @@
 import { supabase } from "./supabase";
 
+const OFFLINE_USER_KEY = "osus-offline-user";
+
+export type OfflineUser = {
+  id: string;
+  email: string | null;
+  name: string | null;
+};
+
+function saveOfflineUser(user: {
+  id: string;
+  email?: string | null;
+  user_metadata?: Record<string, unknown>;
+}) {
+  const offlineUser: OfflineUser = {
+    id: user.id,
+    email: user.email ?? null,
+    name:
+      typeof user.user_metadata?.name === "string"
+        ? user.user_metadata.name
+        : null,
+  };
+
+  localStorage.setItem(OFFLINE_USER_KEY, JSON.stringify(offlineUser));
+}
+
+export function getOfflineUser(): OfflineUser | null {
+  try {
+    const raw = localStorage.getItem(OFFLINE_USER_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw) as Partial<OfflineUser>;
+    if (!parsed.id || typeof parsed.id !== "string") return null;
+
+    return {
+      id: parsed.id,
+      email: typeof parsed.email === "string" ? parsed.email : null,
+      name: typeof parsed.name === "string" ? parsed.name : null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function clearOfflineUser() {
+  localStorage.removeItem(OFFLINE_USER_KEY);
+}
+
 export async function signUp(
   name: string,
   email: string,
@@ -21,6 +68,10 @@ export async function signUp(
     throw error;
   }
 
+  if (data.user && data.session) {
+    saveOfflineUser(data.user);
+  }
+
   return data;
 }
 
@@ -38,13 +89,21 @@ export async function signIn(
     throw error;
   }
 
+  if (data.user && data.session) {
+    saveOfflineUser(data.user);
+  }
+
   return data;
 }
 
 export async function signOut() {
-  const { error } = await supabase.auth.signOut();
+  const { error } = await supabase.auth.signOut({
+    scope: "local",
+  });
 
-  if (error) {
+  clearOfflineUser();
+
+  if (error && navigator.onLine) {
     throw error;
   }
 }

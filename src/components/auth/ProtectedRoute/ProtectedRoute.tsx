@@ -8,6 +8,7 @@ import type { Session } from "@supabase/supabase-js";
 import { LoaderCircle } from "lucide-react";
 
 import { supabase } from "../../../services/supabase";
+import { getOfflineUser } from "../../../services/auth";
 
 type ProtectedRouteProps = {
   children: ReactNode;
@@ -16,24 +17,41 @@ type ProtectedRouteProps = {
 export default function ProtectedRoute({
   children,
 }: ProtectedRouteProps) {
-  const [session, setSession] =
-    useState<Session | null>(null);
-
-  const [isLoading, setIsLoading] =
-    useState(true);
+  const [session, setSession] = useState<Session | null>(null);
+  const [offlineAccess, setOfflineAccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let mounted = true;
 
     async function initializeAuth() {
-      const {
-        data: { session: currentSession },
-      } = await supabase.auth.getSession();
+      const offlineUser = getOfflineUser();
 
-      if (!mounted) return;
+      if (!navigator.onLine && offlineUser) {
+        if (!mounted) return;
+        setOfflineAccess(true);
+        setIsLoading(false);
+        return;
+      }
 
-      setSession(currentSession);
-      setIsLoading(false);
+      try {
+        const {
+          data: { session: currentSession },
+        } = await supabase.auth.getSession();
+
+        if (!mounted) return;
+
+        setSession(currentSession);
+        setOfflineAccess(false);
+      } catch {
+        if (!mounted) return;
+
+        setOfflineAccess(
+          !navigator.onLine && Boolean(offlineUser),
+        );
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
     }
 
     void initializeAuth();
@@ -41,16 +59,40 @@ export default function ProtectedRoute({
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(
-      (_event, nextSession) => {
+      (event, nextSession) => {
         if (!mounted) return;
 
-        setSession(nextSession);
-        setIsLoading(false);
+        if (nextSession) {
+          setSession(nextSession);
+          setOfflineAccess(false);
+          setIsLoading(false);
+          return;
+        }
+
+        if (!navigator.onLine && getOfflineUser()) {
+          setSession(null);
+          setOfflineAccess(true);
+          setIsLoading(false);
+          return;
+        }
+
+        if (event === "SIGNED_OUT") {
+          setSession(null);
+          setOfflineAccess(false);
+          setIsLoading(false);
+        }
       },
     );
 
+    function handleOnline() {
+      void initializeAuth();
+    }
+
+    window.addEventListener("online", handleOnline);
+
     return () => {
       mounted = false;
+      window.removeEventListener("online", handleOnline);
       subscription.unsubscribe();
     };
   }, []);
@@ -59,19 +101,8 @@ export default function ProtectedRoute({
     return (
       <main className="flex min-h-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center">
-          <div
-            className="
-              flex h-14 w-14
-              items-center justify-center
-              rounded-2xl
-              border border-primary/15
-              bg-primary/[0.06]
-            "
-          >
-            <LoaderCircle
-              size={24}
-              className="animate-spin text-primary"
-            />
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-primary/15 bg-primary/[0.06]">
+            <LoaderCircle size={24} className="animate-spin text-primary" />
           </div>
 
           <p className="mt-4 text-sm font-semibold text-text-primary">
@@ -86,13 +117,8 @@ export default function ProtectedRoute({
     );
   }
 
-  if (!session) {
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
+  if (!session && !offlineAccess) {
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;

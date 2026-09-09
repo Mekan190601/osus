@@ -374,12 +374,12 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6 pb-10 lg:space-y-8">
+    <div className="space-y-3 pb-6 sm:space-y-5 sm:pb-8 lg:space-y-8 lg:pb-10">
       {/* ======================================
           HEADER
       ====================================== */}
 
-      <section className="rounded-3xl border border-border bg-surface p-6 shadow-[var(--app-shadow)] sm:p-8">
+      <section className="rounded-[20px] border border-border bg-surface p-4 shadow-[var(--app-shadow)] sm:rounded-3xl sm:p-6 lg:p-8">
         <div className="flex items-center gap-2 text-primary">
           <Settings size={18} />
 
@@ -388,13 +388,13 @@ export default function SettingsPage() {
           </span>
         </div>
 
-        <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mt-2 flex flex-col gap-3 sm:mt-3 sm:gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+            <h1 className="text-[21px] font-bold leading-7 tracking-tight text-text-primary sm:text-3xl sm:leading-normal lg:text-4xl">
               {t.settings.title}
             </h1>
 
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-text-muted sm:text-base">
+            <p className="mt-1.5 max-w-3xl text-[10px] leading-4 text-text-muted sm:mt-3 sm:text-sm sm:leading-6 lg:text-base lg:leading-7">
               {t.settings.description}
             </p>
           </div>
@@ -402,7 +402,7 @@ export default function SettingsPage() {
           <button
             type="button"
             onClick={resetSettings}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border px-4 text-sm font-semibold text-text-secondary transition hover:border-primary/30 hover:text-primary"
+            className="inline-flex h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-border px-3 text-[10px] font-semibold text-text-secondary transition hover:border-primary/30 hover:text-primary sm:h-10 sm:w-auto sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm"
           >
             <RotateCcw size={16} />
 
@@ -415,9 +415,9 @@ export default function SettingsPage() {
           PROFILE
       ====================================== */}
 
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+      <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+        <div className="flex items-start gap-2.5 sm:gap-4">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-11 sm:w-11 sm:rounded-xl">
             <UserRound size={20} />
           </div>
 
@@ -426,16 +426,16 @@ export default function SettingsPage() {
               Profil
             </h2>
 
-            <p className="mt-2 text-sm leading-6 text-text-muted">
+            <p className="mt-1 text-[10px] leading-4 text-text-muted sm:mt-2 sm:text-sm sm:leading-6">
               Topbar-da görkezilýän adyňy
               we roluňy sazla.
             </p>
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-4">
           <label className="block">
-            <span className="text-sm font-semibold text-text-primary">
+            <span className="text-[10px] font-semibold text-text-primary sm:text-sm">
               Adyň
             </span>
 
@@ -448,12 +448,12 @@ export default function SettingsPage() {
                 )
               }
               placeholder="Meselem: Alem"
-              className="mt-2 h-11 w-full rounded-xl border border-border bg-background/40 px-4 text-sm text-text-primary outline-none transition placeholder:text-text-disabled focus:border-primary"
+              className="mt-1.5 h-9 w-full rounded-lg border border-border bg-background/40 px-3 text-xs text-text-primary outline-none transition placeholder:text-text-disabled focus:border-primary sm:mt-2 sm:h-11 sm:rounded-xl sm:px-4 sm:text-sm"
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-semibold text-text-primary">
+            <span className="text-[10px] font-semibold text-text-primary sm:text-sm">
               Rol
             </span>
 
@@ -466,7 +466,7 @@ export default function SettingsPage() {
                 )
               }
               placeholder="Meselem: Founder"
-              className="mt-2 h-11 w-full rounded-xl border border-border bg-background/40 px-4 text-sm text-text-primary outline-none transition placeholder:text-text-disabled focus:border-primary"
+              className="mt-1.5 h-9 w-full rounded-lg border border-border bg-background/40 px-3 text-xs text-text-primary outline-none transition placeholder:text-text-disabled focus:border-primary sm:mt-2 sm:h-11 sm:rounded-xl sm:px-4 sm:text-sm"
             />
           </label>
         </div>
@@ -476,12 +476,12 @@ export default function SettingsPage() {
           MAIN SETTINGS GRID
       ====================================== */}
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:gap-5 xl:grid-cols-2 xl:gap-6">
         {/* LANGUAGE */}
 
-        <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-10 sm:w-10 sm:rounded-xl">
               <Languages size={18} />
             </div>
 
@@ -490,7 +490,7 @@ export default function SettingsPage() {
                 {t.settings.language}
               </h2>
 
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="mt-0.5 line-clamp-1 text-[8px] text-text-muted sm:mt-1 sm:line-clamp-none sm:text-xs">
                 {
                   t.settings
                     .languageDescription
@@ -499,7 +499,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="mt-3 grid grid-cols-3 gap-1.5 sm:mt-6 sm:gap-3">
             {languages.map((item) => (
               <button
                 key={item.value}
@@ -510,7 +510,7 @@ export default function SettingsPage() {
                   )
                 }
                 className={[
-                  "rounded-xl border px-4 py-3 text-sm font-semibold transition",
+                  "rounded-lg border px-2 py-2 text-[10px] font-semibold transition sm:rounded-xl sm:px-4 sm:py-3 sm:text-sm",
                   language === item.value
                     ? "border-primary/30 bg-primary/10 text-primary"
                     : "border-border bg-background/40 text-text-secondary hover:text-text-primary",
@@ -524,9 +524,9 @@ export default function SettingsPage() {
 
         {/* CURRENCY */}
 
-        <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-10 sm:w-10 sm:rounded-xl">
               <Coins size={18} />
             </div>
 
@@ -535,7 +535,7 @@ export default function SettingsPage() {
                 {t.settings.currency}
               </h2>
 
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="mt-0.5 line-clamp-1 text-[8px] text-text-muted sm:mt-1 sm:line-clamp-none sm:text-xs">
                 {
                   t.settings
                     .currencyDescription
@@ -544,7 +544,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="mt-3 grid grid-cols-3 gap-1.5 sm:mt-6 sm:gap-3">
             {currencies.map((item) => (
               <button
                 key={item.value}
@@ -555,7 +555,7 @@ export default function SettingsPage() {
                   )
                 }
                 className={[
-                  "rounded-xl border p-4 text-left transition",
+                  "rounded-lg border p-2 text-left transition sm:rounded-xl sm:p-4",
                   currency === item.value
                     ? "border-primary/30 bg-primary/10"
                     : "border-border bg-background/40 hover:border-primary/20",
@@ -572,7 +572,7 @@ export default function SettingsPage() {
                   {item.label}
                 </p>
 
-                <p className="mt-1 text-xs text-text-muted">
+                <p className="mt-0.5 line-clamp-1 text-[8px] text-text-muted sm:mt-1 sm:line-clamp-none sm:text-xs">
                   {item.description}
                 </p>
               </button>
@@ -582,9 +582,9 @@ export default function SettingsPage() {
 
         {/* START PAGE + THEME */}
 
-        <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-10 sm:w-10 sm:rounded-xl">
               <Monitor size={18} />
             </div>
 
@@ -593,7 +593,7 @@ export default function SettingsPage() {
                 {t.settings.startPage}
               </h2>
 
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="mt-0.5 line-clamp-1 text-[8px] text-text-muted sm:mt-1 sm:line-clamp-none sm:text-xs">
                 {
                   t.settings
                     .startPageDescription
@@ -602,7 +602,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-3 sm:mt-6">
             <select
               value={startPage}
               onChange={(event) =>
@@ -611,7 +611,7 @@ export default function SettingsPage() {
                     .value as StartPage,
                 )
               }
-              className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm text-text-primary outline-none focus:border-primary"
+              className="h-10 w-full rounded-lg border border-border bg-background px-3 text-xs text-text-primary outline-none focus:border-primary sm:h-12 sm:rounded-xl sm:px-4 sm:text-sm"
             >
               {startPages.map((item) => (
                 <option
@@ -624,12 +624,12 @@ export default function SettingsPage() {
             </select>
           </div>
 
-          <div className="mt-6 border-t border-border pt-5">
-            <p className="text-sm font-semibold text-text-primary">
+          <div className="mt-3 border-t border-border pt-3 sm:mt-6 sm:pt-5">
+            <p className="text-[10px] font-semibold text-text-primary sm:text-sm">
               {t.settings.appearance}
             </p>
 
-            <div className="mt-3 grid grid-cols-3 gap-2">
+            <div className="mt-2 grid grid-cols-3 gap-1.5 sm:mt-3 sm:gap-2">
               {themes.map((item) => (
                 <button
                   key={item.value}
@@ -640,7 +640,7 @@ export default function SettingsPage() {
                     )
                   }
                   className={[
-                    "rounded-xl border px-3 py-3 text-sm font-semibold transition",
+                    "rounded-lg border px-2 py-2 text-[10px] font-semibold transition sm:rounded-xl sm:px-3 sm:py-3 sm:text-sm",
                     theme === item.value
                       ? "border-primary/30 bg-primary/10 text-primary"
                       : "border-border bg-background/40 text-text-secondary",
@@ -655,9 +655,9 @@ export default function SettingsPage() {
 
         {/* NOTIFICATIONS */}
 
-        <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-10 sm:w-10 sm:rounded-xl">
               <Bell size={18} />
             </div>
 
@@ -669,7 +669,7 @@ export default function SettingsPage() {
                 }
               </h2>
 
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="mt-0.5 line-clamp-1 text-[8px] text-text-muted sm:mt-1 sm:line-clamp-none sm:text-xs">
                 {
                   t.settings
                     .notificationsDescription
@@ -678,7 +678,7 @@ export default function SettingsPage() {
             </div>
           </div>
 
-          <div className="mt-6 space-y-3">
+          <div className="mt-3 space-y-1.5 sm:mt-6 sm:space-y-3">
             {notificationItems.map(
               (item) => {
                 const key =
@@ -697,9 +697,9 @@ export default function SettingsPage() {
                         !enabled,
                       )
                     }
-                    className="flex w-full items-center justify-between gap-4 rounded-xl border border-border bg-background/40 px-4 py-3 text-left transition hover:border-primary/20"
+                    className="flex w-full items-center justify-between gap-3 rounded-lg border border-border bg-background/40 px-3 py-2 text-left transition hover:border-primary/20 sm:gap-4 sm:rounded-xl sm:px-4 sm:py-3"
                   >
-                    <span className="text-sm font-medium text-text-secondary">
+                    <span className="text-[10px] font-medium text-text-secondary sm:text-sm">
                       {item.label}
                     </span>
 
@@ -713,9 +713,9 @@ export default function SettingsPage() {
                     >
                       <span
                         className={[
-                          "absolute top-1 h-4 w-4 rounded-full bg-white transition-all",
+                          "absolute top-1 h-3 w-3 rounded-full bg-white transition-all sm:h-4 sm:w-4",
                           enabled
-                            ? "left-6"
+                            ? "left-5 sm:left-6"
                             : "left-1",
                         ].join(" ")}
                       />
@@ -734,9 +734,9 @@ export default function SettingsPage() {
           BACKUP
       ====================================== */}
 
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+      <section className="rounded-xl border border-border bg-surface p-3.5 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+        <div className="flex items-start gap-2.5 sm:gap-4">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-11 sm:w-11 sm:rounded-xl">
             <DatabaseBackup size={20} />
           </div>
 
@@ -754,17 +754,17 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-6 sm:flex sm:flex-wrap sm:gap-3">
           <button
             type="button"
             onClick={downloadAppBackup}
-            className="inline-flex h-11 items-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-slate-950 transition hover:bg-primary-hover"
+            className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 text-[10px] font-semibold text-slate-950 transition hover:bg-primary-hover sm:h-11 sm:gap-2 sm:rounded-xl sm:px-5 sm:text-sm"
           >
             <Download size={16} />
             Backup ýükle
           </button>
 
-          <label className="inline-flex h-11 cursor-pointer items-center gap-2 rounded-xl border border-border bg-background/40 px-5 text-sm font-semibold text-text-primary transition hover:border-primary/30 hover:text-primary">
+          <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-border bg-background/40 px-3 text-[10px] font-semibold text-text-primary transition hover:border-primary/30 hover:text-primary sm:h-11 sm:gap-2 sm:rounded-xl sm:px-5 sm:text-sm">
             <Upload size={16} />
             Backup-dan dikelt
 
@@ -787,7 +787,7 @@ export default function SettingsPage() {
           </div>
         )}
 
-        <div className="mt-5 border-t border-border pt-5">
+        <div className="mt-3 border-t border-border pt-3 sm:mt-5 sm:pt-5">
           <p className="text-xs leading-5 text-text-muted">
             Backup faýlyny kompýuterde
             ýa-da bulutda howpsuz ýerde
@@ -803,7 +803,7 @@ export default function SettingsPage() {
           AUTO SAVE
       ====================================== */}
 
-      <section className="rounded-2xl border border-primary/20 bg-primary/5 p-5">
+      <section className="rounded-xl border border-primary/20 bg-primary/5 p-3 sm:rounded-2xl sm:p-5">
         <p className="text-sm font-semibold text-primary">
           {t.settings.autoSaveTitle}
         </p>
@@ -817,9 +817,9 @@ export default function SettingsPage() {
           DANGER ZONE
       ====================================== */}
 
-      <section className="rounded-2xl border border-danger/20 bg-danger/5 p-6">
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-danger/10 text-danger">
+      <section className="rounded-xl border border-danger/20 bg-danger/5 p-3.5 sm:rounded-2xl sm:p-6">
+        <div className="flex items-start gap-2.5 sm:gap-4">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-danger/10 text-danger sm:h-11 sm:w-11 sm:rounded-xl">
             <TriangleAlert size={20} />
           </div>
 
@@ -837,13 +837,13 @@ export default function SettingsPage() {
               we pul kurslary.
             </p>
 
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-5 sm:flex sm:flex-wrap sm:gap-3">
               <button
                 type="button"
                 onClick={
                   downloadAppBackup
                 }
-                className="inline-flex h-11 items-center gap-2 rounded-xl border border-border bg-background/40 px-5 text-sm font-semibold text-text-primary transition hover:border-primary/30 hover:text-primary"
+                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-background/40 px-3 text-[10px] font-semibold text-text-primary transition hover:border-primary/30 hover:text-primary sm:h-11 sm:gap-2 sm:rounded-xl sm:px-5 sm:text-sm"
               >
                 <Download size={16} />
                 Ilki backup ýükle
@@ -856,7 +856,7 @@ export default function SettingsPage() {
                     true,
                   )
                 }
-                className="inline-flex h-11 items-center gap-2 rounded-xl border border-danger/30 bg-danger/10 px-5 text-sm font-semibold text-danger transition hover:bg-danger/15"
+                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-danger/30 bg-danger/10 px-3 text-[10px] font-semibold text-danger transition hover:bg-danger/15 sm:h-11 sm:gap-2 sm:rounded-xl sm:px-5 sm:text-sm"
               >
                 <Trash2 size={16} />
                 Ähli maglumatlary arassala

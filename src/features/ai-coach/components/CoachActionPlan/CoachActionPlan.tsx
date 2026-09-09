@@ -126,8 +126,8 @@ export default function CoachActionPlan({
   }
 
   return (
-    <section className="rounded-2xl border border-border bg-surface p-6">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+    <section className="rounded-xl border border-border bg-surface p-3 sm:rounded-2xl sm:p-6">
+      <div className="flex items-start justify-between gap-3 sm:flex-row sm:gap-5">
         <div>
           <div className="flex items-center gap-2 text-primary">
             <ListChecks size={18} />
@@ -137,11 +137,11 @@ export default function CoachActionPlan({
             </span>
           </div>
 
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-primary">
+          <h2 className="mt-1 text-lg font-bold tracking-tight text-text-primary sm:mt-2 sm:text-2xl">
             Indiki iň möhüm ädimler
           </h2>
 
-          <p className="mt-2 max-w-3xl text-sm leading-6 text-text-muted">
+          <p className="mt-1 line-clamp-2 max-w-3xl text-[10px] leading-4 text-text-muted sm:mt-2 sm:line-clamp-none sm:text-sm sm:leading-6">
             Häzirki analizden çykarylan
   maslahatlar ýerine ýetirip bolýan
   anyk ädimlere öwrülýär.
@@ -150,12 +150,12 @@ export default function CoachActionPlan({
           </p>
         </div>
 
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-primary/20 bg-primary/10 text-primary">
-          <Zap size={20} />
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary sm:h-11 sm:w-11 sm:rounded-xl">
+          <Zap size={15} className="sm:h-5 sm:w-5" />
         </div>
       </div>
 
-      <div className="mt-6 space-y-3">
+      <div className="mt-3 space-y-2 sm:mt-6 sm:space-y-3">
         {actions.map((action, index) => {
           const priority =
             getPriorityConfig(
@@ -179,23 +179,23 @@ export default function CoachActionPlan({
           return (
             <article
               key={action.id}
-              className="rounded-xl border border-border bg-background/40 p-5"
+              className="rounded-lg border border-border bg-background/40 p-3 sm:rounded-xl sm:p-5"
             >
-              <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-                <div className="flex min-w-0 flex-1 items-start gap-4">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-sm font-bold text-primary">
+              <div className="flex flex-col gap-2.5 sm:gap-4 lg:flex-row lg:items-start">
+                <div className="flex min-w-0 flex-1 items-start gap-2.5 sm:gap-4">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-[10px] font-bold text-primary sm:h-9 sm:w-9 sm:text-sm">
                     {index + 1}
                   </div>
 
                   <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <h3 className="font-bold text-text-primary">
+                    <div className="flex flex-wrap items-center gap-1.5 sm:gap-3">
+                      <h3 className="text-[12px] font-bold leading-4 text-text-primary sm:text-base sm:leading-normal">
                         {action.title}
                       </h3>
 
                       <span
                         className={[
-                          "rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide",
+                          "rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-wide sm:px-2.5 sm:py-1 sm:text-[10px]",
                           priority.className,
                         ].join(" ")}
                       >
@@ -203,7 +203,7 @@ export default function CoachActionPlan({
                       </span>
                     </div>
 
-                    <p className="mt-2 text-sm leading-6 text-text-muted">
+                    <p className="mt-1 line-clamp-2 text-[10px] leading-4 text-text-muted sm:mt-2 sm:line-clamp-none sm:text-sm sm:leading-6">
                       {
                         action.description
                       }
@@ -220,7 +220,7 @@ export default function CoachActionPlan({
                     )
                   }
                   className={[
-                    "inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold transition",
+                    "inline-flex h-8 shrink-0 items-center justify-center gap-1.5 rounded-lg px-3 text-[10px] font-semibold transition sm:h-10 sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm",
                     isAdded
                       ? "cursor-default border border-success/20 bg-success/10 text-success"
                       : "border border-primary/20 bg-primary/10 text-primary hover:bg-primary/15",
@@ -248,10 +248,10 @@ export default function CoachActionPlan({
         })}
       </div>
 
-      <div className="mt-6 flex flex-wrap gap-3 border-t border-border pt-5">
+      <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3 sm:mt-6 sm:flex sm:flex-wrap sm:gap-3 sm:pt-5">
         <Link
           to={ROUTES.planner}
-          className="inline-flex h-10 items-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-slate-950 transition hover:bg-primary-hover"
+          className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 text-[10px] font-semibold text-slate-950 transition hover:bg-primary-hover sm:h-10 sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm"
         >
           Meýilnamany aç
           <ArrowRight size={16} />
@@ -259,7 +259,7 @@ export default function CoachActionPlan({
 
         <Link
           to={ROUTES.analytics}
-          className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-background/40 px-4 text-sm font-semibold text-text-primary transition hover:border-primary/30 hover:text-primary"
+          className="inline-flex h-9 items-center justify-center gap-1.5 rounded-lg border border-border bg-background/40 px-3 text-[10px] font-semibold text-text-primary transition hover:border-primary/30 hover:text-primary sm:h-10 sm:gap-2 sm:rounded-xl sm:px-4 sm:text-sm"
         >
           Ösüş analizini gör
           <ArrowRight size={16} />

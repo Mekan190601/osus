@@ -348,23 +348,23 @@ useEffect(() => {
   }
 
   return (
-    <div className="space-y-6 pb-10 lg:space-y-8">
+    <div className="space-y-3 pb-6 sm:space-y-5 sm:pb-8 lg:space-y-8 lg:pb-10">
       {/* HEADER */}
-      <section className="rounded-3xl border border-border bg-surface p-6 shadow-[var(--app-shadow)] sm:p-8">
-        <div className="flex items-center gap-2 text-primary">
-          <Gauge size={18} />
-          <span className="text-sm font-semibold">
+      <section className="rounded-[20px] border border-border bg-surface p-4 shadow-[var(--app-shadow)] sm:rounded-3xl sm:p-6 lg:p-8">
+        <div className="flex items-center gap-1.5 text-primary sm:gap-2">
+          <Gauge size={14} className="sm:h-[18px] sm:w-[18px]" />
+          <span className="text-[10px] font-semibold sm:text-sm">
             Hepdelik syn
           </span>
         </div>
 
-        <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mt-2 flex flex-col gap-3 sm:mt-3 sm:gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+            <h1 className="text-[21px] font-bold leading-7 tracking-tight text-text-primary sm:text-3xl sm:leading-normal lg:text-4xl">
               Hepdäňi seljer. Indiki hepdäni güýçlendir.
             </h1>
 
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-text-muted sm:text-base">
+            <p className="mt-1.5 max-w-3xl text-[10px] leading-4 text-text-muted sm:mt-3 sm:text-sm sm:leading-6 lg:text-base lg:leading-7">
               Geçen hepdäniň netijelerini gör, güýçli we gowulandyrmaly ýerleri kesgitle,
               soň indiki hepde üçin anyk ugur saýla.
             </p>
@@ -374,75 +374,75 @@ useEffect(() => {
             type="button"
             onClick={handleSaveReview}
             className={[
-              "inline-flex h-11 shrink-0 items-center gap-2 rounded-xl px-5 text-sm font-semibold transition",
+              "inline-flex h-10 w-full shrink-0 items-center justify-center gap-1.5 rounded-lg px-4 text-[10px] font-semibold transition sm:h-11 sm:w-auto sm:gap-2 sm:rounded-xl sm:px-5 sm:text-sm",
               saved
                 ? "border border-success/20 bg-success/10 text-success"
                 : "bg-primary text-slate-950 hover:bg-primary-hover",
             ].join(" ")}
           >
-            <Save size={16} />
+            <Save size={14} className="sm:h-4 sm:w-4" />
             {saved ? "Ýatda saklandy" : "Hepdäni tamamla"}
           </button>
         </div>
       </section>
 
       {/* WEEK SCORE */}
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-[0.85fr_1.15fr]">
-        <article className="relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-[var(--app-shadow)]">
+      <section className="grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-[0.85fr_1.15fr] xl:gap-6">
+        <article className="relative overflow-hidden rounded-xl border border-primary/20 bg-primary/5 p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
           <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
 
           <div className="relative z-10">
-            <div className="flex items-center gap-2 text-primary">
-              <Sparkles size={17} />
-              <span className="text-sm font-semibold">
+            <div className="flex items-center gap-1.5 text-primary sm:gap-2">
+              <Sparkles size={13} className="sm:h-[17px] sm:w-[17px]" />
+              <span className="text-[9px] font-semibold sm:text-sm">
                 Hepdäniň bahasy
               </span>
             </div>
 
-            <div className="mt-5 flex items-end gap-2">
-              <span className="text-6xl font-bold tracking-tight text-text-primary">
+            <div className="mt-2 flex items-end gap-1 sm:mt-5 sm:gap-2">
+              <span className="text-3xl font-bold tracking-tight text-text-primary sm:text-6xl">
                 {weeklyScore}
               </span>
-              <span className="pb-2 text-xl font-bold text-primary">
+              <span className="pb-0.5 text-xs font-bold text-primary sm:pb-2 sm:text-xl">
                 /100
               </span>
             </div>
 
-            <p className="mt-3 text-lg font-bold text-text-primary">
+            <p className="mt-1.5 text-xs font-bold text-text-primary sm:mt-3 sm:text-lg">
               {weeklyStatus}
             </p>
 
-            <div className="mt-5 h-2.5 overflow-hidden rounded-full bg-background/60">
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-background/60 sm:mt-5 sm:h-2.5">
               <div
                 className="h-full rounded-full bg-primary transition-all duration-700"
                 style={{ width: `${weeklyScore}%` }}
               />
             </div>
 
-            <p className="mt-4 text-xs leading-5 text-text-muted">
+            <p className="mt-2 hidden text-xs leading-5 text-text-muted sm:block">
               Baha ýerine ýetiriliş, maliýe ösüşi we meýilnama ösüşi boýunça hasaplanýar.
             </p>
           </div>
         </article>
 
-        <article className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
-          <p className="text-sm font-semibold text-primary">
+        <article className="rounded-xl border border-border bg-surface p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
+          <p className="text-[9px] font-semibold text-primary sm:text-sm">
             Indiki hepdäniň esasy ugry
           </p>
 
-          <h2 className="mt-3 text-2xl font-bold text-text-primary">
+          <h2 className="mt-1.5 text-sm font-bold text-text-primary sm:mt-3 sm:text-2xl">
             {strongestAreaLabel}
           </h2>
 
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-text-secondary">
+          <p className="mt-1 text-[9px] leading-4 text-text-secondary sm:mt-3 sm:text-sm sm:leading-7">
             {nextFocusLabel}
           </p>
 
-          <div className="mt-5 border-t border-border/70 pt-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-text-muted">
+          <div className="mt-2 border-t border-border/70 pt-2 sm:mt-5 sm:pt-5">
+            <p className="text-[8px] font-semibold uppercase tracking-[0.08em] text-text-muted sm:text-xs sm:tracking-[0.12em]">
               Umumy ösüş
             </p>
-            <p className="mt-2 text-3xl font-bold text-primary">
+            <p className="mt-0.5 text-lg font-bold text-primary sm:mt-2 sm:text-3xl">
               {growth.overallProgress}%
             </p>
           </div>
@@ -450,49 +450,49 @@ useEffect(() => {
       </section>
 
       {/* METRICS */}
-      <section className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        <article className="rounded-2xl border border-success/15 bg-success/[0.025] p-5 shadow-[var(--app-shadow)]">
+      <section className="grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-4">
+        <article className="rounded-xl border border-success/15 bg-success/[0.025] p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-5">
           <div className="flex items-center gap-2 text-success">
             <CheckCircle2 size={17} />
-            <span className="text-sm">Tamamlanan</span>
+            <span className="text-[10px] sm:text-sm">Tamamlanan</span>
           </div>
-          <p className="mt-3 text-3xl font-bold text-text-primary">
+          <p className="mt-1.5 text-xl font-bold text-text-primary sm:mt-3 sm:text-3xl">
             {review.completedTasks}
           </p>
         </article>
 
-        <article className="rounded-2xl border border-warning/15 bg-warning/[0.025] p-5 shadow-[var(--app-shadow)]">
+        <article className="rounded-xl border border-warning/15 bg-warning/[0.025] p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-5">
           <div className="flex items-center gap-2 text-warning">
             <CircleDashed size={17} />
-            <span className="text-sm">Galan işler</span>
+            <span className="text-[10px] sm:text-sm">Galan işler</span>
           </div>
-          <p className="mt-3 text-3xl font-bold text-text-primary">
+          <p className="mt-1.5 text-xl font-bold text-text-primary sm:mt-3 sm:text-3xl">
             {review.pendingTasks}
           </p>
         </article>
 
-        <article className="rounded-2xl border border-info/15 bg-info/[0.025] p-5 shadow-[var(--app-shadow)]">
+        <article className="rounded-xl border border-info/15 bg-info/[0.025] p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-5">
           <div className="flex items-center gap-2 text-info">
             <Target size={17} />
-            <span className="text-sm">Ýerine ýetiriliş</span>
+            <span className="text-[10px] sm:text-sm">Ýerine ýetiriliş</span>
           </div>
-          <p className="mt-3 text-3xl font-bold text-info">
+          <p className="mt-1.5 text-xl font-bold text-info sm:mt-3 sm:text-3xl">
             {review.completionRate}%
           </p>
         </article>
 
-        <article className="rounded-2xl border border-border bg-surface p-5 shadow-[var(--app-shadow)]">
+        <article className="rounded-xl border border-border bg-surface p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-5">
           <div className="flex items-center gap-2 text-text-muted">
             {review.monthlyNetIncome >= 0 ? (
               <ArrowUpRight size={17} className="text-success" />
             ) : (
               <ArrowDownRight size={17} className="text-danger" />
             )}
-            <span className="text-sm">Arassa girdeji</span>
+            <span className="text-[10px] sm:text-sm">Arassa girdeji</span>
           </div>
           <p
             className={[
-              "mt-3 text-3xl font-bold",
+              "mt-1.5 text-lg font-bold sm:mt-3 sm:text-3xl",
               review.monthlyNetIncome >= 0
                 ? "text-success"
                 : "text-danger",
@@ -504,46 +504,46 @@ useEffect(() => {
       </section>
 
       {/* STRONG + IMPROVE */}
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <article className="rounded-2xl border border-success/15 bg-success/[0.025] p-6 shadow-[var(--app-shadow)]">
+      <section className="grid grid-cols-1 gap-2 sm:gap-4 xl:grid-cols-2 xl:gap-6">
+        <article className="rounded-xl border border-success/15 bg-success/[0.025] p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
           <div className="flex items-center gap-2 text-success">
             <TrendingUp size={18} />
             <span className="text-sm font-semibold">
               Näme gowy gitdi?
             </span>
           </div>
-          <h2 className="mt-4 text-xl font-bold text-text-primary">
+          <h2 className="mt-2 text-sm font-bold text-text-primary sm:mt-4 sm:text-xl">
             {strongPoint.title}
           </h2>
-          <p className="mt-2 text-sm leading-7 text-text-muted">
+          <p className="mt-1 text-[10px] leading-4 text-text-muted sm:mt-2 sm:text-sm sm:leading-7">
             {strongPoint.description}
           </p>
         </article>
 
-        <article className="rounded-2xl border border-warning/15 bg-warning/[0.025] p-6 shadow-[var(--app-shadow)]">
+        <article className="rounded-xl border border-warning/15 bg-warning/[0.025] p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
           <div className="flex items-center gap-2 text-warning">
             <Lightbulb size={18} />
             <span className="text-sm font-semibold">
               Näme gowulandyrmaly?
             </span>
           </div>
-          <h2 className="mt-4 text-xl font-bold text-text-primary">
+          <h2 className="mt-2 text-sm font-bold text-text-primary sm:mt-4 sm:text-xl">
             {improvementPoint.title}
           </h2>
-          <p className="mt-2 text-sm leading-7 text-text-muted">
+          <p className="mt-1 text-[10px] leading-4 text-text-muted sm:mt-2 sm:text-sm sm:leading-7">
             {improvementPoint.description}
           </p>
         </article>
       </section>
 
       {/* PROGRESS + NEXT 3 */}
-      <section className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        <article className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
+      <section className="grid grid-cols-1 gap-2 sm:gap-4 xl:grid-cols-2 xl:gap-6">
+        <article className="rounded-xl border border-border bg-surface p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
           <p className="text-sm font-semibold text-primary">
             Ösüş deňeşdirmesi
           </p>
 
-          <div className="mt-5 space-y-5">
+          <div className="mt-3 space-y-3 sm:mt-5 sm:space-y-5">
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-text-muted">Maliýe</span>
@@ -551,7 +551,7 @@ useEffect(() => {
                   {review.financialProgress}%
                 </span>
               </div>
-              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-background">
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-background sm:mt-2 sm:h-2.5">
                 <div
                   className="h-full rounded-full bg-info transition-all"
                   style={{ width: `${review.financialProgress}%` }}
@@ -566,7 +566,7 @@ useEffect(() => {
                   {review.plannerProgress}%
                 </span>
               </div>
-              <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-background">
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-background sm:mt-2 sm:h-2.5">
                 <div
                   className="h-full rounded-full bg-violet-500 transition-all"
                   style={{ width: `${review.plannerProgress}%` }}
@@ -576,21 +576,21 @@ useEffect(() => {
           </div>
         </article>
 
-        <article className="rounded-2xl border border-primary/20 bg-primary/5 p-6 shadow-[var(--app-shadow)]">
+        <article className="rounded-xl border border-primary/20 bg-primary/5 p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
           <p className="text-sm font-semibold text-primary">
             Indiki hepdäniň 3 esasy ädimi
           </p>
 
-          <div className="mt-5 space-y-3">
+          <div className="mt-3 space-y-2 sm:mt-5 sm:space-y-3">
             {nextWeekActions.map((action, index) => (
               <div
                 key={action}
-                className="flex items-start gap-3 rounded-xl border border-border bg-background/30 p-4"
+                className="flex items-start gap-2 rounded-lg border border-border bg-background/30 p-2.5 sm:gap-3 sm:rounded-xl sm:p-4"
               >
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
                   {index + 1}
                 </span>
-                <p className="pt-0.5 text-sm leading-6 text-text-secondary">
+                <p className="text-[10px] leading-4 text-text-secondary sm:pt-0.5 sm:text-sm sm:leading-6">
                   {action}
                 </p>
               </div>
@@ -600,28 +600,28 @@ useEffect(() => {
       </section>
 
       {/* NOTE */}
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
+      <section className="rounded-xl border border-border bg-surface p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
         <p className="text-sm font-semibold text-primary">
           Hepdelik bellik
         </p>
-        <h2 className="mt-2 text-xl font-bold text-text-primary">
+        <h2 className="mt-1 text-sm font-bold text-text-primary sm:mt-2 sm:text-xl">
           Bu hepde barada näme belläp goýmak isleýärsiň?
         </h2>
-        <p className="mt-2 text-sm leading-6 text-text-muted">
+        <p className="mt-1 text-[10px] leading-4 text-text-muted sm:mt-2 sm:text-sm sm:leading-6">
           Näme gowy gitdi, näme kyn boldy ýa-da indiki hepde ýatda saklamaly zadyňy gysga ýaz.
         </p>
 
         <textarea
           value={note}
           onChange={(event) => setNote(event.target.value)}
-          rows={4}
+          rows={3}
           placeholder="Meselem: Müşderiler bilen iş gowy gitdi, ýöne meýilnamadaky işleri has az saýlamaly..."
-          className="mt-5 w-full resize-none rounded-xl border border-border bg-background/40 p-4 text-sm leading-6 text-text-primary outline-none transition placeholder:text-text-disabled focus:border-primary"
+          className="mt-3 w-full resize-none rounded-lg border border-border bg-background/40 p-3 text-xs leading-5 text-text-primary outline-none transition placeholder:text-text-disabled focus:border-primary sm:mt-5 sm:rounded-xl sm:p-4 sm:text-sm sm:leading-6"
         />
       </section>
 
       {/* HISTORY */}
-      <section className="rounded-2xl border border-border bg-surface p-6 shadow-[var(--app-shadow)]">
+      <section className="rounded-xl border border-border bg-surface p-3 shadow-[var(--app-shadow)] sm:rounded-2xl sm:p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 text-primary">
@@ -629,24 +629,24 @@ useEffect(() => {
               <span className="text-sm font-semibold">Soňky hepdeler</span>
             </div>
 
-            <h2 className="mt-2 text-2xl font-bold text-text-primary">
+            <h2 className="mt-1 text-base font-bold text-text-primary sm:mt-2 sm:text-2xl">
               Hepdelik ösüş taryhy
             </h2>
-            <p className="mt-2 text-sm text-text-muted">
+            <p className="mt-1 text-[10px] text-text-muted sm:mt-2 sm:text-sm">
               Saklanan hepdelik netijeleri öňki hepdeler bilen deňeşdir.
             </p>
           </div>
         </div>
 
         {sortedReviews.length === 0 ? (
-          <div className="mt-6 rounded-2xl border border-dashed border-border bg-background/30 p-8 text-center sm:p-10">
+          <div className="mt-3 rounded-xl border border-dashed border-border bg-background/30 p-4 text-center sm:mt-6 sm:rounded-2xl sm:p-10">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <History size={20} />
             </div>
             <p className="mt-5 text-sm font-semibold text-primary">
               Ilkinji hepdelik syn
             </p>
-            <h3 className="mt-2 text-xl font-bold text-text-primary">
+            <h3 className="mt-1 text-sm font-bold text-text-primary sm:mt-2 sm:text-xl">
               Entäk hepdelik syn saklanmady
             </h3>
             <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-text-muted">
@@ -657,8 +657,8 @@ useEffect(() => {
         ) : (
           <>
             {latestReview && previousReview && (
-              <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-                <article className="rounded-xl border border-border bg-background/40 p-5">
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:mt-6 sm:gap-4">
+                <article className="rounded-lg border border-border bg-background/40 p-3 sm:rounded-xl sm:p-5">
                   <p className="text-sm text-text-muted">
                     Ýerine ýetiriliş üýtgeşmesi
                   </p>
@@ -683,7 +683,7 @@ useEffect(() => {
                   </div>
                 </article>
 
-                <article className="rounded-xl border border-border bg-background/40 p-5">
+                <article className="rounded-lg border border-border bg-background/40 p-3 sm:rounded-xl sm:p-5">
                   <p className="text-sm text-text-muted">
                     Umumy ösüş üýtgeşmesi
                   </p>
@@ -710,13 +710,13 @@ useEffect(() => {
               </div>
             )}
 
-            <div className="mt-6 space-y-3">
+            <div className="mt-3 space-y-2 sm:mt-6 sm:space-y-3">
               {sortedReviews.slice(0, 6).map((item) => (
                 <article
                   key={item.id}
-                  className="rounded-xl border border-border bg-background/40 p-5"
+                  className="rounded-lg border border-border bg-background/40 p-3 sm:rounded-xl sm:p-5"
                 >
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="flex flex-col gap-2 sm:gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div>
                       <p className="font-bold text-text-primary">
                         {item.weekKey}
@@ -730,7 +730,7 @@ useEffect(() => {
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-6 text-center">
+                    <div className="grid grid-cols-3 gap-2 text-center sm:gap-6">
                       <div>
                         <p className="text-xs text-text-muted">Ýerine ýetiriliş</p>
                         <p className="mt-1 font-bold text-text-primary">
@@ -753,7 +753,7 @@ useEffect(() => {
                   </div>
 
                   {item.note && (
-                    <div className="mt-4 border-t border-border pt-4">
+                    <div className="mt-2 border-t border-border pt-2 sm:mt-4 sm:pt-4">
                       <p className="text-xs font-semibold text-text-muted">
                         Bellik
                       </p>

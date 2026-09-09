@@ -203,11 +203,13 @@ export default function GoalEditor() {
       onSubmit={handleSubmit}
       className="
         relative overflow-hidden
-        rounded-3xl
+        rounded-[20px]
         border border-border
         bg-surface
-        p-6
+        p-4
         shadow-[var(--app-shadow)]
+        sm:rounded-3xl
+        sm:p-6
       "
     >
       <div
@@ -223,21 +225,21 @@ export default function GoalEditor() {
 
       <div className="relative z-10">
         {/* HEADER */}
-        <div className="flex flex-col gap-4 border-b border-border/70 pb-5 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex items-start justify-between gap-3 border-b border-border/70 pb-3 sm:gap-4 sm:pb-5">
           <div>
-            <div className="flex items-center gap-2 text-violet-400">
-              <Target size={18} />
+            <div className="flex items-center gap-1.5 text-violet-400 sm:gap-2">
+              <Target size={14} className="sm:h-[18px] sm:w-[18px]" />
 
-              <span className="text-sm font-semibold">
+              <span className="text-[10px] font-semibold sm:text-sm">
                 Maksady dolandyr
               </span>
             </div>
 
-            <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-primary">
+            <h2 className="mt-1 text-[17px] font-bold tracking-tight text-text-primary sm:mt-2 sm:text-2xl">
               Maksat maglumatlary
             </h2>
 
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-text-muted">
+            <p className="mt-1 max-w-2xl text-[10px] leading-4 text-text-muted sm:mt-2 sm:text-sm sm:leading-6">
               Maksadyňy, gerek puluňy,
               häzirki ýygnalan puluňy we
               soňky möhleti giriz.
@@ -249,9 +251,10 @@ export default function GoalEditor() {
 
           <div
             className="
-              flex h-11 w-11 shrink-0
+              hidden h-11 w-11 shrink-0
               items-center justify-center
               rounded-xl
+              sm:flex
               border border-violet-400/15
               bg-violet-500/10
               text-violet-400
@@ -262,12 +265,12 @@ export default function GoalEditor() {
         </div>
 
         {/* FIELDS */}
-        <div className="mt-6 space-y-5">
+        <div className="mt-3 space-y-3 sm:mt-6 sm:space-y-5">
           {/* GOAL NAME */}
           <div>
             <label
               htmlFor="goal-title"
-              className="mb-2 flex items-center gap-2 text-sm font-medium text-text-secondary"
+              className="mb-1.5 flex items-center gap-1.5 text-[10px] font-medium text-text-secondary sm:mb-2 sm:gap-2 sm:text-sm"
             >
               <Target
                 size={15}
@@ -294,10 +297,12 @@ export default function GoalEditor() {
               }}
               placeholder="Meselem: 20 000 manat ýygnamak"
               className="
-                h-12 w-full rounded-xl
+                h-10 w-full rounded-lg
                 border border-violet-400/15
                 bg-background/50
-                px-4 text-sm
+                px-3 text-xs
+                sm:h-12 sm:rounded-xl
+                sm:px-4 sm:text-sm
                 text-text-primary
                 outline-none
                 transition-all duration-200
@@ -312,11 +317,11 @@ export default function GoalEditor() {
           </div>
 
           {/* MONEY */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
             <div>
               <label
                 htmlFor="goal-target-money"
-                className="mb-2 flex items-center gap-2 text-sm font-medium text-text-secondary"
+                className="mb-1.5 flex items-center gap-1.5 text-[10px] font-medium text-text-secondary sm:mb-2 sm:gap-2 sm:text-sm"
               >
                 <CircleDollarSign
                   size={15}
@@ -343,10 +348,12 @@ export default function GoalEditor() {
                   handleFieldChange();
                 }}
                 className="
-                  h-12 w-full rounded-xl
+                  h-10 w-full rounded-lg
                   border border-info/15
                   bg-background/50
-                  px-4 text-sm
+                  px-3 text-xs
+                  sm:h-12 sm:rounded-xl
+                  sm:px-4 sm:text-sm
                   text-text-primary
                   outline-none
                   transition-all duration-200
@@ -362,7 +369,7 @@ export default function GoalEditor() {
             <div>
               <label
                 htmlFor="goal-current-money"
-                className="mb-2 flex items-center gap-2 text-sm font-medium text-text-secondary"
+                className="mb-1.5 flex items-center gap-1.5 text-[10px] font-medium text-text-secondary sm:mb-2 sm:gap-2 sm:text-sm"
               >
                 <WalletCards
                   size={15}
@@ -389,10 +396,12 @@ export default function GoalEditor() {
                   handleFieldChange();
                 }}
                 className="
-                  h-12 w-full rounded-xl
+                  h-10 w-full rounded-lg
                   border border-success/15
                   bg-background/50
-                  px-4 text-sm
+                  px-3 text-xs
+                  sm:h-12 sm:rounded-xl
+                  sm:px-4 sm:text-sm
                   text-text-primary
                   outline-none
                   transition-all duration-200
@@ -410,7 +419,7 @@ export default function GoalEditor() {
           <div>
             <label
               htmlFor="goal-deadline"
-              className="mb-2 flex items-center gap-2 text-sm font-medium text-text-secondary"
+              className="mb-1.5 flex items-center gap-1.5 text-[10px] font-medium text-text-secondary sm:mb-2 sm:gap-2 sm:text-sm"
             >
               <CalendarDays
                 size={15}
@@ -436,10 +445,12 @@ export default function GoalEditor() {
                 handleFieldChange();
               }}
               className="
-                h-12 w-full rounded-xl
+                h-10 w-full rounded-lg
                 border border-warning/15
                 bg-background/50
-                px-4 text-sm
+                px-3 text-xs
+                sm:h-12 sm:rounded-xl
+                sm:px-4 sm:text-sm
                 text-text-primary
                 outline-none
                 transition-all duration-200
@@ -455,15 +466,15 @@ export default function GoalEditor() {
 
         {/* ERROR */}
         {error && (
-          <div className="mt-5 rounded-xl border border-danger/20 bg-danger/10 px-4 py-3">
-            <p className="text-sm font-medium text-danger">
+          <div className="mt-3 rounded-lg border border-danger/20 bg-danger/10 px-3 py-2 sm:mt-5 sm:rounded-xl sm:px-4 sm:py-3">
+            <p className="text-[10px] font-medium text-danger sm:text-sm">
               {error}
             </p>
           </div>
         )}
 
         {/* FOOTER */}
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-border/70 pt-5">
+        <div className="mt-4 flex flex-col gap-3 border-t border-border/70 pt-3 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 sm:pt-5">
           <div>
             {saved ? (
               <div className="flex items-center gap-2 text-success">
@@ -471,13 +482,13 @@ export default function GoalEditor() {
                   size={17}
                 />
 
-                <p className="text-sm font-medium">
+                <p className="text-[10px] font-medium sm:text-sm">
                   Maglumatlar üstünlikli
                   ýatda saklandy.
                 </p>
               </div>
             ) : (
-              <p className="text-sm text-text-muted">
+              <p className="text-[10px] text-text-muted sm:text-sm">
                 Üýtgeşmeleri girizip,
                 soň “Ýatda sakla”
                 düwmesine bas.
@@ -485,7 +496,7 @@ export default function GoalEditor() {
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
             {hasExistingGoal && (
               <button
                 type="button"
@@ -497,13 +508,17 @@ export default function GoalEditor() {
                   isDeleting
                 }
                 className="
-                  inline-flex h-11
-                  items-center gap-2
-                  rounded-xl
+                  inline-flex h-10
+                  items-center justify-center gap-1.5
+                  rounded-lg
+                  sm:h-11 sm:gap-2
+                  sm:rounded-xl
                   border border-danger/20
                   bg-danger/10
-                  px-4
-                  text-sm font-semibold
+                  px-3
+                  text-[10px] font-semibold
+                  sm:px-4
+                  sm:text-sm
                   text-danger
                   transition-all duration-200
                   hover:border-danger/35
@@ -527,11 +542,14 @@ export default function GoalEditor() {
                 isDeleting
               }
               className="
-                inline-flex h-11
-                items-center gap-2
-                rounded-xl
-                bg-primary px-5
-                text-sm font-semibold
+                inline-flex h-10
+                items-center justify-center gap-1.5
+                rounded-lg
+                bg-primary px-3
+                text-[10px] font-semibold
+                sm:h-11 sm:gap-2
+                sm:rounded-xl sm:px-5
+                sm:text-sm
                 text-slate-950
                 shadow-[0_8px_24px_rgba(34,214,111,0.12)]
                 transition-all duration-200

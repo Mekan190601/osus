@@ -44,13 +44,16 @@ export default function WelcomeHero() {
       variants={containerVariants}
       className="
         group relative overflow-hidden
-        rounded-[28px]
+        rounded-[20px]
         border border-border
         bg-surface
-        px-6 py-7
-        shadow-[0_20px_70px_rgba(0,0,0,0.16)]
-        sm:px-8 sm:py-8
+        px-4 py-4
+        shadow-[0_12px_40px_rgba(0,0,0,0.14)]
+        sm:rounded-[24px]
+        sm:px-6 sm:py-6
+        lg:rounded-[28px]
         lg:px-10 lg:py-9
+        lg:shadow-[0_20px_70px_rgba(0,0,0,0.16)]
       "
     >
       {/* Background atmosphere */}
@@ -58,20 +61,24 @@ export default function WelcomeHero() {
         <div
           className="
             absolute -right-24 -top-32
-            h-[420px] w-[420px]
+            h-[300px] w-[300px]
             rounded-full
             bg-primary/[0.10]
-            blur-[100px]
+            blur-[90px]
+            lg:h-[420px] lg:w-[420px]
+            lg:blur-[100px]
           "
         />
 
         <div
           className="
             absolute bottom-[-180px] right-[20%]
+            hidden
             h-[360px] w-[360px]
             rounded-full
             bg-info/[0.055]
             blur-[110px]
+            sm:block
           "
         />
 
@@ -100,8 +107,10 @@ export default function WelcomeHero() {
       <div
         className="
           relative z-10
-          grid items-center gap-8
+          grid items-center gap-4
+          sm:gap-6
           lg:grid-cols-[minmax(0,1fr)_330px]
+          lg:gap-8
           xl:grid-cols-[minmax(0,1fr)_370px]
         "
       >
@@ -110,15 +119,22 @@ export default function WelcomeHero() {
           <motion.div
             variants={itemVariants}
             className="
-              mb-5 inline-flex items-center gap-2
+              mb-3 inline-flex items-center gap-1.5
               rounded-full
               border border-primary/20
               bg-primary/[0.08]
-              px-3 py-1.5
-              text-xs font-semibold text-primary
+              px-2.5 py-1
+              text-[10px] font-semibold text-primary
+              sm:mb-4
+              sm:px-3 sm:py-1.5
+              sm:text-xs
+              lg:mb-5
             "
           >
-            <Sparkles size={14} />
+            <Sparkles
+              size={12}
+              className="sm:h-[14px] sm:w-[14px]"
+            />
             Şu gün üçin esasy ugur
           </motion.div>
 
@@ -126,16 +142,19 @@ export default function WelcomeHero() {
             variants={itemVariants}
             className="
               max-w-3xl
-              text-[34px] font-bold tracking-[-0.035em]
+              text-[25px]
+              font-bold
+              leading-[1.12]
+              tracking-[-0.035em]
               text-text-primary
-              sm:text-[40px]
+              sm:text-[32px]
               lg:text-[46px]
               lg:leading-[1.08]
             "
           >
             {t.dashboard.welcome}
 
-            <span className="mt-1 block text-primary">
+            <span className="mt-0.5 block text-primary sm:mt-1">
               {t.dashboard.todayQuestion}
             </span>
           </motion.h1>
@@ -143,9 +162,17 @@ export default function WelcomeHero() {
           <motion.p
             variants={itemVariants}
             className="
-              mt-5 max-w-2xl
-              text-sm leading-7 text-text-secondary
-              sm:text-[15px]
+              mt-3
+              max-w-2xl
+              text-[12px]
+              leading-[1.55]
+              text-text-secondary
+              sm:mt-4
+              sm:text-sm
+              sm:leading-6
+              lg:mt-5
+              lg:text-[15px]
+              lg:leading-7
             "
           >
             {t.dashboard.heroDescription}
@@ -153,30 +180,43 @@ export default function WelcomeHero() {
 
           <motion.div
             variants={itemVariants}
-            className="mt-7 flex flex-wrap items-center gap-3"
+            className="
+              mt-4 grid grid-cols-2 gap-2
+              sm:mt-5 sm:flex sm:flex-wrap sm:items-center sm:gap-3
+              lg:mt-7
+            "
           >
             <Link
               to="/goals"
               className="
-                group/button inline-flex h-11 items-center gap-2
+                group/button
+                inline-flex h-10
+                min-w-0
+                items-center justify-center gap-1.5
                 rounded-xl
-                bg-primary px-5
-                text-sm font-semibold text-slate-950
-                shadow-[0_8px_30px_rgba(34,214,111,0.16)]
+                bg-primary
+                px-3
+                text-[12px] font-semibold
+                text-slate-950
+                shadow-[0_6px_20px_rgba(34,214,111,0.14)]
                 transition-all duration-200
                 hover:-translate-y-0.5
                 hover:bg-primary-hover
-                hover:shadow-[0_12px_35px_rgba(34,214,111,0.22)]
                 active:translate-y-0
+                sm:h-11 sm:gap-2 sm:px-5 sm:text-sm
               "
             >
-              {t.dashboard.addGoal}
+              <span className="truncate">
+                {t.dashboard.addGoal}
+              </span>
 
               <ArrowRight
-                size={17}
+                size={15}
                 className="
+                  shrink-0
                   transition-transform duration-200
                   group-hover/button:translate-x-0.5
+                  sm:h-[17px] sm:w-[17px]
                 "
               />
             </Link>
@@ -184,26 +224,36 @@ export default function WelcomeHero() {
             <Link
               to="/ai-coach"
               className="
-                inline-flex h-11 items-center gap-2
+                inline-flex h-10
+                min-w-0
+                items-center justify-center gap-1.5
                 rounded-xl
                 border border-border
                 bg-background/35
-                px-5
-                text-sm font-semibold text-text-primary
+                px-3
+                text-[12px] font-semibold
+                text-text-primary
                 transition-all duration-200
                 hover:-translate-y-0.5
                 hover:border-primary/20
                 hover:bg-surface-hover
                 active:translate-y-0
+                sm:h-11 sm:gap-2 sm:px-5 sm:text-sm
               "
             >
-              <Brain size={16} className="text-primary" />
-              {t.dashboard.getAdvice}
+              <Brain
+                size={15}
+                className="shrink-0 text-primary sm:h-4 sm:w-4"
+              />
+
+              <span className="truncate">
+                {t.dashboard.getAdvice}
+              </span>
             </Link>
           </motion.div>
         </div>
 
-        {/* RIGHT — daily command center */}
+        {/* RIGHT — desktop daily command center */}
         <motion.div
           variants={itemVariants}
           className="hidden lg:block"

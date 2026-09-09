@@ -25,11 +25,15 @@ export default function PlannerGoalTree() {
     (state) => state.setFocusedTaskId,
   );
 
-  const [expandedYearlyIds, setExpandedYearlyIds] =
-    useState<string[]>([]);
+  const [
+    expandedYearlyIds,
+    setExpandedYearlyIds,
+  ] = useState<string[]>([]);
 
-  const [expandedMonthlyIds, setExpandedMonthlyIds] =
-    useState<string[]>([]);
+  const [
+    expandedMonthlyIds,
+    setExpandedMonthlyIds,
+  ] = useState<string[]>([]);
 
   const yearlyTasks = tasks.filter(
     (task) =>
@@ -38,10 +42,13 @@ export default function PlannerGoalTree() {
         task.id === focusedTaskId),
   );
 
-  function getChildren(parentTaskId: string) {
+  function getChildren(
+    parentTaskId: string,
+  ) {
     return tasks.filter(
       (task) =>
-        task.parentTaskId === parentTaskId,
+        task.parentTaskId ===
+        parentTaskId,
     );
   }
 
@@ -52,141 +59,259 @@ export default function PlannerGoalTree() {
     );
   }
 
-  function toggleYearly(taskId: string) {
-    setExpandedYearlyIds((current) =>
-      current.includes(taskId)
-        ? current.filter(
-            (id) => id !== taskId,
-          )
-        : [...current, taskId],
+  function toggleYearly(
+    taskId: string,
+  ) {
+    setExpandedYearlyIds(
+      (current) =>
+        current.includes(taskId)
+          ? current.filter(
+              (id) =>
+                id !== taskId,
+            )
+          : [...current, taskId],
     );
   }
 
-  function toggleMonthly(taskId: string) {
-    setExpandedMonthlyIds((current) =>
-      current.includes(taskId)
-        ? current.filter(
-            (id) => id !== taskId,
-          )
-        : [...current, taskId],
+  function toggleMonthly(
+    taskId: string,
+  ) {
+    setExpandedMonthlyIds(
+      (current) =>
+        current.includes(taskId)
+          ? current.filter(
+              (id) =>
+                id !== taskId,
+            )
+          : [...current, taskId],
     );
   }
 
   return (
     <section
       className="
-        relative overflow-hidden
-        rounded-3xl
+        relative
+        overflow-hidden
+        rounded-[18px]
         border border-border
         bg-surface
-        p-6
+        p-3
         shadow-[var(--app-shadow)]
+
+        sm:rounded-3xl
+        sm:p-5
+
+        lg:p-6
       "
     >
-      {/* Ýumşak fon */}
+      {/* SOFT BACKGROUND */}
       <div
         className="
           pointer-events-none
-          absolute -right-24 -top-24
-          h-56 w-56
+          absolute -right-20 -top-20
+          h-40 w-40
           rounded-full
-          bg-violet-500/[0.05]
+          bg-violet-500/[0.04]
           blur-3xl
+
+          sm:h-56 sm:w-56
         "
       />
 
       <div className="relative z-10">
         {/* HEADER */}
         <div>
-          <div className="flex items-center gap-2 text-violet-400">
-            <Target size={17} />
+          <div className="flex items-center gap-1.5 text-violet-400 sm:gap-2">
+            <Target
+              size={14}
+              className="sm:h-[17px] sm:w-[17px]"
+            />
 
-            <span className="text-sm font-semibold">
+            <span className="text-[10px] font-semibold sm:text-sm">
               Maksatdan şu güne çenli
             </span>
           </div>
 
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-text-primary">
+          <h2
+            className="
+              mt-1
+              text-[18px]
+              font-bold
+              tracking-tight
+              text-text-primary
+
+              sm:mt-2
+              sm:text-2xl
+            "
+          >
             Meýilnama ýoly
           </h2>
 
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-text-muted">
+          <p
+            className="
+              mt-1
+              text-[9px]
+              leading-4
+              text-text-muted
+
+              sm:mt-2
+              sm:max-w-2xl
+              sm:text-sm
+              sm:leading-6
+            "
+          >
             Uly maksadyňy kiçi we ýerine
             ýetirip bolýan ädimlere böl.
           </p>
 
-          {/* ÝOL */}
-          <div className="mt-5 flex flex-wrap items-center gap-2 text-xs font-medium">
-            <span className="rounded-lg bg-violet-500/10 px-3 py-2 text-violet-400">
+          {/* ROAD */}
+          <div
+            className="
+              mt-2.5
+              flex
+              items-center
+              gap-1
+              overflow-x-auto
+              pb-1
+              text-[8px]
+              font-medium
+
+              sm:mt-5
+              sm:flex-wrap
+              sm:gap-2
+              sm:overflow-visible
+              sm:pb-0
+              sm:text-xs
+            "
+          >
+            <span
+              className="
+                shrink-0
+                rounded-md
+                bg-violet-500/10
+                px-2 py-1
+                text-violet-400
+
+                sm:rounded-lg
+                sm:px-3
+                sm:py-2
+              "
+            >
               Ýyllyk maksat
             </span>
 
             <ChevronRight
-              size={14}
-              className="text-text-disabled"
+              size={11}
+              className="shrink-0 text-text-disabled sm:h-[14px] sm:w-[14px]"
             />
 
-            <span className="rounded-lg bg-info/10 px-3 py-2 text-info">
+            <span
+              className="
+                shrink-0
+                rounded-md
+                bg-info/10
+                px-2 py-1
+                text-info
+
+                sm:rounded-lg
+                sm:px-3
+                sm:py-2
+              "
+            >
               Aýlyk ädim
             </span>
 
             <ChevronRight
-              size={14}
-              className="text-text-disabled"
+              size={11}
+              className="shrink-0 text-text-disabled sm:h-[14px] sm:w-[14px]"
             />
 
-            <span className="rounded-lg bg-warning/10 px-3 py-2 text-warning">
+            <span
+              className="
+                shrink-0
+                rounded-md
+                bg-warning/10
+                px-2 py-1
+                text-warning
+
+                sm:rounded-lg
+                sm:px-3
+                sm:py-2
+              "
+            >
               Hepdelik iş
             </span>
 
             <ChevronRight
-              size={14}
-              className="text-text-disabled"
+              size={11}
+              className="shrink-0 text-text-disabled sm:h-[14px] sm:w-[14px]"
             />
 
-            <span className="rounded-lg bg-success/10 px-3 py-2 text-success">
+            <span
+              className="
+                shrink-0
+                rounded-md
+                bg-success/10
+                px-2 py-1
+                text-success
+
+                sm:rounded-lg
+                sm:px-3
+                sm:py-2
+              "
+            >
               Şu gün
             </span>
           </div>
         </div>
 
-        {/* SAÝLANAN MAKSAT */}
+        {/* FOCUSED GOAL */}
         {focusedTaskId && (
           <div
             className="
-              mt-5 flex flex-col gap-3
-              rounded-xl
+              mt-3
+              flex
+              items-center
+              gap-2
+              rounded-lg
               border border-primary/15
               bg-primary/[0.04]
-              p-4
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
+              p-2.5
+
+              sm:mt-5
+              sm:gap-3
+              sm:rounded-xl
+              sm:p-4
             "
           >
-            <div className="flex items-center gap-3">
-              <div
-                className="
-                  flex h-9 w-9
-                  items-center justify-center
-                  rounded-lg
-                  bg-primary/10
-                  text-primary
-                "
-              >
-                <Focus size={17} />
-              </div>
+            <div
+              className="
+                flex h-8 w-8
+                shrink-0
+                items-center
+                justify-center
+                rounded-lg
+                bg-primary/10
+                text-primary
 
-              <div>
-                <p className="text-sm font-semibold text-primary">
-                  Esasy maksat saýlandy
-                </p>
+                sm:h-9
+                sm:w-9
+              "
+            >
+              <Focus
+                size={14}
+                className="sm:h-[17px] sm:w-[17px]"
+              />
+            </div>
 
-                <p className="mt-1 text-xs text-text-muted">
-                  Häzir diňe şu maksada degişli
-                  meýilnama görkezilýär.
-                </p>
-              </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-semibold text-primary sm:text-sm">
+                Esasy maksat saýlandy
+              </p>
+
+              <p className="mt-0.5 truncate text-[8px] text-text-muted sm:mt-1 sm:text-xs">
+                Häzir diňe şu maksada degişli meýilnama görkezilýär.
+              </p>
             </div>
 
             <button
@@ -195,421 +320,510 @@ export default function PlannerGoalTree() {
                 setFocusedTaskId(null)
               }
               className="
-                inline-flex h-9
-                items-center justify-center
-                gap-2 rounded-lg
+                flex h-8 w-8
+                shrink-0
+                items-center
+                justify-center
+                rounded-lg
                 border border-border
-                px-3
-                text-xs font-semibold
                 text-text-secondary
                 transition
                 hover:bg-surface-hover
                 hover:text-text-primary
+
+                sm:w-auto
+                sm:gap-2
+                sm:px-3
+                sm:text-xs
+                sm:font-semibold
               "
+              aria-label="Hemmesini görkez"
             >
-              <X size={14} />
-              Hemmesini görkez
+              <X size={13} />
+
+              <span className="hidden sm:inline">
+                Hemmesini görkez
+              </span>
             </button>
           </div>
         )}
 
-        {/* MAKSATLAR */}
-        <div className="mt-6 space-y-4">
+        {/* GOALS */}
+        <div className="mt-3 space-y-2.5 sm:mt-6 sm:space-y-4">
           {yearlyTasks.length === 0 ? (
             <div
               className="
-                rounded-xl
+                rounded-lg
                 border border-dashed
                 border-border
                 bg-background/20
-                p-6 text-center
+                p-3
+                text-center
+
+                sm:rounded-xl
+                sm:p-6
               "
             >
-              <p className="text-sm font-medium text-text-secondary">
+              <p className="text-[10px] font-medium text-text-secondary sm:text-sm">
                 Heniz ýyllyk maksat ýok
               </p>
 
-              <p className="mt-1 text-xs text-text-muted">
+              <p className="mt-1 text-[8px] leading-4 text-text-muted sm:text-xs">
                 Ýyllyk maksat goşulanda onuň
                 aşagyndaky ädimler şu ýerde
                 görkeziler.
               </p>
             </div>
           ) : (
-            yearlyTasks.map((yearlyTask) => {
-              const monthlyTasks =
-                getChildren(yearlyTask.id);
+            yearlyTasks.map(
+              (yearlyTask) => {
+                const monthlyTasks =
+                  getChildren(
+                    yearlyTask.id,
+                  );
 
-              const yearlyProgress =
-                getProgress(yearlyTask.id);
+                const yearlyProgress =
+                  getProgress(
+                    yearlyTask.id,
+                  );
 
-              const isYearlyExpanded =
-                expandedYearlyIds.includes(
-                  yearlyTask.id,
-                );
+                const isYearlyExpanded =
+                  expandedYearlyIds.includes(
+                    yearlyTask.id,
+                  );
 
-              return (
-                <article
-                  key={yearlyTask.id}
-                  className="
-                    overflow-hidden
-                    rounded-2xl
-                    border border-violet-400/15
-                    bg-background/25
-                  "
-                >
-                  {/* ÝYLLYK */}
-                  <div className="flex items-center gap-3 p-5">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        toggleYearly(
-                          yearlyTask.id,
-                        )
-                      }
-                      className="
-                        flex h-9 w-9 shrink-0
-                        items-center justify-center
-                        rounded-lg
-                        border border-border
-                        bg-surface
-                        text-text-muted
-                        transition
-                        hover:border-violet-400/30
-                        hover:text-violet-400
-                      "
-                    >
-                      {isYearlyExpanded ? (
-                        <ChevronDown size={18} />
-                      ) : (
-                        <ChevronRight size={18} />
-                      )}
-                    </button>
+                return (
+                  <article
+                    key={
+                      yearlyTask.id
+                    }
+                    className="
+                      overflow-hidden
+                      rounded-xl
+                      border
+                      border-violet-400/15
+                      bg-background/25
 
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <CalendarDays
-                          size={16}
-                          className="shrink-0 text-violet-400"
-                        />
+                      sm:rounded-2xl
+                    "
+                  >
+                    {/* YEARLY */}
+                    <div className="flex items-center gap-2 p-2.5 sm:gap-3 sm:p-5">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          toggleYearly(
+                            yearlyTask.id,
+                          )
+                        }
+                        className="
+                          flex h-8 w-8
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-lg
+                          border border-border
+                          bg-surface
+                          text-text-muted
+                          transition
+                          hover:border-violet-400/30
+                          hover:text-violet-400
 
-                        <span className="text-xs font-semibold text-violet-400">
-                          Ýyllyk maksat
-                        </span>
+                          sm:h-9
+                          sm:w-9
+                        "
+                      >
+                        {isYearlyExpanded ? (
+                          <ChevronDown
+                            size={15}
+                          />
+                        ) : (
+                          <ChevronRight
+                            size={15}
+                          />
+                        )}
+                      </button>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <CalendarDays
+                            size={12}
+                            className="shrink-0 text-violet-400 sm:h-4 sm:w-4"
+                          />
+
+                          <span className="text-[8px] font-semibold text-violet-400 sm:text-xs">
+                            Ýyllyk maksat
+                          </span>
+                        </div>
+
+                        <p className="mt-0.5 truncate text-[11px] font-semibold text-text-primary sm:mt-1 sm:text-base">
+                          {
+                            yearlyTask.title
+                          }
+                        </p>
+
+                        <p className="mt-0.5 text-[8px] text-text-muted sm:mt-1 sm:text-xs">
+                          {monthlyTasks.length >
+                          0
+                            ? `${monthlyTasks.length} aýlyk ädim`
+                            : "Heniz aýlyk ädim ýok"}
+                        </p>
                       </div>
 
-                      <p className="mt-1 truncate font-semibold text-text-primary">
-                        {yearlyTask.title}
-                      </p>
-
-                      <p className="mt-1 text-xs text-text-muted">
-                        {monthlyTasks.length > 0
-                          ? `${monthlyTasks.length} aýlyk ädim`
-                          : "Heniz aýlyk ädim ýok"}
-                      </p>
-                    </div>
-
-                    <div className="hidden shrink-0 text-right sm:block">
-                      <p className="text-lg font-bold text-violet-400">
-                        {yearlyProgress}%
-                      </p>
-
-                      <p className="text-[10px] text-text-disabled">
-                        ýerine ýetirildi
-                      </p>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setFocusedTaskId(
-                          yearlyTask.id,
-                        )
-                      }
-                      disabled={
-                        focusedTaskId ===
-                        yearlyTask.id
-                      }
-                      className="
-                        flex h-9 w-9 shrink-0
-                        items-center justify-center
-                        rounded-lg
-                        border border-border
-                        bg-surface
-                        text-text-muted
-                        transition
-                        hover:border-primary/30
-                        hover:bg-primary/10
-                        hover:text-primary
-                        disabled:cursor-default
-                        disabled:border-primary/20
-                        disabled:bg-primary/10
-                        disabled:text-primary
-                      "
-                      aria-label="Şu maksady saýla"
-                    >
-                      <Focus size={16} />
-                    </button>
-
-                    {yearlyProgress === 100 && (
-                      <CheckCircle2
-                        size={18}
-                        className="shrink-0 text-success"
-                      />
-                    )}
-                  </div>
-
-                  {/* AÝLYK */}
-                  {isYearlyExpanded && (
-                    <div className="border-t border-border p-4 sm:p-5">
-                      {monthlyTasks.length === 0 ? (
-                        <p className="rounded-xl border border-dashed border-border px-4 py-3 text-sm text-text-muted">
-                          Heniz aýlyk ädim ýok.
+                      <div className="shrink-0 text-right">
+                        <p className="text-[12px] font-bold text-violet-400 sm:text-lg">
+                          {yearlyProgress}%
                         </p>
-                      ) : (
-                        <div className="space-y-3">
-                          {monthlyTasks.map(
-                            (monthlyTask) => {
-                              const weeklyTasks =
-                                getChildren(
-                                  monthlyTask.id,
-                                );
 
-                              const monthlyProgress =
-                                getProgress(
-                                  monthlyTask.id,
-                                );
+                        <p className="hidden text-[10px] text-text-disabled sm:block">
+                          ýerine ýetirildi
+                        </p>
+                      </div>
 
-                              const isMonthlyExpanded =
-                                expandedMonthlyIds.includes(
-                                  monthlyTask.id,
-                                );
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFocusedTaskId(
+                            yearlyTask.id,
+                          )
+                        }
+                        disabled={
+                          focusedTaskId ===
+                          yearlyTask.id
+                        }
+                        className="
+                          flex h-8 w-8
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-lg
+                          border border-border
+                          bg-surface
+                          text-text-muted
+                          transition
+                          hover:border-primary/30
+                          hover:bg-primary/10
+                          hover:text-primary
+                          disabled:cursor-default
+                          disabled:border-primary/20
+                          disabled:bg-primary/10
+                          disabled:text-primary
 
-                              return (
-                                <div
-                                  key={monthlyTask.id}
-                                  className="
-                                    overflow-hidden
-                                    rounded-xl
-                                    border border-info/15
-                                    bg-surface
-                                  "
-                                >
-                                  <button
-                                    type="button"
-                                    onClick={() =>
-                                      toggleMonthly(
-                                        monthlyTask.id,
-                                      )
-                                    }
-                                    className="
-                                      flex w-full
-                                      items-center gap-3
-                                      p-4 text-left
-                                      transition
-                                      hover:bg-surface-hover
-                                    "
-                                  >
-                                    <div
-                                      className="
-                                        flex h-8 w-8
-                                        shrink-0
-                                        items-center
-                                        justify-center
-                                        rounded-lg
-                                        bg-info/10
-                                        text-info
-                                      "
-                                    >
-                                      {isMonthlyExpanded ? (
-                                        <ChevronDown
-                                          size={16}
-                                        />
-                                      ) : (
-                                        <ChevronRight
-                                          size={16}
-                                        />
-                                      )}
-                                    </div>
+                          sm:h-9
+                          sm:w-9
+                        "
+                        aria-label="Şu maksady saýla"
+                      >
+                        <Focus
+                          size={14}
+                        />
+                      </button>
 
-                                    <div className="min-w-0 flex-1">
-                                      <p className="text-xs font-semibold text-info">
-                                        Aýlyk ädim
-                                      </p>
-
-                                      <p className="mt-1 truncate text-sm font-medium text-text-primary">
-                                        {monthlyTask.title}
-                                      </p>
-
-                                      <p className="mt-1 text-xs text-text-muted">
-                                        {weeklyTasks.length > 0
-                                          ? `${weeklyTasks.length} hepdelik iş`
-                                          : "Heniz hepdelik iş ýok"}
-                                      </p>
-                                    </div>
-
-                                    <span className="shrink-0 text-xs font-semibold text-info">
-                                      {monthlyProgress}%
-                                    </span>
-
-                                    {monthlyProgress ===
-                                      100 && (
-                                      <CheckCircle2
-                                        size={16}
-                                        className="shrink-0 text-success"
-                                      />
-                                    )}
-                                  </button>
-
-                                  {/* HEPDELIK */}
-                                  {isMonthlyExpanded && (
-                                    <div className="border-t border-border p-3">
-                                      {weeklyTasks.length ===
-                                      0 ? (
-                                        <p className="px-2 py-2 text-xs text-text-muted">
-                                          Heniz hepdelik iş ýok.
-                                        </p>
-                                      ) : (
-                                        <div className="space-y-2">
-                                          {weeklyTasks.map(
-                                            (
-                                              weeklyTask,
-                                            ) => {
-                                              const dailyTasks =
-                                                getChildren(
-                                                  weeklyTask.id,
-                                                );
-
-                                              const weeklyProgress =
-                                                getProgress(
-                                                  weeklyTask.id,
-                                                );
-
-                                              return (
-                                                <div
-                                                  key={
-                                                    weeklyTask.id
-                                                  }
-                                                  className="
-                                                    rounded-lg
-                                                    border border-warning/15
-                                                    bg-warning/[0.025]
-                                                    px-4 py-3
-                                                  "
-                                                >
-                                                  <div className="flex items-center gap-3">
-                                                    <div className="min-w-0 flex-1">
-                                                      <p className="text-[11px] font-semibold text-warning">
-                                                        Hepdelik iş
-                                                      </p>
-
-                                                      <p className="mt-1 truncate text-sm text-text-secondary">
-                                                        {
-                                                          weeklyTask.title
-                                                        }
-                                                      </p>
-                                                    </div>
-
-                                                    <span className="shrink-0 text-xs font-semibold text-warning">
-                                                      {
-                                                        weeklyProgress
-                                                      }
-                                                      %
-                                                    </span>
-
-                                                    {weeklyProgress ===
-                                                      100 && (
-                                                      <CheckCircle2
-                                                        size={
-                                                          16
-                                                        }
-                                                        className="shrink-0 text-success"
-                                                      />
-                                                    )}
-                                                  </div>
-
-                                                  {/* GÜNLÜK */}
-                                                  {dailyTasks.length >
-                                                    0 && (
-                                                    <div className="mt-3 space-y-2 border-t border-border/60 pt-3">
-                                                      {dailyTasks.map(
-                                                        (
-                                                          dailyTask,
-                                                        ) => (
-                                                          <div
-                                                            key={
-                                                              dailyTask.id
-                                                            }
-                                                            className="
-                                                              flex
-                                                              items-center
-                                                              gap-2
-                                                              rounded-lg
-                                                              bg-success/[0.025]
-                                                              px-3 py-2
-                                                              text-xs
-                                                            "
-                                                          >
-                                                            <span
-                                                              className={[
-                                                                "h-2 w-2 shrink-0 rounded-full",
-                                                                dailyTask.completed
-                                                                  ? "bg-success"
-                                                                  : "bg-text-disabled",
-                                                              ].join(
-                                                                " ",
-                                                              )}
-                                                            />
-
-                                                            <span className="shrink-0 font-semibold text-success">
-                                                              Şu gün
-                                                            </span>
-
-                                                            <span
-                                                              className={[
-                                                                "truncate",
-                                                                dailyTask.completed
-                                                                  ? "text-text-disabled line-through"
-                                                                  : "text-text-muted",
-                                                              ].join(
-                                                                " ",
-                                                              )}
-                                                            >
-                                                              {
-                                                                dailyTask.title
-                                                              }
-                                                            </span>
-                                                          </div>
-                                                        ),
-                                                      )}
-                                                    </div>
-                                                  )}
-
-                                                  {dailyTasks.length ===
-                                                    0 && (
-                                                    <p className="mt-2 text-[11px] text-text-disabled">
-                                                      Heniz günlük iş ýok.
-                                                    </p>
-                                                  )}
-                                                </div>
-                                              );
-                                            },
-                                          )}
-                                        </div>
-                                      )}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            },
-                          )}
-                        </div>
+                      {yearlyProgress ===
+                        100 && (
+                        <CheckCircle2
+                          size={15}
+                          className="hidden shrink-0 text-success sm:block"
+                        />
                       )}
                     </div>
-                  )}
-                </article>
-              );
-            })
+
+                    {/* MONTHLY */}
+                    {isYearlyExpanded && (
+                      <div className="border-t border-border p-2 sm:p-5">
+                        {monthlyTasks.length ===
+                        0 ? (
+                          <p className="rounded-lg border border-dashed border-border px-3 py-2 text-[9px] text-text-muted sm:rounded-xl sm:px-4 sm:py-3 sm:text-sm">
+                            Heniz aýlyk
+                            ädim ýok.
+                          </p>
+                        ) : (
+                          <div className="space-y-2 sm:space-y-3">
+                            {monthlyTasks.map(
+                              (
+                                monthlyTask,
+                              ) => {
+                                const weeklyTasks =
+                                  getChildren(
+                                    monthlyTask.id,
+                                  );
+
+                                const monthlyProgress =
+                                  getProgress(
+                                    monthlyTask.id,
+                                  );
+
+                                const isMonthlyExpanded =
+                                  expandedMonthlyIds.includes(
+                                    monthlyTask.id,
+                                  );
+
+                                return (
+                                  <div
+                                    key={
+                                      monthlyTask.id
+                                    }
+                                    className="
+                                      overflow-hidden
+                                      rounded-lg
+                                      border border-info/15
+                                      bg-surface
+
+                                      sm:rounded-xl
+                                    "
+                                  >
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        toggleMonthly(
+                                          monthlyTask.id,
+                                        )
+                                      }
+                                      className="
+                                        flex w-full
+                                        items-center
+                                        gap-2
+                                        p-2.5
+                                        text-left
+                                        transition
+                                        hover:bg-surface-hover
+
+                                        sm:gap-3
+                                        sm:p-4
+                                      "
+                                    >
+                                      <div
+                                        className="
+                                          flex h-7 w-7
+                                          shrink-0
+                                          items-center
+                                          justify-center
+                                          rounded-md
+                                          bg-info/10
+                                          text-info
+
+                                          sm:h-8
+                                          sm:w-8
+                                          sm:rounded-lg
+                                        "
+                                      >
+                                        {isMonthlyExpanded ? (
+                                          <ChevronDown
+                                            size={13}
+                                          />
+                                        ) : (
+                                          <ChevronRight
+                                            size={13}
+                                          />
+                                        )}
+                                      </div>
+
+                                      <div className="min-w-0 flex-1">
+                                        <p className="text-[8px] font-semibold text-info sm:text-xs">
+                                          Aýlyk
+                                          ädim
+                                        </p>
+
+                                        <p className="mt-0.5 truncate text-[10px] font-medium text-text-primary sm:mt-1 sm:text-sm">
+                                          {
+                                            monthlyTask.title
+                                          }
+                                        </p>
+
+                                        <p className="mt-0.5 text-[8px] text-text-muted sm:mt-1 sm:text-xs">
+                                          {weeklyTasks.length >
+                                          0
+                                            ? `${weeklyTasks.length} hepdelik iş`
+                                            : "Heniz hepdelik iş ýok"}
+                                        </p>
+                                      </div>
+
+                                      <span className="shrink-0 text-[9px] font-semibold text-info sm:text-xs">
+                                        {
+                                          monthlyProgress
+                                        }
+                                        %
+                                      </span>
+
+                                      {monthlyProgress ===
+                                        100 && (
+                                        <CheckCircle2
+                                          size={
+                                            14
+                                          }
+                                          className="shrink-0 text-success"
+                                        />
+                                      )}
+                                    </button>
+
+                                    {/* WEEKLY */}
+                                    {isMonthlyExpanded && (
+                                      <div className="border-t border-border p-2 sm:p-3">
+                                        {weeklyTasks.length ===
+                                        0 ? (
+                                          <p className="px-1 py-1 text-[8px] text-text-muted sm:px-2 sm:py-2 sm:text-xs">
+                                            Heniz
+                                            hepdelik
+                                            iş ýok.
+                                          </p>
+                                        ) : (
+                                          <div className="space-y-1.5 sm:space-y-2">
+                                            {weeklyTasks.map(
+                                              (
+                                                weeklyTask,
+                                              ) => {
+                                                const dailyTasks =
+                                                  getChildren(
+                                                    weeklyTask.id,
+                                                  );
+
+                                                const weeklyProgress =
+                                                  getProgress(
+                                                    weeklyTask.id,
+                                                  );
+
+                                                return (
+                                                  <div
+                                                    key={
+                                                      weeklyTask.id
+                                                    }
+                                                    className="
+                                                      rounded-lg
+                                                      border
+                                                      border-warning/15
+                                                      bg-warning/[0.025]
+                                                      px-2.5
+                                                      py-2
+
+                                                      sm:px-4
+                                                      sm:py-3
+                                                    "
+                                                  >
+                                                    <div className="flex items-center gap-2 sm:gap-3">
+                                                      <div className="min-w-0 flex-1">
+                                                        <p className="text-[8px] font-semibold text-warning sm:text-[11px]">
+                                                          Hepdelik
+                                                          iş
+                                                        </p>
+
+                                                        <p className="mt-0.5 truncate text-[9px] text-text-secondary sm:mt-1 sm:text-sm">
+                                                          {
+                                                            weeklyTask.title
+                                                          }
+                                                        </p>
+                                                      </div>
+
+                                                      <span className="shrink-0 text-[8px] font-semibold text-warning sm:text-xs">
+                                                        {
+                                                          weeklyProgress
+                                                        }
+                                                        %
+                                                      </span>
+
+                                                      {weeklyProgress ===
+                                                        100 && (
+                                                        <CheckCircle2
+                                                          size={
+                                                            13
+                                                          }
+                                                          className="shrink-0 text-success sm:h-4 sm:w-4"
+                                                        />
+                                                      )}
+                                                    </div>
+
+                                                    {/* DAILY */}
+                                                    {dailyTasks.length >
+                                                      0 && (
+                                                      <div className="mt-2 space-y-1 border-t border-border/60 pt-2 sm:mt-3 sm:space-y-2 sm:pt-3">
+                                                        {dailyTasks.map(
+                                                          (
+                                                            dailyTask,
+                                                          ) => (
+                                                            <div
+                                                              key={
+                                                                dailyTask.id
+                                                              }
+                                                              className="
+                                                                flex
+                                                                items-center
+                                                                gap-1.5
+                                                                rounded-md
+                                                                bg-success/[0.025]
+                                                                px-2
+                                                                py-1.5
+                                                                text-[8px]
+
+                                                                sm:gap-2
+                                                                sm:rounded-lg
+                                                                sm:px-3
+                                                                sm:py-2
+                                                                sm:text-xs
+                                                              "
+                                                            >
+                                                              <span
+                                                                className={[
+                                                                  "h-1.5 w-1.5 shrink-0 rounded-full sm:h-2 sm:w-2",
+                                                                  dailyTask.completed
+                                                                    ? "bg-success"
+                                                                    : "bg-text-disabled",
+                                                                ].join(
+                                                                  " ",
+                                                                )}
+                                                              />
+
+                                                              <span className="shrink-0 font-semibold text-success">
+                                                                Şu
+                                                                gün
+                                                              </span>
+
+                                                              <span
+                                                                className={[
+                                                                  "truncate",
+                                                                  dailyTask.completed
+                                                                    ? "text-text-disabled line-through"
+                                                                    : "text-text-muted",
+                                                                ].join(
+                                                                  " ",
+                                                                )}
+                                                              >
+                                                                {
+                                                                  dailyTask.title
+                                                                }
+                                                              </span>
+                                                            </div>
+                                                          ),
+                                                        )}
+                                                      </div>
+                                                    )}
+
+                                                    {dailyTasks.length ===
+                                                      0 && (
+                                                      <p className="mt-1.5 text-[8px] text-text-disabled sm:mt-2 sm:text-[11px]">
+                                                        Heniz
+                                                        günlük
+                                                        iş ýok.
+                                                      </p>
+                                                    )}
+                                                  </div>
+                                                );
+                                              },
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              },
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </article>
+                );
+              },
+            )
           )}
         </div>
       </div>

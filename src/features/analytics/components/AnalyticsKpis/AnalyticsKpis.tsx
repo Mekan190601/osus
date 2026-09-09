@@ -92,32 +92,43 @@ export default function AnalyticsKpis() {
 ];
 
   return (
-    <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <section className="grid grid-cols-2 gap-2.5 sm:gap-4 xl:grid-cols-4">
       {kpis.map((kpi) => {
         const Icon = kpi.icon;
 
         return (
           <article
             key={kpi.label}
-            className="rounded-2xl border border-border bg-surface p-5"
+            className="
+              rounded-[18px] border border-border bg-surface
+              p-3.5
+              sm:rounded-2xl sm:p-5
+            "
           >
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-2 sm:gap-4">
               <div>
-                <p className="text-sm font-medium text-text-muted">
+                <p className="text-[11px] font-medium leading-4 text-text-muted sm:text-sm">
                   {kpi.label}
                 </p>
 
-                <p className="mt-3 text-3xl font-bold tracking-tight text-text-primary">
+                <p className="mt-1.5 text-[24px] font-bold tracking-tight text-text-primary sm:mt-3 sm:text-3xl">
                   {kpi.value}
                 </p>
               </div>
 
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-background/50 text-primary">
-                <Icon size={19} />
+              <div className="
+                flex h-8 w-8 shrink-0 items-center justify-center
+                rounded-lg border border-border bg-background/50 text-primary
+                sm:h-10 sm:w-10 sm:rounded-xl
+              ">
+                <Icon size={16} className="sm:h-[19px] sm:w-[19px]" />
               </div>
             </div>
 
-            <p className="mt-4 text-xs leading-5 text-text-disabled">
+            <p className="
+              mt-2 line-clamp-2 text-[9px] leading-4 text-text-disabled
+              sm:mt-4 sm:text-xs sm:leading-5
+            ">
               {kpi.description}
             </p>
           </article>

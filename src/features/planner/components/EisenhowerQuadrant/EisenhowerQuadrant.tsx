@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Check,
+  ChevronDown,
   Circle,
   Link2,
   Pencil,
@@ -31,24 +32,14 @@ type EisenhowerQuadrantProps = {
 function getParentPeriod(
   period: PlannerPeriod,
 ): PlannerPeriod | null {
-  if (period === "daily") {
-    return "weekly";
-  }
-
-  if (period === "weekly") {
-    return "monthly";
-  }
-
-  if (period === "monthly") {
-    return "yearly";
-  }
+  if (period === "daily") return "weekly";
+  if (period === "weekly") return "monthly";
+  if (period === "monthly") return "yearly";
 
   return null;
 }
 
-function getParentLabel(
-  period: PlannerPeriod,
-) {
+function getParentLabel(period: PlannerPeriod) {
   if (period === "weekly") {
     return "Hepdelik meýilnama";
   }
@@ -76,24 +67,16 @@ function getQuadrantStyle(
     };
   }
 
-  if (
-    quadrant ===
-    "important-not-urgent"
-  ) {
+  if (quadrant === "important-not-urgent") {
     return {
       border: "border-warning/20",
-      background:
-        "bg-warning/[0.025]",
-      badge:
-        "bg-warning/10 text-warning",
+      background: "bg-warning/[0.025]",
+      badge: "bg-warning/10 text-warning",
       accent: "text-warning",
     };
   }
 
-  if (
-    quadrant ===
-    "urgent-not-important"
-  ) {
+  if (quadrant === "urgent-not-important") {
     return {
       border: "border-info/20",
       background: "bg-info/[0.025]",
@@ -105,8 +88,7 @@ function getQuadrantStyle(
   return {
     border: "border-border",
     background: "bg-background/20",
-    badge:
-      "bg-background/70 text-text-muted",
+    badge: "bg-background/70 text-text-muted",
     accent: "text-text-muted",
   };
 }
@@ -121,20 +103,14 @@ function getDisplayText(
     };
   }
 
-  if (
-    quadrant ===
-    "important-not-urgent"
-  ) {
+  if (quadrant === "important-not-urgent") {
     return {
       name: "Meýilleşdirmeli",
       type: "Möhüm + gyssagly däl",
     };
   }
 
-  if (
-    quadrant ===
-    "urgent-not-important"
-  ) {
+  if (quadrant === "urgent-not-important") {
     return {
       name: "Tabşyrmaly / azaltmaly",
       type: "Möhüm däl + gyssagly",
@@ -176,15 +152,16 @@ export default function EisenhowerQuadrant({
     (state) => state.moveTask,
   );
 
+  const [isOpen, setIsOpen] =
+    useState(tasks.length > 0);
+
   const [
     editingTaskId,
     setEditingTaskId,
   ] = useState<string | null>(null);
 
-  const [
-    editTitle,
-    setEditTitle,
-  ] = useState("");
+  const [editTitle, setEditTitle] =
+    useState("");
 
   const [
     editDescription,
@@ -210,18 +187,19 @@ export default function EisenhowerQuadrant({
   const displayText =
     getDisplayText(quadrant);
 
-  function startEditing(
-    task: PlannerTask,
-  ) {
+  useEffect(() => {
+    if (tasks.length > 0) {
+      setIsOpen(true);
+    }
+  }, [tasks.length]);
+
+  function startEditing(task: PlannerTask) {
     setEditingTaskId(task.id);
     setEditTitle(task.title);
-
     setEditDescription(
       task.description ?? "",
     );
-
     setEditQuadrant(task.quadrant);
-
     setEditParentTaskId(
       task.parentTaskId ?? "",
     );
@@ -234,9 +212,7 @@ export default function EisenhowerQuadrant({
     setEditParentTaskId("");
   }
 
-  function saveEditing(
-    taskId: string,
-  ) {
+  function saveEditing(taskId: string) {
     const cleanTitle =
       editTitle.trim();
 
@@ -252,10 +228,7 @@ export default function EisenhowerQuadrant({
         editParentTaskId || null,
     });
 
-    moveTask(
-      taskId,
-      editQuadrant,
-    );
+    moveTask(taskId, editQuadrant);
 
     cancelEditing();
   }
@@ -263,62 +236,184 @@ export default function EisenhowerQuadrant({
   return (
     <section
       className={[
-        "flex min-h-[300px] flex-col rounded-2xl border p-5 transition-all duration-200",
+        `
+          overflow-hidden
+          rounded-[16px]
+          border
+          transition-all
+          duration-200
+
+          xl:flex
+          xl:min-h-[300px]
+          xl:flex-col
+          xl:rounded-2xl
+          xl:p-5
+        `,
         quadrantStyle.border,
         quadrantStyle.background,
       ].join(" ")}
     >
       {/* HEADER */}
-      <div className="flex items-start gap-3 border-b border-border/70 pb-4">
+      <button
+        type="button"
+        onClick={() =>
+          setIsOpen(
+            (current) => !current,
+          )
+        }
+        className="
+          flex w-full
+          items-center
+          gap-2.5
+          p-3
+          text-left
+
+          xl:pointer-events-none
+          xl:items-start
+          xl:gap-3
+          xl:border-b
+          xl:border-border/70
+          xl:p-0
+          xl:pb-4
+        "
+      >
         <span
           className={[
-            "flex h-9 min-w-9 shrink-0 items-center justify-center rounded-lg px-2 text-sm font-bold",
+            `
+              flex h-8 min-w-8
+              shrink-0 items-center
+              justify-center
+              rounded-lg
+              px-2
+              text-[11px]
+              font-bold
+
+              xl:h-9
+              xl:min-w-9
+              xl:text-sm
+            `,
             quadrantStyle.badge,
           ].join(" ")}
         >
           {romanNumber}
         </span>
 
-        <div>
-          <h3 className="text-lg font-semibold text-text-primary">
-            {displayText.name}
-          </h3>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <h3
+              className="
+                truncate
+                text-[12px]
+                font-semibold
+                text-text-primary
+                sm:text-sm
+                xl:text-lg
+              "
+            >
+              {displayText.name}
+            </h3>
+
+            <span
+              className={[
+                `
+                  inline-flex h-5 min-w-5
+                  items-center justify-center
+                  rounded-full
+                  px-1.5
+                  text-[9px]
+                  font-bold
+                  xl:text-[10px]
+                `,
+                quadrantStyle.badge,
+              ].join(" ")}
+            >
+              {tasks.length}
+            </span>
+          </div>
 
           <p
             className={[
-              "mt-1 text-xs font-medium",
+              `
+                mt-0.5
+                truncate
+                text-[9px]
+                font-medium
+                sm:text-[10px]
+                xl:mt-1
+                xl:text-xs
+              `,
               quadrantStyle.accent,
             ].join(" ")}
           >
             {displayText.type}
           </p>
         </div>
-      </div>
+
+        <ChevronDown
+          size={16}
+          className={[
+            `
+              shrink-0
+              text-text-muted
+              transition-transform
+              duration-200
+              xl:hidden
+            `,
+            isOpen
+              ? "rotate-180"
+              : "",
+          ].join(" ")}
+        />
+      </button>
 
       {/* TASKS */}
-      <div className="flex-1 pt-4">
+      <div
+        className={[
+          isOpen
+            ? "block"
+            : "hidden",
+          `
+            border-t
+            border-border/60
+            px-3
+            pb-3
+            pt-2.5
+
+            xl:block
+            xl:flex-1
+            xl:border-t-0
+            xl:px-0
+            xl:pb-0
+            xl:pt-4
+          `,
+        ].join(" ")}
+      >
         {tasks.length === 0 ? (
           <div
             className="
-              flex min-h-32
+              flex min-h-16
               items-center justify-center
-              rounded-xl
+              rounded-lg
               border border-dashed
               border-border/80
               bg-background/15
-              p-5 text-center
+              p-3
+              text-center
+
+              xl:min-h-32
+              xl:rounded-xl
+              xl:p-5
             "
           >
-            <p className="text-sm text-text-muted">
+            <p className="text-[10px] text-text-muted xl:text-sm">
               Bu bölümde häzir iş ýok.
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2 xl:space-y-3">
             {tasks.map((task) => {
               const isEditing =
-                editingTaskId ===
-                task.id;
+                editingTaskId === task.id;
 
               const parentPeriod =
                 getParentPeriod(
@@ -339,9 +434,7 @@ export default function EisenhowerQuadrant({
                 parentPeriod &&
                 parentDateKey
                   ? allTasks.filter(
-                      (
-                        parentTask,
-                      ) =>
+                      (parentTask) =>
                         parentTask.period ===
                           parentPeriod &&
                         parentTask.dateKey ===
@@ -354,9 +447,7 @@ export default function EisenhowerQuadrant({
               const linkedParentTask =
                 task.parentTaskId
                   ? allTasks.find(
-                      (
-                        parentTask,
-                      ) =>
+                      (parentTask) =>
                         parentTask.id ===
                         task.parentTaskId,
                     )
@@ -366,49 +457,62 @@ export default function EisenhowerQuadrant({
                 <article
                   key={task.id}
                   className={[
-                    "group rounded-xl border p-4 transition-all duration-200",
+                    `
+                      group
+                      rounded-[10px]
+                      border
+                      p-2.5
+                      transition-all
+                      duration-200
+
+                      xl:rounded-xl
+                      xl:p-4
+                    `,
                     task.completed
                       ? "border-success/15 bg-success/[0.035]"
                       : "border-border bg-background/35 hover:border-border-strong",
                   ].join(" ")}
                 >
                   {isEditing ? (
-                    <div className="space-y-4">
+                    <div className="space-y-2.5 xl:space-y-4">
                       {/* TITLE */}
                       <div>
-                        <label className="mb-2 block text-xs font-semibold text-text-muted">
+                        <label className="mb-1 block text-[9px] font-semibold text-text-muted xl:mb-2 xl:text-xs">
                           Işiň ady
                         </label>
 
                         <input
                           type="text"
                           value={editTitle}
-                          onChange={(
-                            event,
-                          ) =>
+                          onChange={(event) =>
                             setEditTitle(
-                              event
-                                .target
+                              event.target
                                 .value,
                             )
                           }
                           className="
-                            h-11 w-full
-                            rounded-xl
+                            h-9 w-full
+                            rounded-lg
                             border border-border
                             bg-background
-                            px-3 text-sm
+                            px-2.5
+                            text-[11px]
                             text-text-primary
                             outline-none
                             transition
                             focus:border-primary
+
+                            xl:h-11
+                            xl:rounded-xl
+                            xl:px-3
+                            xl:text-sm
                           "
                         />
                       </div>
 
                       {/* DESCRIPTION */}
                       <div>
-                        <label className="mb-2 block text-xs font-semibold text-text-muted">
+                        <label className="mb-1 block text-[9px] font-semibold text-text-muted xl:mb-2 xl:text-xs">
                           Düşündiriş
                         </label>
 
@@ -416,35 +520,37 @@ export default function EisenhowerQuadrant({
                           value={
                             editDescription
                           }
-                          onChange={(
-                            event,
-                          ) =>
+                          onChange={(event) =>
                             setEditDescription(
-                              event
-                                .target
+                              event.target
                                 .value,
                             )
                           }
                           placeholder="Gerek bolsa gysga düşündiriş ýaz..."
-                          rows={3}
+                          rows={2}
                           className="
                             w-full resize-none
-                            rounded-xl
+                            rounded-lg
                             border border-border
                             bg-background
-                            px-3 py-3
-                            text-sm
+                            px-2.5 py-2
+                            text-[11px]
                             text-text-primary
                             outline-none
                             placeholder:text-text-disabled
                             focus:border-primary
+
+                            xl:rounded-xl
+                            xl:px-3
+                            xl:py-3
+                            xl:text-sm
                           "
                         />
                       </div>
 
                       {/* IMPORTANCE */}
                       <div>
-                        <label className="mb-2 block text-xs font-semibold text-text-muted">
+                        <label className="mb-1 block text-[9px] font-semibold text-text-muted xl:mb-2 xl:text-xs">
                           Möhümlik derejesi
                         </label>
 
@@ -452,50 +558,44 @@ export default function EisenhowerQuadrant({
                           value={
                             editQuadrant
                           }
-                          onChange={(
-                            event,
-                          ) =>
+                          onChange={(event) =>
                             setEditQuadrant(
-                              event
-                                .target
+                              event.target
                                 .value as EisenhowerQuadrantType,
                             )
                           }
                           className="
-                            h-11 w-full
-                            rounded-xl
+                            h-9 w-full
+                            rounded-lg
                             border border-border
                             bg-background
-                            px-3 text-sm
+                            px-2.5
+                            text-[10px]
                             text-text-primary
                             outline-none
                             focus:border-primary
+
+                            xl:h-11
+                            xl:rounded-xl
+                            xl:px-3
+                            xl:text-sm
                           "
                         >
                           <option value="urgent-important">
                             🔴 Häzir etmeli
-                            — Möhüm +
-                            gyssagly
                           </option>
 
                           <option value="important-not-urgent">
-                            🟡
-                            Meýilleşdirmeli
-                            — Möhüm +
-                            gyssagly däl
+                            🟡 Meýilleşdirmeli
                           </option>
 
                           <option value="urgent-not-important">
-                            🔵 Tabşyrmaly
-                            / azaltmaly —
-                            Möhüm däl +
-                            gyssagly
+                            🔵 Tabşyrmaly /
+                            azaltmaly
                           </option>
 
                           <option value="not-urgent-not-important">
                             ⚪ Bes etmeli
-                            — Möhüm däl +
-                            gyssagly däl
                           </option>
                         </select>
                       </div>
@@ -503,47 +603,44 @@ export default function EisenhowerQuadrant({
                       {/* PARENT */}
                       {parentPeriod && (
                         <div>
-                          <label className="mb-2 flex items-center gap-2 text-xs font-semibold text-text-muted">
-                            <Link2
-                              size={14}
-                            />
-                            Ýokarky
-                            meýilnama
+                          <label className="mb-1 flex items-center gap-1.5 text-[9px] font-semibold text-text-muted xl:mb-2 xl:gap-2 xl:text-xs">
+                            <Link2 size={12} />
+                            Ýokarky meýilnama
                           </label>
 
                           <select
                             value={
                               editParentTaskId
                             }
-                            onChange={(
-                              event,
-                            ) =>
+                            onChange={(event) =>
                               setEditParentTaskId(
-                                event
-                                  .target
+                                event.target
                                   .value,
                               )
                             }
                             className="
-                              h-11 w-full
-                              rounded-xl
+                              h-9 w-full
+                              rounded-lg
                               border border-border
                               bg-background
-                              px-3 text-sm
+                              px-2.5
+                              text-[10px]
                               text-text-primary
                               outline-none
                               focus:border-primary
+
+                              xl:h-11
+                              xl:rounded-xl
+                              xl:px-3
+                              xl:text-sm
                             "
                           >
                             <option value="">
-                              Baglanyşyk
-                              ýok
+                              Baglanyşyk ýok
                             </option>
 
                             {availableParentTasks.map(
-                              (
-                                parentTask,
-                              ) => (
+                              (parentTask) => (
                                 <option
                                   key={
                                     parentTask.id
@@ -560,14 +657,13 @@ export default function EisenhowerQuadrant({
                             )}
                           </select>
 
-                          <p className="mt-2 text-xs leading-5 text-text-disabled">
+                          <p className="mt-1.5 text-[9px] leading-4 text-text-disabled xl:mt-2 xl:text-xs xl:leading-5">
                             Bu işi{" "}
                             {getParentLabel(
                               parentPeriod,
                             )}
                             daky uly işe
-                            baglap
-                            bilersiň.
+                            baglap bilersiň.
                           </p>
                         </div>
                       )}
@@ -580,19 +676,26 @@ export default function EisenhowerQuadrant({
                             cancelEditing
                           }
                           className="
-                            inline-flex h-10
-                            items-center gap-2
-                            rounded-xl
+                            inline-flex h-9
+                            items-center gap-1.5
+                            rounded-lg
                             border border-border
-                            px-4
-                            text-sm font-semibold
+                            px-3
+                            text-[10px]
+                            font-semibold
                             text-text-secondary
                             transition
                             hover:bg-surface-hover
                             hover:text-text-primary
+
+                            xl:h-10
+                            xl:gap-2
+                            xl:rounded-xl
+                            xl:px-4
+                            xl:text-sm
                           "
                         >
-                          <X size={16} />
+                          <X size={14} />
                           Ýatyr
                         </button>
 
@@ -604,26 +707,32 @@ export default function EisenhowerQuadrant({
                             )
                           }
                           className="
-                            inline-flex h-10
-                            items-center gap-2
-                            rounded-xl
-                            bg-primary px-4
-                            text-sm font-semibold
+                            inline-flex h-9
+                            items-center gap-1.5
+                            rounded-lg
+                            bg-primary
+                            px-3
+                            text-[10px]
+                            font-semibold
                             text-slate-950
                             transition
                             hover:bg-primary-hover
+
+                            xl:h-10
+                            xl:gap-2
+                            xl:rounded-xl
+                            xl:px-4
+                            xl:text-sm
                           "
                         >
-                          <Save
-                            size={16}
-                          />
+                          <Save size={14} />
                           Ýatda sakla
                         </button>
                       </div>
                     </div>
                   ) : (
                     /* NORMAL TASK */
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-start gap-2 xl:gap-3">
                       <button
                         type="button"
                         onClick={() =>
@@ -637,7 +746,15 @@ export default function EisenhowerQuadrant({
                             : "Işi tamamla"
                         }
                         className={[
-                          "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition",
+                          `
+                            mt-0.5 flex
+                            h-6 w-6
+                            shrink-0
+                            items-center
+                            justify-center
+                            rounded-full
+                            transition
+                          `,
                           task.completed
                             ? "bg-success text-slate-950"
                             : "text-text-disabled hover:text-success",
@@ -645,17 +762,13 @@ export default function EisenhowerQuadrant({
                       >
                         {task.completed ? (
                           <Check
-                            size={15}
-                            strokeWidth={
-                              3
-                            }
+                            size={14}
+                            strokeWidth={3}
                           />
                         ) : (
                           <Circle
-                            size={21}
-                            strokeWidth={
-                              1.8
-                            }
+                            size={19}
+                            strokeWidth={1.8}
                           />
                         )}
                       </button>
@@ -663,7 +776,13 @@ export default function EisenhowerQuadrant({
                       <div className="min-w-0 flex-1">
                         <p
                           className={[
-                            "font-medium",
+                            `
+                              text-[11px]
+                              font-medium
+                              leading-4
+                              xl:text-base
+                              xl:leading-normal
+                            `,
                             task.completed
                               ? "text-text-muted line-through"
                               : "text-text-primary",
@@ -675,13 +794,18 @@ export default function EisenhowerQuadrant({
                         {task.description && (
                           <p
                             className={[
-                              "mt-2 text-sm leading-5",
+                              `
+                                mt-1
+                                text-[9px]
+                                leading-4
+                                xl:mt-2
+                                xl:text-sm
+                                xl:leading-5
+                              `,
                               task.completed
                                 ? "text-text-disabled line-through"
                                 : "text-text-muted",
-                            ].join(
-                              " ",
-                            )}
+                            ].join(" ")}
                           >
                             {
                               task.description
@@ -692,25 +816,30 @@ export default function EisenhowerQuadrant({
                         {linkedParentTask && (
                           <div
                             className="
-                              mt-3 flex
-                              items-start gap-2
+                              mt-2 flex
+                              items-start gap-1.5
                               rounded-lg
                               border border-info/15
                               bg-info/5
-                              px-3 py-2
+                              px-2 py-1.5
+
+                              xl:mt-3
+                              xl:gap-2
+                              xl:px-3
+                              xl:py-2
                             "
                           >
                             <Link2
-                              size={14}
-                              className="mt-0.5 shrink-0 text-info"
+                              size={12}
+                              className="mt-0.5 shrink-0 text-info xl:h-[14px] xl:w-[14px]"
                             />
 
                             <div className="min-w-0">
-                              <p className="text-[11px] font-semibold text-text-disabled">
+                              <p className="text-[8px] font-semibold text-text-disabled xl:text-[11px]">
                                 Bagly iş
                               </p>
 
-                              <p className="mt-0.5 truncate text-xs font-medium text-info">
+                              <p className="mt-0.5 truncate text-[9px] font-medium text-info xl:text-xs">
                                 {
                                   linkedParentTask.title
                                 }
@@ -722,13 +851,18 @@ export default function EisenhowerQuadrant({
                         {task.completed && (
                           <span
                             className="
-                              mt-3 inline-flex
+                              mt-2 inline-flex
                               rounded-full
                               bg-success/10
-                              px-2.5 py-1
-                              text-[11px]
+                              px-2 py-0.5
+                              text-[8px]
                               font-semibold
                               text-success
+
+                              xl:mt-3
+                              xl:px-2.5
+                              xl:py-1
+                              xl:text-[11px]
                             "
                           >
                             Tamamlandy
@@ -740,11 +874,13 @@ export default function EisenhowerQuadrant({
                       <div
                         className="
                           flex shrink-0
-                          items-center gap-1
-                          opacity-0
-                          transition
-                          group-hover:opacity-100
-                          focus-within:opacity-100
+                          items-center gap-0.5
+
+                          sm:gap-1
+                          xl:opacity-0
+                          xl:transition
+                          xl:group-hover:opacity-100
+                          xl:focus-within:opacity-100
                         "
                       >
                         <button
@@ -756,7 +892,7 @@ export default function EisenhowerQuadrant({
                           }
                           aria-label="Işi üýtget"
                           className="
-                            flex h-8 w-8
+                            flex h-7 w-7
                             items-center
                             justify-center
                             rounded-lg
@@ -764,11 +900,12 @@ export default function EisenhowerQuadrant({
                             transition
                             hover:bg-primary/10
                             hover:text-primary
+
+                            xl:h-8
+                            xl:w-8
                           "
                         >
-                          <Pencil
-                            size={15}
-                          />
+                          <Pencil size={13} />
                         </button>
 
                         <button
@@ -780,7 +917,7 @@ export default function EisenhowerQuadrant({
                           }
                           aria-label="Işi poz"
                           className="
-                            flex h-8 w-8
+                            flex h-7 w-7
                             items-center
                             justify-center
                             rounded-lg
@@ -788,11 +925,12 @@ export default function EisenhowerQuadrant({
                             transition
                             hover:bg-danger/10
                             hover:text-danger
+
+                            xl:h-8
+                            xl:w-8
                           "
                         >
-                          <Trash2
-                            size={16}
-                          />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </div>
