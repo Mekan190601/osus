@@ -128,7 +128,7 @@ function NotificationCard({
   return (
     <article
       className={[
-        "rounded-2xl border p-5 transition",
+        "rounded-xl border p-3 transition sm:rounded-2xl sm:p-5",
         isResolved
           ? "border-success/15 bg-success/[0.025]"
           : notification.read
@@ -136,10 +136,10 @@ function NotificationCard({
             : "border-primary/20 bg-primary/[0.03]",
       ].join(" ")}
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-3 sm:gap-4">
         <div
           className={[
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+            "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 sm:rounded-xl",
             isResolved
               ? "bg-success/10 text-success"
               : getTypeClasses(
@@ -186,7 +186,7 @@ function NotificationCard({
 
               <p
                 className={[
-                  "mt-2 text-sm leading-6",
+                  "mt-1.5 text-xs leading-5 sm:mt-2 sm:text-sm sm:leading-6",
                   isResolved
                     ? "text-text-disabled"
                     : "text-text-muted",
@@ -203,7 +203,7 @@ function NotificationCard({
             </span>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3 sm:mt-4 sm:gap-3 sm:pt-4">
             <div>
               <p className="text-xs text-text-disabled">
                 Döredildi:{" "}
@@ -396,8 +396,8 @@ export default function NotificationsPage() {
     ]);
 
   return (
-    <div className="space-y-6 lg:space-y-8">
-      <section className="rounded-3xl border border-border bg-surface p-6 sm:p-8">
+    <div className="space-y-3 sm:space-y-6 lg:space-y-8">
+      <section className="rounded-2xl border border-border bg-surface p-4 sm:rounded-3xl sm:p-8">
         <div className="flex items-center gap-2 text-primary">
           <Bell size={18} />
 
@@ -406,13 +406,13 @@ export default function NotificationsPage() {
           </span>
         </div>
 
-        <div className="mt-3 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mt-2 flex flex-col gap-3 sm:mt-3 sm:gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-text-primary sm:text-4xl">
+            <h1 className="text-2xl font-bold tracking-tight text-text-primary sm:text-4xl">
               Möhüm üýtgeşmeler
             </h1>
 
-            <p className="mt-3 max-w-3xl text-sm leading-7 text-text-muted sm:text-base">
+            <p className="mt-2 max-w-3xl text-xs leading-5 text-text-muted sm:mt-3 sm:text-base sm:leading-7">
               Aktiw meseleleri,
               çözülen ýagdaýlary we
               möhüm üýtgeşmeleri bir
@@ -451,39 +451,39 @@ export default function NotificationsPage() {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <article className="rounded-2xl border border-border bg-surface p-5">
+      <section className="grid grid-cols-3 gap-2 sm:gap-4">
+        <article className="rounded-xl border border-border bg-surface p-3 sm:rounded-2xl sm:p-5">
           <p className="text-sm text-text-muted">
             Jemi
           </p>
 
-          <p className="mt-2 text-3xl font-bold text-text-primary">
+          <p className="mt-1 text-xl font-bold text-text-primary sm:mt-2 sm:text-3xl">
             {notifications.length}
           </p>
         </article>
 
-        <article className="rounded-2xl border border-warning/20 bg-warning/5 p-5">
+        <article className="rounded-xl border border-warning/20 bg-warning/5 p-3 sm:rounded-2xl sm:p-5">
           <p className="text-sm text-warning">
             Aktiw
           </p>
 
-          <p className="mt-2 text-3xl font-bold text-warning">
+          <p className="mt-1 text-xl font-bold text-warning sm:mt-2 sm:text-3xl">
             {activeCount}
           </p>
         </article>
 
-        <article className="rounded-2xl border border-success/20 bg-success/5 p-5">
+        <article className="rounded-xl border border-success/20 bg-success/5 p-3 sm:rounded-2xl sm:p-5">
           <p className="text-sm text-success">
             Çözülen
           </p>
 
-          <p className="mt-2 text-3xl font-bold text-success">
+          <p className="mt-1 text-xl font-bold text-success sm:mt-2 sm:text-3xl">
             {resolvedCount}
           </p>
         </article>
       </section>
 
-      <section className="rounded-2xl border border-border bg-surface p-5">
+      <section className="rounded-xl border border-border bg-surface p-3 sm:rounded-2xl sm:p-5">
         <div className="space-y-4">
           <div className="flex flex-wrap gap-2">
             <button

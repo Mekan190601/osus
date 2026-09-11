@@ -187,7 +187,7 @@ function NotificationItem({
             onClose();
           }}
           className={[
-            "flex gap-3 px-4 py-4 pr-12 transition hover:bg-background/60",
+            "flex gap-3 px-3 py-3 pr-11 transition hover:bg-background/60 sm:px-4 sm:py-4 sm:pr-12",
             !notification.read
               ? "bg-primary/[0.03]"
               : "",
@@ -200,7 +200,7 @@ function NotificationItem({
           type="button"
           onClick={handleRead}
           className={[
-            "flex w-full gap-3 px-4 py-4 pr-12 text-left transition hover:bg-background/60",
+            "flex w-full gap-3 px-3 py-3 pr-11 text-left transition hover:bg-background/60 sm:px-4 sm:py-4 sm:pr-12",
             !notification.read
               ? "bg-primary/[0.03]"
               : "",
@@ -218,7 +218,7 @@ function NotificationItem({
           )
         }
         aria-label="Bildirişi poz"
-        className="absolute right-3 top-4 flex h-7 w-7 items-center justify-center rounded-lg text-text-disabled opacity-0 transition hover:bg-danger/10 hover:text-danger group-hover:opacity-100"
+        className="absolute right-2.5 top-3 flex h-7 w-7 items-center justify-center rounded-lg text-text-disabled opacity-100 transition hover:bg-danger/10 hover:text-danger sm:right-3 sm:top-4 sm:opacity-0 sm:group-hover:opacity-100"
       >
         <Trash2 size={14} />
       </button>
@@ -311,7 +311,7 @@ export default function NotificationBell() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-12 z-50 w-[360px] overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl shadow-black/30">
+        <div className="fixed left-3 right-3 top-[72px] z-50 max-h-[calc(100dvh-88px)] overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl shadow-black/30 sm:absolute sm:left-auto sm:right-0 sm:top-12 sm:w-[360px] sm:max-h-none">
           <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-4">
             <div>
               <h3 className="font-bold text-text-primary">
@@ -324,23 +324,13 @@ export default function NotificationBell() {
                   : "Ähli bildirişler okaldy"}
               </p>
             </div>
-            <div className="border-t border-border p-3">
-  <Link
-    to="/notifications"
-    onClick={() => setIsOpen(false)}
-    className="flex h-10 w-full items-center justify-center rounded-xl text-sm font-semibold text-primary transition hover:bg-primary/10"
-  >
-    Ähli bildirişleri gör
-  </Link>
-</div>
-
             {unreadCount > 0 && (
               <button
                 type="button"
                 onClick={
                   markAllAsRead
                 }
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary transition hover:text-primary-hover"
+                className="inline-flex shrink-0 items-center gap-1.5 text-[11px] font-semibold text-primary transition hover:text-primary-hover sm:text-xs"
               >
                 <CheckCheck
                   size={15}
@@ -352,7 +342,7 @@ export default function NotificationBell() {
 
           {recentNotifications.length >
           0 ? (
-            <div className="max-h-[420px] overflow-y-auto">
+            <div className="max-h-[calc(100dvh-210px)] overflow-y-auto sm:max-h-[420px]">
               {recentNotifications.map(
                 (notification) => (
                   <NotificationItem
@@ -387,6 +377,16 @@ export default function NotificationBell() {
               </p>
             </div>
           )}
+
+          <div className="border-t border-border p-2.5 sm:p-3">
+            <Link
+              to="/notifications"
+              onClick={() => setIsOpen(false)}
+              className="flex h-9 w-full items-center justify-center rounded-xl text-xs font-semibold text-primary transition hover:bg-primary/10 sm:h-10 sm:text-sm"
+            >
+              Ähli bildirişleri gör
+            </Link>
+          </div>
         </div>
       )}
     </div>

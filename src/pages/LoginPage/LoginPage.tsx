@@ -467,7 +467,7 @@ export default function LoginPage() {
 
       <div className="relative mx-auto grid min-h-screen max-w-[1700px] lg:grid-cols-2">
         {/* LEFT SIDE */}
-        <section className="relative flex min-h-[620px] flex-col overflow-hidden border-white/[0.08] px-6 pb-8 pt-7 sm:px-10 lg:min-h-screen lg:border-r lg:px-20 lg:pb-14 lg:pt-10">
+        <section className="relative flex min-h-[560px] flex-col overflow-hidden border-white/[0.08] px-4 pb-7 pt-5 sm:px-10 sm:pt-7 lg:min-h-screen lg:border-r lg:px-20 lg:pb-14 lg:pt-10">
           {/* BRAND */}
           <div className="relative z-30">
             <div className="text-[30px] font-black tracking-[-0.05em] text-emerald-400 sm:text-[34px]">
@@ -480,7 +480,7 @@ export default function LoginPage() {
           </div>
 
           {/* LAMP STAGE */}
-          <div className="relative flex min-h-[390px] flex-1 items-center justify-center lg:min-h-0">
+          <div className="relative flex min-h-[330px] flex-1 items-center justify-center sm:min-h-[390px] lg:min-h-0">
             {/* MAIN WARM LIGHT */}
             <div
               className={`
@@ -522,7 +522,7 @@ export default function LoginPage() {
             />
 
             {/* LAMP */}
-            <div className="relative z-20 flex -translate-y-4 flex-col items-center lg:-translate-y-8">
+            <div className="relative z-20 flex -translate-y-2 scale-[0.82] flex-col items-center sm:-translate-y-4 sm:scale-100 lg:-translate-y-8">
               {/* SHADE */}
               <div className="relative">
                 <div
@@ -694,8 +694,9 @@ export default function LoginPage() {
                 <div
                   className={`
                     pointer-events-none
-                    absolute left-[42px] top-[128px]
-                    w-[165px]
+                    absolute left-[-118px] top-[142px]
+                    w-[112px] text-right
+                    sm:left-[42px] sm:top-[128px] sm:w-[165px] sm:text-left
                     transition-all duration-700
                     ${
                       lampOn
@@ -712,7 +713,7 @@ export default function LoginPage() {
                       className="absolute -left-[38px] top-[18px] rotate-[118deg] text-amber-300/80"
                     />
 
-                    <p className="font-medium italic text-amber-200/80">
+                    <p className="text-[11px] font-medium italic leading-4 text-amber-200/80 sm:text-base sm:leading-normal">
                       Ýüpi aşak çek
                     </p>
                   </div>
@@ -734,17 +735,17 @@ export default function LoginPage() {
               }
             `}
           >
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-400">
+            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-400 sm:text-xs sm:tracking-[0.24em]">
               Täze başlangyç
             </p>
 
-            <h1 className="mt-4 max-w-[620px] text-[38px] font-black leading-[1.03] tracking-[-0.045em] sm:text-[48px] lg:text-[58px]">
+            <h1 className="mt-3 max-w-[620px] text-[32px] font-black leading-[1.02] tracking-[-0.045em] sm:mt-4 sm:text-[48px] lg:text-[58px]">
               Ösüşiňi bir ýerden
               <br />
               dolandyr.
             </h1>
 
-            <p className="mt-5 max-w-[590px] text-sm leading-7 text-slate-400 sm:text-[15px]">
+            <p className="mt-3 max-w-[590px] text-[13px] leading-6 text-slate-400 sm:mt-5 sm:text-[15px] sm:leading-7">
               Maksatlaryňy, maliýäňi we
               meýilnamaňy bir ulgamda
               birleşdir. Her gün iň möhüm
@@ -752,7 +753,7 @@ export default function LoginPage() {
             </p>
 
             {/* FEATURES */}
-            <div className="mt-8 grid gap-4 sm:grid-cols-3 lg:mt-10">
+            <div className="mt-5 grid gap-3 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:mt-10">
               <div className="flex items-start gap-3 border-white/[0.07] sm:border-r sm:pr-4">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-emerald-400/40 bg-emerald-400/[0.05] text-emerald-400">
                   <Target size={19} />
@@ -837,7 +838,7 @@ export default function LoginPage() {
         </div>
 
         {/* RIGHT SIDE */}
-        <section className="relative flex min-h-[620px] items-center justify-center px-5 py-10 sm:px-8 lg:min-h-screen lg:px-16">
+        <section className="relative flex min-h-[560px] items-center justify-center px-4 py-7 sm:min-h-[620px] sm:px-8 sm:py-10 lg:min-h-screen lg:px-16">
           {!lampOn ? (
             <div className="max-w-xs text-center">
               <div className="mx-auto h-2.5 w-2.5 rounded-full bg-slate-700 shadow-[0_0_12px_rgba(100,116,139,0.16)]" />
@@ -877,7 +878,7 @@ export default function LoginPage() {
                         Hoş geldiň
                       </p>
 
-                      <h2 className="mt-2 text-[34px] font-black tracking-[-0.045em] sm:text-[38px]">
+                      <h2 className="mt-2 text-[28px] font-black tracking-[-0.045em] sm:text-[38px]">
                         {mode === "login"
                           ? "Hasabyňa gir"
                           : "Täze hasap döred"}
@@ -933,7 +934,7 @@ export default function LoginPage() {
                     onSubmit={
                       handleSubmit
                     }
-                    className="mt-7 space-y-5"
+                    className="mt-5 space-y-4 sm:mt-7 sm:space-y-5"
                   >
                     {mode ===
                       "register" && (
@@ -942,7 +943,7 @@ export default function LoginPage() {
                           Adyň
                         </span>
 
-                        <div className="flex h-[60px] items-center gap-3 rounded-2xl border border-white/[0.10] bg-[#061218]/70 px-4 transition-all focus-within:border-emerald-400/55 focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.05)]">
+                        <div className="flex h-[54px] items-center gap-3 rounded-2xl sm:h-[60px] border border-white/[0.10] bg-[#061218]/70 px-4 transition-all focus-within:border-emerald-400/55 focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.05)]">
                           <UserRound
                             size={18}
                             className="shrink-0 text-slate-500"
@@ -975,7 +976,7 @@ export default function LoginPage() {
                         E-mail
                       </span>
 
-                      <div className="flex h-[60px] items-center gap-3 rounded-2xl border border-white/[0.10] bg-[#061218]/70 px-4 transition-all focus-within:border-emerald-400/55 focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.05)]">
+                      <div className="flex h-[54px] items-center gap-3 rounded-2xl sm:h-[60px] border border-white/[0.10] bg-[#061218]/70 px-4 transition-all focus-within:border-emerald-400/55 focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.05)]">
                         <Mail
                           size={18}
                           className="shrink-0 text-slate-500"
@@ -1007,7 +1008,7 @@ export default function LoginPage() {
                         Parol
                       </span>
 
-                      <div className="flex h-[60px] items-center gap-3 rounded-2xl border border-white/[0.10] bg-[#061218]/70 px-4 transition-all focus-within:border-emerald-400/55 focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.05)]">
+                      <div className="flex h-[54px] items-center gap-3 rounded-2xl sm:h-[60px] border border-white/[0.10] bg-[#061218]/70 px-4 transition-all focus-within:border-emerald-400/55 focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.05)]">
                         <LockKeyhole
                           size={18}
                           className="shrink-0 text-slate-500"
@@ -1128,7 +1129,7 @@ export default function LoginPage() {
                         isLoading
                       }
                       className="
-                        mt-1 flex h-[62px] w-full
+                        mt-1 flex h-[56px] w-full sm:h-[62px]
                         items-center justify-center
                         gap-3
                         rounded-2xl
