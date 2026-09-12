@@ -7,6 +7,7 @@ const OSUS_STORAGE_KEYS = [
   "osus-notification-storage",
   "osus-weekly-review-storage",
   "osus-profile-storage",
+  "osus-offline-user",
 ];
 
 export function clearAppData() {
