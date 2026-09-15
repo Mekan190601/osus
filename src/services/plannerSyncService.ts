@@ -1,5 +1,10 @@
-import { supabase } from "./supabase";
-import { offlineDb } from "./offlineDb";
+import {
+  getCurrentUserId,
+} from "./auth";
+
+import {
+  offlineDb,
+} from "./offlineDb";
 
 import {
   getOfflinePlannerTasks,
@@ -28,25 +33,6 @@ function isPlannerQueueItem(
   payload: OfflinePlannerTask | null;
 } {
   return item.entity === "plannerTask";
-}
-
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
 }
 
 function toTimestamp(
@@ -87,7 +73,8 @@ function cloudToOffline(
     sourceGoalId:
       task.sourceGoalId,
 
-    completed: task.completed,
+    completed:
+      task.completed,
 
     completedAt:
       task.completedAt,
@@ -150,6 +137,14 @@ export async function syncPlannerQueue() {
     return;
   }
 
+  /*
+   * Offline-safe user ID.
+   *
+   * Supabase session elýeterli bolsa şol ulanylýar.
+   * Session wagtlaýyn elýeterli däl bolsa,
+   * soňky üstünlikli login-den galan local user
+   * arkaly IndexedDB queue tapylýar.
+   */
   const userId =
     await getCurrentUserId();
 
@@ -195,10 +190,21 @@ export async function syncPlannerQueue() {
         );
       }
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
     } catch (error) {
+      /*
+       * Sync şowsuz bolsa local maglumat
+       * we queue item saklanýar.
+       *
+       * Şeýlelikde indiki online / visibility
+       * event-de gaýtadan synanyşyp bolýar.
+       */
       console.warn(
         "Planner queue item sync failed:",
         error,
@@ -327,15 +333,6 @@ export async function pullPlannerFromCloud() {
     }
   }
 
-  /*
-   * Täze lokal task cloud-da entek ýok
-   * we queue-da pending bolsa —
-   * ony saklaýarys.
-   *
-   * Queue ýok bolsa-da lokal task
-   * täze bolsa, hem saklanýar.
-   */
-
   return getOfflinePlannerTasks(
     userId,
   );
@@ -355,15 +352,23 @@ export async function initializePlannerSync() {
     );
 
   /*
-   * Offline bolsa diňe IndexedDB.
+   * Internet ýok bolsa Supabase-a
+   * asla ýüzlenmeýäris.
+   *
+   * Göni IndexedDB maglumatyny berýäris.
    */
   if (!navigator.onLine) {
     return localTasks;
   }
 
   /*
-   * Ilki offline queue cloud-a gitmeli.
-   * Soň cloud pull edilýär.
+   * Internet gaýdanda:
+   *
+   * 1. Ilki offline wagty döredilen /
+   *    üýtgedilen maglumat cloud-a gidýär.
+   *
+   * 2. Soň cloud maglumatlary local bilen
+   *    birleşdirilýär.
    */
   await syncPlannerQueue();
 
