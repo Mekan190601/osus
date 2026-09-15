@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
-import { supabase } from "../services/supabase";
+import {
+  getCurrentUserId,
+} from "../services/auth";
 
 import {
   getOfflineFinanceAccount,
@@ -103,26 +105,6 @@ function getErrorMessage(
   return "Näbelli ýalňyşlyk ýüze çykdy.";
 }
 
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 function createTransactionId() {
   if (
     typeof crypto !== "undefined" &&
@@ -214,9 +196,8 @@ export const useFinanceStore =
             await getCurrentUserId();
 
           /*
-           * 1. Ilki IndexedDB.
-           * Offline wagty UI şu maglumat
-           * bilen açylýar.
+           * OFFLINE-FIRST:
+           * Ilki IndexedDB-däki maglumatlar alynýar.
            */
           const [
             localAccount,
@@ -250,14 +231,15 @@ export const useFinanceStore =
               ),
 
             isInitialized: true,
+            error: null,
           });
 
           /*
-           * 2. Online bolsa queue sync +
+           * Internet bar bolsa queue sync +
            * cloud merge.
            *
-           * Cloud ýalňyşsa lokal maglumat
-           * bilen işlemegi dowam etdirýäris.
+           * Cloud şowsuz bolsa lokal maglumat
+           * UI-da galýar.
            */
           if (navigator.onLine) {
             try {
@@ -577,7 +559,7 @@ export const useFinanceStore =
             };
 
           /*
-           * ILKI lokal database.
+           * Ilki lokal database-a ýazylýar.
            */
           await saveOfflineFinanceTransaction(
             offlineTransaction,
@@ -782,9 +764,7 @@ export const useFinanceStore =
          * Logout/account switch wagty
          * diňe Zustand RAM arassalanýar.
          *
-         * IndexedDB cache-ni pozmaýarys,
-         * sebäbi soň şol akkaunt
-         * offline girip biler.
+         * IndexedDB cache saklanýar.
          */
         set({
           ...initialState,

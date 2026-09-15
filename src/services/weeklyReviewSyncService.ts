@@ -1,5 +1,10 @@
-import { supabase } from "./supabase";
-import { offlineDb } from "./offlineDb";
+import {
+  getCurrentUserId,
+} from "./auth";
+
+import {
+  offlineDb,
+} from "./offlineDb";
 
 import {
   getOfflineWeeklyReviews,
@@ -35,37 +40,15 @@ function isWeeklyReviewQueueItem(
 }
 
 /* =========================
-   USER
-========================= */
-
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
-/* =========================
    HELPERS
 ========================= */
 
 function toTimestamp(
   value: string | null | undefined,
 ) {
-  if (!value) return 0;
+  if (!value) {
+    return 0;
+  }
 
   const timestamp =
     new Date(value).getTime();
@@ -79,22 +62,34 @@ function rowToOffline(
   row: WeeklyReviewRow,
 ): OfflineWeeklyReview {
   return {
-    userId: row.user_id,
-    id: row.id,
+    userId:
+      row.user_id,
 
-    weekKey: row.week_key,
+    id:
+      row.id,
+
+    weekKey:
+      row.week_key,
 
     totalTasks:
-      Number(row.total_tasks),
+      Number(
+        row.total_tasks,
+      ),
 
     completedTasks:
-      Number(row.completed_tasks),
+      Number(
+        row.completed_tasks,
+      ),
 
     pendingTasks:
-      Number(row.pending_tasks),
+      Number(
+        row.pending_tasks,
+      ),
 
     completionRate:
-      Number(row.completion_rate),
+      Number(
+        row.completion_rate,
+      ),
 
     monthlyNetIncome:
       Number(
@@ -116,7 +111,8 @@ function rowToOffline(
         row.overall_progress,
       ),
 
-    note: row.note,
+    note:
+      row.note,
 
     createdAt:
       row.created_at,
@@ -138,6 +134,9 @@ export async function syncWeeklyReviewQueue() {
     return;
   }
 
+  /*
+   * Merkezi offline-safe user ID.
+   */
   const userId =
     await getCurrentUserId();
 
@@ -153,7 +152,9 @@ export async function syncWeeklyReviewQueue() {
     );
 
   for (const item of reviewQueue) {
-    if (item.id === undefined) {
+    if (
+      item.id === undefined
+    ) {
       continue;
     }
 
@@ -179,18 +180,24 @@ export async function syncWeeklyReviewQueue() {
         );
       } else {
         await saveWeeklyReview({
-          id: payload.id,
+          id:
+            payload.id,
+
           weekKey:
             payload.weekKey,
+
           createdAt:
             payload.createdAt,
 
           totalTasks:
             payload.totalTasks,
+
           completedTasks:
             payload.completedTasks,
+
           pendingTasks:
             payload.pendingTasks,
+
           completionRate:
             payload.completionRate,
 
@@ -199,8 +206,10 @@ export async function syncWeeklyReviewQueue() {
 
           financialProgress:
             payload.financialProgress,
+
           plannerProgress:
             payload.plannerProgress,
+
           overallProgress:
             payload.overallProgress,
 
@@ -215,6 +224,10 @@ export async function syncWeeklyReviewQueue() {
         });
       }
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
@@ -224,6 +237,10 @@ export async function syncWeeklyReviewQueue() {
         error,
       );
 
+      /*
+       * Şowsuz bolsa queue galýar.
+       * Indiki sync-de ýene synanyşylýar.
+       */
       await offlineDb.syncQueue.update(
         item.id,
         {
@@ -260,6 +277,10 @@ export async function pullWeeklyReviewsFromCloud() {
       .toArray(),
   ]);
 
+  /*
+   * Queue-da pending bolan review-lary
+   * cloud maglumatlary basyp geçmeli däl.
+   */
   const pendingIds =
     new Set(
       queue
@@ -313,6 +334,10 @@ export async function pullWeeklyReviewsFromCloud() {
       continue;
     }
 
+    /*
+     * Last-write-wins:
+     * täze updatedAt ýeňýär.
+     */
     if (
       toTimestamp(
         cloudOffline.updatedAt,
@@ -346,10 +371,21 @@ export async function initializeWeeklyReviewSync() {
       userId,
     );
 
+  /*
+   * OFFLINE:
+   * Supabase-a ýüzlenmeýäris.
+   * Diňe IndexedDB maglumatlary.
+   */
   if (!navigator.onLine) {
     return localReviews;
   }
 
+  /*
+   * ONLINE:
+   * 1. Offline queue cloud-a gidýär.
+   * 2. Soň cloud maglumatlary local bilen
+   *    birleşdirilýär.
+   */
   await syncWeeklyReviewQueue();
 
   return pullWeeklyReviewsFromCloud();

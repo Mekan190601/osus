@@ -1,8 +1,11 @@
 import { create } from "zustand";
 
-import { supabase } from "../services/supabase";
+import {
+  getCurrentUserId,
+} from "../services/auth";
 
 import {
+  getOfflineNotification,
   getOfflineNotifications,
   saveOfflineNotification,
 } from "../services/offlineNotificationService";
@@ -87,39 +90,27 @@ function getErrorMessage(
     : "Näbelli ýalňyşlyk ýüze çykdy.";
 }
 
-async function getUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 function toAppNotification(
   item: OfflineNotification,
 ): AppNotification {
   return {
-    id: item.id,
+    id:
+      item.id,
 
-    title: item.title,
-    message: item.message,
+    title:
+      item.title,
 
-    type: item.type,
-    source: item.source,
+    message:
+      item.message,
 
-    read: item.read,
+    type:
+      item.type,
+
+    source:
+      item.source,
+
+    read:
+      item.read,
 
     actionLabel:
       item.actionLabel ??
@@ -145,6 +136,10 @@ function toAppNotification(
   };
 }
 
+/* =========================
+   BACKGROUND SYNC
+========================= */
+
 async function backgroundSync() {
   if (!navigator.onLine) {
     return;
@@ -165,6 +160,10 @@ export const useNotificationStore =
     (set, get) => ({
       ...initialState,
 
+      /* =========================
+         LOAD
+      ========================= */
+
       loadNotifications:
         async () => {
           set({
@@ -174,8 +173,13 @@ export const useNotificationStore =
 
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
+            /*
+             * OFFLINE-FIRST:
+             * Ilki IndexedDB-däki
+             * bildirişler görkezilýär.
+             */
             let local =
               await getOfflineNotifications(
                 userId,
@@ -187,39 +191,60 @@ export const useNotificationStore =
                   toAppNotification,
                 ),
 
-              isLoading: false,
               isInitialized: true,
+              error: null,
             });
 
+            /*
+             * Diňe internet bar wagty
+             * cloud sync edilýär.
+             *
+             * Cloud şowsuz bolsa local
+             * bildirişler ekranda galýar.
+             */
             if (navigator.onLine) {
-              await initializeNotificationSync();
+              try {
+                await initializeNotificationSync();
 
-              local =
-                await getOfflineNotifications(
-                  userId,
+                local =
+                  await getOfflineNotifications(
+                    userId,
+                  );
+
+                set({
+                  notifications:
+                    local.map(
+                      toAppNotification,
+                    ),
+
+                  error: null,
+                });
+              } catch (error) {
+                console.warn(
+                  "Notification cloud sync failed:",
+                  error,
                 );
-
-              set({
-                notifications:
-                  local.map(
-                    toAppNotification,
-                  ),
-
-                error: null,
-              });
+              }
             }
           } catch (error) {
             set({
-              isLoading: false,
-              isInitialized: true,
-
               error:
                 getErrorMessage(
                   error,
                 ),
+
+              isInitialized: true,
+            });
+          } finally {
+            set({
+              isLoading: false,
             });
           }
         },
+
+      /* =========================
+         ADD
+      ========================= */
 
       addNotification:
         async (input) => {
@@ -233,7 +258,10 @@ export const useNotificationStore =
             input.dedupeKey?.trim() ||
             null;
 
-          if (!title || !message) {
+          if (
+            !title ||
+            !message
+          ) {
             return;
           }
 
@@ -251,7 +279,7 @@ export const useNotificationStore =
 
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
             const now =
               new Date().toISOString();
@@ -295,11 +323,17 @@ export const useNotificationStore =
                 deletedAt: null,
               };
 
+            /*
+             * Ilki IndexedDB.
+             */
             await saveOfflineNotification(
               item,
               true,
             );
 
+            /*
+             * UI derrew täzelenýär.
+             */
             set((state) => ({
               notifications: [
                 toAppNotification(
@@ -322,16 +356,20 @@ export const useNotificationStore =
           }
         },
 
+      /* =========================
+         MARK AS READ
+      ========================= */
+
       markAsRead:
         async (
           notificationId,
         ) => {
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
             const item =
-              await offlineNotification(
+              await getOfflineNotification(
                 userId,
                 notificationId,
               );
@@ -340,14 +378,15 @@ export const useNotificationStore =
               return;
             }
 
-            const updated = {
-              ...item,
+            const updated:
+              OfflineNotification = {
+                ...item,
 
-              read: true,
+                read: true,
 
-              updatedAt:
-                new Date().toISOString(),
-            };
+                updatedAt:
+                  new Date().toISOString(),
+              };
 
             await saveOfflineNotification(
               updated,
@@ -380,11 +419,15 @@ export const useNotificationStore =
           }
         },
 
+      /* =========================
+         MARK ALL AS READ
+      ========================= */
+
       markAllAsRead:
         async () => {
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
             const items =
               await getOfflineNotifications(
@@ -402,7 +445,9 @@ export const useNotificationStore =
               await saveOfflineNotification(
                 {
                   ...item,
+
                   read: true,
+
                   updatedAt: now,
                 },
                 true,
@@ -434,6 +479,10 @@ export const useNotificationStore =
           }
         },
 
+      /* =========================
+         RESOLVE
+      ========================= */
+
       resolveNotificationByKey:
         async (dedupeKey) => {
           const clean =
@@ -445,7 +494,7 @@ export const useNotificationStore =
 
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
             const items =
               await getOfflineNotifications(
@@ -503,16 +552,20 @@ export const useNotificationStore =
           }
         },
 
+      /* =========================
+         DELETE
+      ========================= */
+
       deleteNotification:
         async (
           notificationId,
         ) => {
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
             const item =
-              await offlineNotification(
+              await getOfflineNotification(
                 userId,
                 notificationId,
               );
@@ -556,11 +609,15 @@ export const useNotificationStore =
           }
         },
 
+      /* =========================
+         CLEAR ALL
+      ========================= */
+
       clearNotifications:
         async () => {
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
             const items =
               await getOfflineNotifications(
@@ -599,27 +656,19 @@ export const useNotificationStore =
           }
         },
 
+      /* =========================
+         RESET RAM
+      ========================= */
+
       clearLocalNotifications:
         () => {
+          /*
+           * Logout wagty diňe RAM arassalanýar.
+           * IndexedDB cache saklanýar.
+           */
           set({
             ...initialState,
           });
         },
     }),
   );
-
-async function offlineNotification(
-  userId: string,
-  notificationId: string,
-) {
-  const {
-    getOfflineNotification,
-  } = await import(
-    "../services/offlineNotificationService"
-  );
-
-  return getOfflineNotification(
-    userId,
-    notificationId,
-  );
-}

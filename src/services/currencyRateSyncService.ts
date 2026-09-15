@@ -1,4 +1,6 @@
-import { supabase } from "./supabase";
+import {
+  getCurrentUserId,
+} from "./auth";
 
 import {
   offlineDb,
@@ -17,6 +19,10 @@ import {
   type CurrencyRateRow,
 } from "./currencyRateService";
 
+/* =========================
+   TYPE GUARD
+========================= */
+
 function isCurrencyRateQueueItem(
   item: SyncQueueItem,
 ): item is SyncQueueItem & {
@@ -31,25 +37,9 @@ function isCurrencyRateQueueItem(
   );
 }
 
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
+/* =========================
+   HELPERS
+========================= */
 
 function rowToOffline(
   row: CurrencyRateRow,
@@ -105,11 +95,18 @@ function timestamp(
     : 0;
 }
 
+/* =========================
+   PUSH LOCAL QUEUE → CLOUD
+========================= */
+
 export async function syncCurrencyRateQueue() {
   if (!navigator.onLine) {
     return;
   }
 
+  /*
+   * Merkezi offline-safe user ID.
+   */
   const userId =
     await getCurrentUserId();
 
@@ -164,6 +161,10 @@ export async function syncCurrencyRateQueue() {
         data.updatedAt,
       );
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
@@ -173,6 +174,11 @@ export async function syncCurrencyRateQueue() {
         error,
       );
 
+      /*
+       * Sync şowsuz bolsa queue galýar.
+       * Internet/session dikelende
+       * indiki sync-de ýene synanyşylýar.
+       */
       await offlineDb.syncQueue.update(
         item.id,
         {
@@ -183,6 +189,10 @@ export async function syncCurrencyRateQueue() {
     }
   }
 }
+
+/* =========================
+   PULL CLOUD → LOCAL
+========================= */
 
 export async function pullCurrencyRatesFromCloud() {
   const userId =
@@ -205,6 +215,10 @@ export async function pullCurrencyRatesFromCloud() {
       .toArray(),
   ]);
 
+  /*
+   * Pending lokal üýtgeşme bar bolsa
+   * cloud onuň üstünden ýazmaýar.
+   */
   const hasPending =
     queue.some(
       (item) =>
@@ -222,8 +236,14 @@ export async function pullCurrencyRatesFromCloud() {
   }
 
   const cloudData =
-    rowToOffline(cloud);
+    rowToOffline(
+      cloud,
+    );
 
+  /*
+   * Last-write-wins:
+   * täze updatedAt ýeňýär.
+   */
   if (
     !local ||
     timestamp(
@@ -244,6 +264,10 @@ export async function pullCurrencyRatesFromCloud() {
   return local;
 }
 
+/* =========================
+   INITIALIZE
+========================= */
+
 export async function initializeCurrencyRateSync() {
   const userId =
     await getCurrentUserId();
@@ -253,10 +277,20 @@ export async function initializeCurrencyRateSync() {
       userId,
     );
 
+  /*
+   * OFFLINE:
+   * Supabase-a ýüzlenmeýäris.
+   * Diňe IndexedDB maglumatlary ulanylýar.
+   */
   if (!navigator.onLine) {
     return local;
   }
 
+  /*
+   * ONLINE:
+   * 1. Offline queue cloud-a gidýär.
+   * 2. Cloud maglumat local bilen deňeşdirilýär.
+   */
   await syncCurrencyRateQueue();
 
   return pullCurrencyRatesFromCloud();

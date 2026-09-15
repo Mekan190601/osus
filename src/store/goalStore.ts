@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
-import { supabase } from "../services/supabase";
+import {
+  getCurrentUserId,
+} from "../services/auth";
 
 import {
   getOfflineGoal,
@@ -71,25 +73,6 @@ function getErrorMessage(
   return "Näbelli ýalňyşlyk ýüze çykdy.";
 }
 
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 export const useGoalStore =
   create<GoalState>()((set, get) => ({
     ...initialState,
@@ -131,8 +114,8 @@ export const useGoalStore =
           await getCurrentUserId();
 
         /*
-         * 1. Ilki lokal maglumat.
-         * Bu offline wagty UI-ni açýar.
+         * OFFLINE-FIRST:
+         * Ilki IndexedDB-däki maglumat alynýar.
          */
         const localGoal =
           await getOfflineGoal(
@@ -161,6 +144,7 @@ export const useGoalStore =
               localGoal.deadline,
 
             isInitialized: true,
+            error: null,
           });
         } else {
           set({
@@ -171,10 +155,11 @@ export const useGoalStore =
         }
 
         /*
-         * 2. Internet bar bolsa queue sync
-         * we cloud bilen deňeşdir.
+         * Diňe internet bar wagty
+         * cloud sync edilýär.
          *
-         * Ýalňyşsa lokal maglumat galýar.
+         * Cloud şowsuz bolsa lokal
+         * maglumat ekranda galýar.
          */
         if (navigator.onLine) {
           try {
@@ -202,7 +187,6 @@ export const useGoalStore =
                   syncedGoal.deadline,
 
                 isInitialized: true,
-
                 error: null,
               });
             } else if (
@@ -215,10 +199,6 @@ export const useGoalStore =
               });
             }
           } catch (error) {
-            /*
-             * Cloud elýeterli bolmasa
-             * lokal maglumat bilen dowam edýäris.
-             */
             console.warn(
               "Goal cloud sync failed:",
               error,
@@ -282,8 +262,9 @@ export const useGoalStore =
         };
 
         /*
-         * ILKI IndexedDB.
-         * Internet bolmasa-da ýazgy üstünlikli.
+         * Ilki IndexedDB.
+         * Internet bolmasa-da maglumat
+         * lokal saklanýar.
          */
         await saveOfflineGoal(
           nextGoal,
@@ -291,7 +272,7 @@ export const useGoalStore =
         );
 
         /*
-         * UI derrew täze ýagdaýy görkezýär.
+         * UI derrew täzelenýär.
          */
         set({
           goalId:
@@ -314,8 +295,6 @@ export const useGoalStore =
 
         /*
          * Internet bar bolsa background sync.
-         * Sync şowsuz bolsa ýazgyny yzyna almaýarys.
-         * Queue soň ýene synanar.
          */
         if (navigator.onLine) {
           void syncGoalQueue().catch(
@@ -403,9 +382,7 @@ export const useGoalStore =
        * Logout wagty diňe Zustand RAM
        * arassalanýar.
        *
-       * IndexedDB-ni pozmaýarys:
-       * şol user soň offline girende
-       * cache gerek bolar.
+       * IndexedDB cache saklanýar.
        */
       set({
         ...initialState,

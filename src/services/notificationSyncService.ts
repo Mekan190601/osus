@@ -1,4 +1,6 @@
-import { supabase } from "./supabase";
+import {
+  getCurrentUserId,
+} from "./auth";
 
 import {
   offlineDb,
@@ -15,40 +17,30 @@ import {
   type NotificationRow,
 } from "./notificationService";
 
-async function getUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 function rowToOffline(
   row: NotificationRow,
 ): OfflineNotification {
   return {
-    userId: row.user_id,
-    id: row.id,
+    userId:
+      row.user_id,
 
-    title: row.title,
-    message: row.message,
+    id:
+      row.id,
 
-    type: row.type,
-    source: row.source,
+    title:
+      row.title,
 
-    read: row.read,
+    message:
+      row.message,
+
+    type:
+      row.type,
+
+    source:
+      row.source,
+
+    read:
+      row.read,
 
     actionLabel:
       row.action_label,
@@ -87,13 +79,20 @@ function getTime(
     : 0;
 }
 
+/* =========================
+   PUSH LOCAL QUEUE → CLOUD
+========================= */
+
 export async function syncNotificationQueue() {
   if (!navigator.onLine) {
     return;
   }
 
+  /*
+   * Merkezi offline-safe user ID.
+   */
   const userId =
-    await getUserId();
+    await getCurrentUserId();
 
   const queue =
     await offlineDb.syncQueue
@@ -109,7 +108,9 @@ export async function syncNotificationQueue() {
     );
 
   for (const item of items) {
-    if (item.id === undefined) {
+    if (
+      item.id === undefined
+    ) {
       continue;
     }
 
@@ -131,6 +132,10 @@ export async function syncNotificationQueue() {
         payload,
       );
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
@@ -140,6 +145,11 @@ export async function syncNotificationQueue() {
         error,
       );
 
+      /*
+       * Sync şowsuz bolsa queue galýar.
+       * Internet/session dikeldilende
+       * indiki sync-de ýene synanyşylýar.
+       */
       await offlineDb.syncQueue.update(
         item.id,
         {
@@ -151,9 +161,13 @@ export async function syncNotificationQueue() {
   }
 }
 
+/* =========================
+   PULL CLOUD → LOCAL
+========================= */
+
 export async function pullNotificationsFromCloud() {
   const userId =
-    await getUserId();
+    await getCurrentUserId();
 
   const rows =
     await getNotificationRows();
@@ -164,6 +178,10 @@ export async function pullNotificationsFromCloud() {
       .equals(userId)
       .toArray();
 
+  /*
+   * Pending lokal üýtgeşmesi bolan
+   * notification-lary cloud basyp geçmeýär.
+   */
   const pendingIds =
     new Set(
       queue
@@ -179,12 +197,18 @@ export async function pullNotificationsFromCloud() {
     );
 
   for (const row of rows) {
-    if (pendingIds.has(row.id)) {
+    if (
+      pendingIds.has(
+        row.id,
+      )
+    ) {
       continue;
     }
 
     const cloud =
-      rowToOffline(row);
+      rowToOffline(
+        row,
+      );
 
     const local =
       await offlineDb.notifications.get([
@@ -192,10 +216,18 @@ export async function pullNotificationsFromCloud() {
         row.id,
       ]);
 
+    /*
+     * Last-write-wins:
+     * täze updatedAt ýeňýär.
+     */
     if (
       !local ||
-      getTime(cloud.updatedAt) >=
-        getTime(local.updatedAt)
+      getTime(
+        cloud.updatedAt,
+      ) >=
+        getTime(
+          local.updatedAt,
+        )
     ) {
       await saveOfflineNotification(
         cloud,
@@ -205,11 +237,27 @@ export async function pullNotificationsFromCloud() {
   }
 }
 
+/* =========================
+   INITIALIZE
+========================= */
+
 export async function initializeNotificationSync() {
+  /*
+   * OFFLINE:
+   * Cloud-a asla ýüzlenmeýäris.
+   * Notification store IndexedDB-däki
+   * maglumat bilen işleýär.
+   */
   if (!navigator.onLine) {
     return;
   }
 
+  /*
+   * ONLINE:
+   * 1. Offline queue cloud-a gidýär.
+   * 2. Soň cloud maglumatlary local-a çekilýär.
+   */
   await syncNotificationQueue();
+
   await pullNotificationsFromCloud();
 }

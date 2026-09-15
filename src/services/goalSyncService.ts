@@ -1,5 +1,10 @@
-import { supabase } from "./supabase";
-import { offlineDb } from "./offlineDb";
+import {
+  getCurrentUserId,
+} from "./auth";
+
+import {
+  offlineDb,
+} from "./offlineDb";
 
 import {
   getOfflineGoal,
@@ -27,25 +32,6 @@ function isGoalQueueItem(
   return item.entity === "goal";
 }
 
-async function getCurrentUserId() {
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return user.id;
-}
-
 function toTimestamp(
   value: string | null | undefined,
 ) {
@@ -60,6 +46,10 @@ function toTimestamp(
     ? timestamp
     : 0;
 }
+
+/* =========================
+   CLOUD → LOCAL
+========================= */
 
 export async function pullGoalFromCloud() {
   const userId =
@@ -88,6 +78,10 @@ export async function pullGoalFromCloud() {
       localGoal?.updatedAt,
     );
 
+  /*
+   * Lokal maglumat cloud-dan täze bolsa,
+   * cloud onuň üstünden ýazmaýar.
+   */
   if (
     localGoal &&
     localUpdated > cloudUpdated
@@ -95,35 +89,7 @@ export async function pullGoalFromCloud() {
     return localGoal;
   }
 
-  await saveOfflineGoal(
-    {
-      userId,
-
-      goalId:
-        cloudGoal.goalId,
-
-      mainGoal:
-        cloudGoal.mainGoal,
-
-      targetMoney:
-        cloudGoal.targetMoney,
-
-      currentMoney:
-        cloudGoal.currentMoney,
-
-      deadline:
-        cloudGoal.deadline,
-
-      updatedAt:
-        cloudGoal.updatedAt,
-
-      deletedAt:
-        cloudGoal.deletedAt,
-    },
-    false,
-  );
-
-  return {
+  const nextGoal: OfflineGoal = {
     userId,
 
     goalId:
@@ -147,13 +113,29 @@ export async function pullGoalFromCloud() {
     deletedAt:
       cloudGoal.deletedAt,
   };
+
+  await saveOfflineGoal(
+    nextGoal,
+    false,
+  );
+
+  return nextGoal;
 }
+
+/* =========================
+   PUSH LOCAL QUEUE → CLOUD
+========================= */
 
 export async function syncGoalQueue() {
   if (!navigator.onLine) {
     return;
   }
 
+  /*
+   * Offline-safe user ID.
+   * Supabase session elýeterli bolmasa-da,
+   * local user marker arkaly queue tapylýar.
+   */
   const userId =
     await getCurrentUserId();
 
@@ -164,11 +146,11 @@ export async function syncGoalQueue() {
       .toArray();
 
   const goalQueue =
-  queue.filter(isGoalQueueItem);
+    queue.filter(
+      isGoalQueueItem,
+    );
 
-  for (
-    const item of goalQueue
-  ) {
+  for (const item of goalQueue) {
     if (
       item.id === undefined
     ) {
@@ -223,10 +205,24 @@ export async function syncGoalQueue() {
         await saveGoal(goal);
       }
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
-    } catch {
+    } catch (error) {
+      /*
+       * Sync şowsuz bolsa queue galýar.
+       * Internet/session dikeldilende
+       * indiki sync-de ýene synanyşylýar.
+       */
+      console.warn(
+        "Goal queue item sync failed:",
+        error,
+      );
+
       await offlineDb.syncQueue.update(
         item.id,
         {
@@ -238,6 +234,10 @@ export async function syncGoalQueue() {
   }
 }
 
+/* =========================
+   INITIALIZE
+========================= */
+
 export async function initializeGoalSync() {
   const userId =
     await getCurrentUserId();
@@ -248,10 +248,19 @@ export async function initializeGoalSync() {
       "primary-goal",
     );
 
+  /*
+   * Internet ýok bolsa Supabase-a
+   * asla ýüzlenmeýäris.
+   */
   if (!navigator.onLine) {
     return localGoal ?? null;
   }
 
+  /*
+   * Internet bar bolsa:
+   * 1. Offline queue cloud-a gidýär.
+   * 2. Cloud maglumat local bilen deňeşdirilýär.
+   */
   await syncGoalQueue();
 
   return pullGoalFromCloud();

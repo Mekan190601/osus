@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
-import { supabase } from "../services/supabase";
+import {
+  getCurrentUserId,
+} from "../services/auth";
 
 import {
   getOfflineCurrencyRates,
@@ -109,26 +111,6 @@ function getErrorMessage(
     : "Näbelli ýalňyşlyk ýüze çykdy.";
 }
 
-async function getUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 function applyData(
   data: OfflineCurrencyRateSettings,
 ) {
@@ -163,7 +145,7 @@ export const useCurrencyRateStore =
         }> = {},
       ) {
         const userId =
-          await getUserId();
+          await getCurrentUserId();
 
         const existing =
           await getOfflineCurrencyRates(
@@ -216,11 +198,19 @@ export const useCurrencyRateStore =
             deletedAt: null,
           };
 
+        /*
+         * OFFLINE-FIRST:
+         * Ilki IndexedDB-de saklanýar.
+         */
         await saveOfflineCurrencyRates(
           data,
           true,
         );
 
+        /*
+         * Internet bar bolsa background sync.
+         * Sync şowsuz bolsa queue galýar.
+         */
         if (navigator.onLine) {
           void syncCurrencyRateQueue().catch(
             (error) => {
@@ -250,8 +240,11 @@ export const useCurrencyRateStore =
 
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
+            /*
+             * Ilki local maglumat.
+             */
             let data =
               await getOfflineCurrencyRates(
                 userId,
@@ -259,25 +252,45 @@ export const useCurrencyRateStore =
 
             if (data) {
               set(
-                applyData(data),
+                applyData(
+                  data,
+                ),
               );
             }
 
+            /*
+             * Diňe internet bar wagty
+             * cloud sync edilýär.
+             *
+             * Cloud şowsuz bolsa local
+             * maglumat bilen dowam edýäris.
+             */
             if (navigator.onLine) {
-              const synced =
-                await initializeCurrencyRateSync();
+              try {
+                const synced =
+                  await initializeCurrencyRateSync();
 
-              if (synced) {
-                data = synced;
+                if (synced) {
+                  data = synced;
 
-                set(
-                  applyData(
-                    synced,
-                  ),
+                  set(
+                    applyData(
+                      synced,
+                    ),
+                  );
+                }
+              } catch (error) {
+                console.warn(
+                  "Currency rate cloud sync failed:",
+                  error,
                 );
               }
             }
 
+            /*
+             * Local-da hem maglumat ýok bolsa
+             * default kurslar döredilýär.
+             */
             if (!data) {
               const now =
                 new Date().toISOString();
@@ -314,7 +327,9 @@ export const useCurrencyRateStore =
               );
 
               set(
-                applyData(data),
+                applyData(
+                  data,
+                ),
               );
             }
 
@@ -392,8 +407,10 @@ export const useCurrencyRateStore =
 
           set({
             rates,
+
             lastUpdatedAt:
               now,
+
             error: null,
           });
 
@@ -439,7 +456,9 @@ export const useCurrencyRateStore =
           const rates:
             CurrencyRates = {
               ...get().rates,
+
               ...cleanRates,
+
               TMT: 1,
             };
 
@@ -539,6 +558,10 @@ export const useCurrencyRateStore =
         },
 
         clearLocalRates: () => {
+          /*
+           * Logout wagty diňe RAM arassalanýar.
+           * IndexedDB maglumatlary saklanýar.
+           */
           set({
             ...initialState,
 

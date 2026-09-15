@@ -1,5 +1,10 @@
-import { supabase } from "./supabase";
-import { offlineDb } from "./offlineDb";
+import {
+  getCurrentUserId,
+} from "./auth";
+
+import {
+  offlineDb,
+} from "./offlineDb";
 
 import {
   getOfflineFinanceAccount,
@@ -47,29 +52,6 @@ function isFinanceTransactionQueueItem(
   payload: OfflineFinanceTransaction | null;
 } {
   return item.entity === "financeTransaction";
-}
-
-/* =========================
-   USER
-========================= */
-
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } = await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
 }
 
 /* =========================
@@ -188,11 +170,11 @@ async function syncFinanceAccountQueue() {
       }
 
       /*
-       * Häzirki programmada finance account
+       * Finance account häzirki programmada
        * bütinleý pozulmaýar.
        *
-       * Şonuň üçin account queue
-       * esasy ýagdaýda UPSERT edýär.
+       * Şonuň üçin queue esasy ýagdaýda
+       * UPSERT edýär.
        */
       await saveFinanceAccount({
         bankBalance:
@@ -211,6 +193,10 @@ async function syncFinanceAccountQueue() {
           payload.deletedAt,
       });
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
@@ -220,6 +206,10 @@ async function syncFinanceAccountQueue() {
         error,
       );
 
+      /*
+       * Şowsuz bolsa queue saklanýar.
+       * Indiki sync-de täzeden synanyşylýar.
+       */
       await offlineDb.syncQueue.update(
         item.id,
         {
@@ -283,7 +273,8 @@ async function syncFinanceTransactionQueue() {
         await saveFinanceTransaction({
           id: payload.id,
 
-          type: payload.type,
+          type:
+            payload.type,
 
           amount:
             payload.amount,
@@ -305,6 +296,10 @@ async function syncFinanceTransactionQueue() {
         });
       }
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
@@ -335,12 +330,10 @@ export async function syncFinanceQueue() {
   }
 
   /*
-   * Account bilen transaction queue-laryny
-   * bir wagtda işletmeýäris.
-   *
    * Tertipli sync:
-   * 1. account
-   * 2. transactions
+   *
+   * 1. Account
+   * 2. Transactions
    */
   await syncFinanceAccountQueue();
 
@@ -416,6 +409,10 @@ async function pullFinanceAccountFromCloud() {
       localAccount.updatedAt,
     );
 
+  /*
+   * Last-write-wins:
+   * täze updatedAt ýeňýär.
+   */
   if (
     cloudUpdated >=
     localUpdated
@@ -523,6 +520,9 @@ async function pullFinanceTransactionsFromCloud() {
         localTransaction.updatedAt,
       );
 
+    /*
+     * Last-write-wins.
+     */
     if (
       cloudUpdated >=
       localUpdated
@@ -544,6 +544,12 @@ async function pullFinanceTransactionsFromCloud() {
 ========================= */
 
 export async function initializeFinanceSync() {
+  /*
+   * Merkezi offline-safe user ID.
+   *
+   * Supabase session wagtlaýyn ýok bolsa-da,
+   * auth.ts-daky local user marker ulanylýar.
+   */
   const userId =
     await getCurrentUserId();
 
@@ -561,7 +567,10 @@ export async function initializeFinanceSync() {
   ]);
 
   /*
-   * Internet ýok bolsa diňe lokal maglumat.
+   * OFFLINE:
+   * Supabase-a asla ýüzlenmeýäris.
+   *
+   * Diňe IndexedDB maglumatlaryny berýäris.
    */
   if (!navigator.onLine) {
     return {
@@ -574,12 +583,14 @@ export async function initializeFinanceSync() {
   }
 
   /*
-   * Ilki offline üýtgeşmeler cloud-a.
+   * ONLINE:
+   *
+   * 1. Offline üýtgeşmeler cloud-a.
    */
   await syncFinanceQueue();
 
   /*
-   * Soň cloud bilen lokal maglumat
+   * 2. Cloud maglumatlary local bilen
    * deňeşdirilýär.
    */
   const [

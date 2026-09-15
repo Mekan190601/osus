@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
-import { supabase } from "../services/supabase";
+import {
+  getCurrentUserId,
+} from "../services/auth";
 
 import {
   getOfflineWeeklyReview,
@@ -103,26 +105,6 @@ function getErrorMessage(
   return "Näbelli ýalňyşlyk ýüze çykdy.";
 }
 
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 function toSnapshot(
   review: OfflineWeeklyReview,
 ): WeeklyReviewSnapshot {
@@ -183,6 +165,10 @@ export const useWeeklyReviewStore =
           const userId =
             await getCurrentUserId();
 
+          /*
+           * OFFLINE-FIRST:
+           * Ilki IndexedDB maglumatlary.
+           */
           const localReviews =
             await getVisibleOfflineWeeklyReviews(
               userId,
@@ -195,8 +181,13 @@ export const useWeeklyReviewStore =
               ),
 
             isInitialized: true,
+            error: null,
           });
 
+          /*
+           * Diňe internet bar bolsa
+           * cloud sync edilýär.
+           */
           if (navigator.onLine) {
             try {
               const synced =
@@ -299,11 +290,17 @@ export const useWeeklyReviewStore =
               deletedAt: null,
             };
 
+          /*
+           * Ilki lokal database.
+           */
           await saveOfflineWeeklyReview(
             offlineReview,
             true,
           );
 
+          /*
+           * UI derrew täzelenýär.
+           */
           set((state) => {
             const snapshot =
               toSnapshot(
@@ -525,6 +522,10 @@ export const useWeeklyReviewStore =
       ========================= */
 
       clearLocalReviews: () => {
+        /*
+         * Logout wagty diňe RAM arassalanýar.
+         * IndexedDB maglumatlary saklanýar.
+         */
         set({
           ...initialState,
         });

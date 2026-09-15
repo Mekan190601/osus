@@ -1,4 +1,6 @@
-import { supabase } from "./supabase";
+import {
+  getCurrentUserId,
+} from "./auth";
 
 import {
   offlineDb,
@@ -17,6 +19,10 @@ import {
   type UserSettingsRow,
 } from "./settingsService";
 
+/* =========================
+   TYPE GUARD
+========================= */
+
 function isSettingsQueueItem(
   item: SyncQueueItem,
 ): item is SyncQueueItem & {
@@ -31,25 +37,9 @@ function isSettingsQueueItem(
   );
 }
 
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
+/* =========================
+   HELPERS
+========================= */
 
 function rowToOffline(
   row: UserSettingsRow,
@@ -109,11 +99,18 @@ function timestamp(
     : 0;
 }
 
+/* =========================
+   PUSH LOCAL QUEUE → CLOUD
+========================= */
+
 export async function syncSettingsQueue() {
   if (!navigator.onLine) {
     return;
   }
 
+  /*
+   * Merkezi offline-safe user ID.
+   */
   const userId =
     await getCurrentUserId();
 
@@ -133,7 +130,9 @@ export async function syncSettingsQueue() {
       item.id === undefined ||
       !item.payload
     ) {
-      if (item.id !== undefined) {
+      if (
+        item.id !== undefined
+      ) {
         await offlineDb.syncQueue.delete(
           item.id,
         );
@@ -167,6 +166,10 @@ export async function syncSettingsQueue() {
         settings.updatedAt,
       );
 
+      /*
+       * Cloud-a üstünlikli geçenden soň
+       * queue item pozulýar.
+       */
       await offlineDb.syncQueue.delete(
         item.id,
       );
@@ -176,6 +179,11 @@ export async function syncSettingsQueue() {
         error,
       );
 
+      /*
+       * Sync şowsuz bolsa queue galýar.
+       * Internet/session dikelende
+       * indiki sync-de ýene synanyşylýar.
+       */
       await offlineDb.syncQueue.update(
         item.id,
         {
@@ -186,6 +194,10 @@ export async function syncSettingsQueue() {
     }
   }
 }
+
+/* =========================
+   PULL CLOUD → LOCAL
+========================= */
 
 export async function pullSettingsFromCloud() {
   const userId =
@@ -208,6 +220,10 @@ export async function pullSettingsFromCloud() {
       .toArray(),
   ]);
 
+  /*
+   * Pending lokal settings üýtgeşmesi
+   * bar bolsa cloud ony basyp geçmeýär.
+   */
   const hasPending =
     queue.some(
       (item) =>
@@ -225,8 +241,14 @@ export async function pullSettingsFromCloud() {
   }
 
   const cloudSettings =
-    rowToOffline(cloud);
+    rowToOffline(
+      cloud,
+    );
 
+  /*
+   * Last-write-wins:
+   * täze updatedAt ýeňýär.
+   */
   if (
     !local ||
     timestamp(
@@ -247,6 +269,10 @@ export async function pullSettingsFromCloud() {
   return local;
 }
 
+/* =========================
+   INITIALIZE
+========================= */
+
 export async function initializeSettingsSync() {
   const userId =
     await getCurrentUserId();
@@ -256,10 +282,21 @@ export async function initializeSettingsSync() {
       userId,
     );
 
+  /*
+   * OFFLINE:
+   * Supabase-a asla ýüzlenmeýäris.
+   * Diňe IndexedDB maglumatlaryny ulanýarys.
+   */
   if (!navigator.onLine) {
     return local;
   }
 
+  /*
+   * ONLINE:
+   * 1. Offline queue cloud-a gidýär.
+   * 2. Soň cloud maglumat local bilen
+   *    deňeşdirilýär.
+   */
   await syncSettingsQueue();
 
   return pullSettingsFromCloud();

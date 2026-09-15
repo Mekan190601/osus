@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
-import { supabase } from "../services/supabase";
+import {
+  getCurrentUserId,
+} from "../services/auth";
 
 import {
   getOfflineUserSettings,
@@ -98,26 +100,6 @@ function getErrorMessage(
     : "Näbelli ýalňyşlyk ýüze çykdy.";
 }
 
-async function getUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 function applySettings(
   settings: OfflineUserSettings,
 ) {
@@ -154,7 +136,7 @@ export const useSettingsStore =
         }> = {},
       ) {
         const userId =
-          await getUserId();
+          await getCurrentUserId();
 
         const existing =
           await getOfflineUserSettings(
@@ -162,6 +144,7 @@ export const useSettingsStore =
           );
 
         const state = get();
+
         const now =
           new Date().toISOString();
 
@@ -196,14 +179,23 @@ export const useSettingsStore =
               now,
 
             updatedAt: now,
+
             deletedAt: null,
           };
 
+        /*
+         * OFFLINE-FIRST:
+         * Ilki IndexedDB-de saklanýar.
+         */
         await saveOfflineUserSettings(
           settings,
           true,
         );
 
+        /*
+         * Internet bar bolsa background sync.
+         * Şowsuz bolsa queue galýar.
+         */
         if (navigator.onLine) {
           void syncSettingsQueue().catch(
             (error) => {
@@ -227,8 +219,11 @@ export const useSettingsStore =
 
           try {
             const userId =
-              await getUserId();
+              await getCurrentUserId();
 
+            /*
+             * Ilki local settings.
+             */
             let settings =
               await getOfflineUserSettings(
                 userId,
@@ -242,21 +237,40 @@ export const useSettingsStore =
               );
             }
 
+            /*
+             * Diňe internet bar bolsa
+             * cloud sync edilýär.
+             */
             if (navigator.onLine) {
-              const synced =
-                await initializeSettingsSync();
+              try {
+                const synced =
+                  await initializeSettingsSync();
 
-              if (synced) {
-                settings = synced;
+                if (synced) {
+                  settings = synced;
 
-                set(
-                  applySettings(
-                    synced,
-                  ),
+                  set(
+                    applySettings(
+                      synced,
+                    ),
+                  );
+                }
+              } catch (error) {
+                /*
+                 * Cloud sync şowsuz bolsa
+                 * local settings bilen dowam edýäris.
+                 */
+                console.warn(
+                  "Settings cloud sync failed:",
+                  error,
                 );
               }
             }
 
+            /*
+             * Hiç hili settings ýok bolsa
+             * default settings local döredilýär.
+             */
             if (!settings) {
               const now =
                 new Date().toISOString();
@@ -265,9 +279,12 @@ export const useSettingsStore =
                 userId,
 
                 language: "tk",
+
                 currency: "TMT",
+
                 startPage:
                   "dashboard",
+
                 theme: "dark",
 
                 notifications: {
@@ -275,7 +292,9 @@ export const useSettingsStore =
                 },
 
                 createdAt: now,
+
                 updatedAt: now,
+
                 deletedAt: null,
               };
 
@@ -393,6 +412,7 @@ export const useSettingsStore =
           ) => {
             const notifications = {
               ...get().notifications,
+
               [key]: enabled,
             };
 
@@ -430,10 +450,14 @@ export const useSettingsStore =
           try {
             await persistCurrent({
               language: "tk",
+
               currency: "TMT",
+
               startPage:
                 "dashboard",
+
               theme: "dark",
+
               notifications,
             });
           } catch (error) {
@@ -445,6 +469,10 @@ export const useSettingsStore =
         },
 
         clearLocalSettings: () => {
+          /*
+           * Logout wagty diňe RAM arassalanýar.
+           * IndexedDB maglumatlary saklanýar.
+           */
           set({
             ...DEFAULT_SETTINGS,
 
