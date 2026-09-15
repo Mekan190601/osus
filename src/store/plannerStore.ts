@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
-import { supabase } from "../services/supabase";
+import {
+  getCurrentUserId,
+} from "../services/auth";
 
 import {
   getVisibleOfflinePlannerTasks,
@@ -130,26 +132,6 @@ function getErrorMessage(
   return "Näbelli ýalňyşlyk ýüze çykdy.";
 }
 
-async function getCurrentUserId() {
-  const {
-    data: { session },
-    error,
-  } =
-    await supabase.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!session?.user) {
-    throw new Error(
-      "Ulanyjy hasaba girmändir.",
-    );
-  }
-
-  return session.user.id;
-}
-
 function offlineToPlannerTask(
   task: OfflinePlannerTask,
 ): PlannerTask {
@@ -212,7 +194,11 @@ export const usePlannerStore =
           const userId =
             await getCurrentUserId();
 
-          // 1. Ilki lokal cache
+          /*
+           * OFFLINE-FIRST:
+           * Ilki IndexedDB-däki lokal maglumat görkezilýär.
+           * Internet bolmasa-da Planner şu maglumat bilen işleýär.
+           */
           const localTasks =
             await getVisibleOfflinePlannerTasks(
               userId,
@@ -223,10 +209,15 @@ export const usePlannerStore =
               localTasks.map(
                 offlineToPlannerTask,
               ),
+
             isInitialized: true,
+            error: null,
           });
 
-          // 2. Online bolsa sync + cloud merge
+          /*
+           * Diňe internet bar wagty cloud bilen birleşdirilýär.
+           * Cloud sync şowsuz bolsa lokal maglumat UI-da galýar.
+           */
           if (navigator.onLine) {
             try {
               const syncedTasks =
@@ -342,13 +333,18 @@ export const usePlannerStore =
               deletedAt: null,
             };
 
-          // Ilki lokal database
+          /*
+           * Ilki lokal database-a ýazylýar.
+           * Şonuň üçin internet ýok wagty hem task döredilýär.
+           */
           await saveOfflinePlannerTask(
             offlineTask,
             true,
           );
 
-          // UI derrew täzelenýär
+          /*
+           * UI derrew täzelenýär.
+           */
           set((state) => ({
             tasks: [
               offlineToPlannerTask(
@@ -358,6 +354,10 @@ export const usePlannerStore =
             ],
           }));
 
+          /*
+           * Internet bar bolsa queue derrew sync edilýär.
+           * Internet ýok bolsa queue IndexedDB-de galýar.
+           */
           if (navigator.onLine) {
             void syncPlannerQueue().catch(
               (error) => {
