@@ -365,13 +365,26 @@ export default function SettingsPage() {
     }
   }
 
-  function handleClearAllData() {
-    clearAppData();
+  async function handleClearAllData() {
+  try {
+    await clearAppData();
 
     setShowClearConfirm(false);
 
     window.location.reload();
+  } catch (error) {
+    console.error(
+      "App data clear failed:",
+      error,
+    );
+
+    setBackupStatus(
+      "Maglumatlary doly arassalamak başartmady.",
+    );
+
+    setShowClearConfirm(false);
   }
+}
 
   return (
     <div className="space-y-3 pb-6 sm:space-y-5 sm:pb-8 lg:space-y-8 lg:pb-10">

@@ -1,17 +1,41 @@
-const OSUS_STORAGE_KEYS = [
-  "osus-goal-storage",
-  "osus-finance-storage",
-  "osus-planner-storage",
-  "osus-settings-storage",
-  "osus-currency-rates-storage",
-  "osus-notification-storage",
-  "osus-weekly-review-storage",
-  "osus-profile-storage",
-  "osus-offline-user",
-];
+import {
+  offlineDb,
+} from "../../../services/offlineDb";
 
-export function clearAppData() {
-  OSUS_STORAGE_KEYS.forEach((key) => {
-    window.localStorage.removeItem(key);
-  });
+/*
+ * ÖSÜŞ-iň şu enjamdaky ähli ýerli
+ * maglumatlaryny doly arassalaýar.
+ *
+ * Bu:
+ * - localStorage
+ * - sessionStorage
+ * - Dexie / IndexedDB
+ *
+ * maglumatlaryny pozýar.
+ */
+export async function clearAppData() {
+  /*
+   * Zustand persist maglumatlary,
+   * offline user marker we Supabase-nyň
+   * şu brauzerdäki local session-y hem
+   * arassalanýar.
+   */
+  window.localStorage.clear();
+
+  window.sessionStorage.clear();
+
+  /*
+   * Goals
+   * Planner
+   * Finance
+   * Weekly Review
+   * Settings
+   * Currency Rates
+   * Notifications
+   * Sync Queue
+   *
+   * ýaly ähli offline maglumatlaryň
+   * ýerleşýän Dexie bazasyny doly poz.
+   */
+  await offlineDb.delete();
 }
