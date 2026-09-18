@@ -1,41 +1,61 @@
 import {
+  clearCloudAppData,
+} from "../../../services/appDataResetService";
+
+import {
   offlineDb,
 } from "../../../services/offlineDb";
 
+const OSUS_STORAGE_KEYS = [
+  "osus-goal-storage",
+  "osus-finance-storage",
+  "osus-planner-storage",
+  "osus-settings-storage",
+  "osus-currency-rates-storage",
+  "osus-notification-storage",
+  "osus-weekly-review-storage",
+  "osus-profile-storage",
+];
+
 /*
- * ÖSÜŞ-iň şu enjamdaky ähli ýerli
- * maglumatlaryny doly arassalaýar.
+ * ÖSÜŞ-däki ähli ulanyjy maglumatlaryny arassalaýar.
  *
- * Bu:
- * - localStorage
- * - sessionStorage
- * - Dexie / IndexedDB
+ * Tertip:
+ * 1. Ilki cloud / Supabase maglumatlary arassalanýar.
+ * 2. Soň IndexedDB / Dexie pozulýar.
+ * 3. Soň diňe ÖSÜŞ-e degişli localStorage maglumatlary pozulýar.
  *
- * maglumatlaryny pozýar.
+ * Auth / Supabase login sessiýasyna degilmeýär.
  */
 export async function clearAppData() {
   /*
-   * Zustand persist maglumatlary,
-   * offline user marker we Supabase-nyň
-   * şu brauzerdäki local session-y hem
-   * arassalanýar.
+   * Cloud maglumatlar ilki pozulmaly.
+   * Eger cloud arassalamak şowsuz bolsa,
+   * local maglumatlara degmeýäris.
    */
-  window.localStorage.clear();
-
-  window.sessionStorage.clear();
+  await clearCloudAppData();
 
   /*
-   * Goals
-   * Planner
-   * Finance
-   * Weekly Review
-   * Settings
-   * Currency Rates
-   * Notifications
-   * Sync Queue
-   *
-   * ýaly ähli offline maglumatlaryň
-   * ýerleşýän Dexie bazasyny doly poz.
+   * Offline maglumatlaryň hemmesi:
+   * - goals
+   * - planner
+   * - finance
+   * - weekly reviews
+   * - settings
+   * - currency rates
+   * - notifications
+   * - sync queue
    */
   await offlineDb.delete();
+
+  /*
+   * Diňe programmanyň öz persist maglumatlaryny poz.
+   *
+   * localStorage.clear() ulanmaýarys,
+   * sebäbi ol Supabase auth sessiýasyny hem
+   * pozup biler.
+   */
+  OSUS_STORAGE_KEYS.forEach((key) => {
+    window.localStorage.removeItem(key);
+  });
 }
